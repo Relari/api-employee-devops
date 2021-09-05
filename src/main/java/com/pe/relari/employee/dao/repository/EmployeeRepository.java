@@ -9,11 +9,11 @@ public interface EmployeeRepository {
 
     List<EmployeeEntity> findAll();
 
-    EmployeeEntity save(EmployeeEntity employeeEntity);
+    boolean save(EmployeeEntity employeeEntity);
 
     void deleteAll();
 
-    void deleteById(Integer id);
+    boolean deleteById(Integer id);
 
     Optional<EmployeeEntity> findById(Integer id);
 

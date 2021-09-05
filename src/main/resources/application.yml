@@ -1,0 +1,18 @@
+application:
+  info:
+    name: '@project.name@'
+    version: '@project.version@'
+    description: '@project.description@'
+  api:
+    path: '/api/v1/employees'
+
+springdoc:
+  api-docs:
+    path: '${application.api.path}/openapi'
+
+  swagger-ui:
+    path: '${application.api.path}/swagger-ui.html'
+
+logging:
+  level:
+    com.pe.relari: TRACE

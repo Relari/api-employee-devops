@@ -17,9 +17,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public EmployeeEntity save(EmployeeEntity employeeEntity) {
-        employeeEntities.add(employeeEntity);
-        return employeeEntity;
+    public boolean save(EmployeeEntity employeeEntity) {
+        return employeeEntities.add(employeeEntity);
     }
 
     @Override
@@ -28,8 +27,8 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        employeeEntities.removeIf(
+    public boolean deleteById(Integer id) {
+        return employeeEntities.removeIf(
                 employeeEntity -> employeeEntity.getId().equals(id)
         );
     }

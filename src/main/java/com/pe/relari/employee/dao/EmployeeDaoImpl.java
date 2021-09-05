@@ -6,10 +6,11 @@ import com.pe.relari.employee.dao.repository.EmployeeRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-
-@Service
+@Slf4j
+@Component
 @AllArgsConstructor
 public class EmployeeDaoImpl implements EmployeeDao {
 
@@ -17,6 +18,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public List<Employee> findAll() {
+
+        log.debug("Listing all employees.");
+
         return employeeRepository.findAll()
                 .stream()
                 .map(EmployeeMapper::mapEmployee)
@@ -27,7 +31,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public void save(Employee employee) {
 
         var employeeEntity = EmployeeMapper.mapEmployeeEntity(employee);
-        employeeRepository.save(employeeEntity);
+
+        log.debug("Saving the new employee.");
+
+        if (employeeRepository.save(employeeEntity)) {
+            log.info("It was saved correctly to the employee.");
+        } else {
+            log.error("An error occurred while saving the employee.");
+        }
 
     }
 
@@ -38,15 +49,25 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void deleteById(Integer id) {
-        employeeRepository.deleteById(id);
+
+        log.debug("Eliminating the employee.");
+
+        if (employeeRepository.deleteById(id)) {
+            log.info("The employee was successfully eliminated.");
+        } else {
+            log.error("An error occurred while removing the employee.");
+        }
     }
 
 
     @Override
     public Employee findById(Integer id) {
+
+        log.debug("Looking for the employee.");
+
         return employeeRepository.findById(id)
                 .map(EmployeeMapper::mapEmployee)
-                .orElseThrow(() -> new RuntimeException("No se encontro"));
+                .orElseThrow(() -> new RuntimeException("The employee was not found."));
     }
 
 
