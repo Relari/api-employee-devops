@@ -13,6 +13,10 @@ springdoc:
   swagger-ui:
     path: '${application.api.path}/swagger-ui.html'
 
+server:
+  error:
+    include-message: always
+
 logging:
   level:
     com.pe.relari: TRACE

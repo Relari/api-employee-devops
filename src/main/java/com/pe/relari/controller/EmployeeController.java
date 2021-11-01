@@ -1,6 +1,7 @@
 package com.pe.relari.controller;
 
 import com.pe.relari.controller.mapper.EmployeeMapper;
+import com.pe.relari.employee.model.api.AddressResponse;
 import com.pe.relari.employee.model.api.EmployeeDetailResponse;
 import com.pe.relari.employee.service.EmployeeService;
 import com.pe.relari.employee.model.api.EmployeeRequest;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -113,9 +116,46 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
+            @Pattern(regexp = "[0-9]*")
             @PathVariable(name = "id") Integer id) {
         return EmployeeMapper.mapEmployeeResponse(
                 employeeService.findById(id)
+        );
+    }
+
+    @Operation(
+            summary = "Obtiene la informacion de un empleado.",
+            method = "GET",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Show Employee",
+                            content = @Content(
+                                    schema = @Schema(implementation = AddressResponse.class),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Error to Save",
+                            content = @Content(
+                                    schema = @Schema(implementation = Error.class),
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE
+                            )
+                    )
+            })
+    @GetMapping(path = "/{id}/address")
+    public AddressResponse getAddressById(
+            @Parameter(
+                    description = "Id del Empleado",
+                    name = "Id",
+                    in = ParameterIn.PATH,
+                    example = "1",
+                    required = true)
+            @Pattern(regexp = "[0-9]*")
+            @PathVariable(name = "id") Integer id) {
+        return EmployeeMapper.mapAddressResponse(
+                employeeService.findById(id).getAddress()
         );
     }
 
@@ -130,7 +170,8 @@ public class EmployeeController {
             })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void save(@RequestBody EmployeeRequest employeeRequest) {
+    public void save(@RequestBody @Valid EmployeeRequest employeeRequest) {
+        System.out.println(employeeRequest.toString());
         var employeeEntity = EmployeeMapper.mapEmployee(employeeRequest);
         employeeService.save(employeeEntity);
     }
@@ -168,6 +209,7 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
+            @Pattern(regexp = "[0-9]*")
             @PathVariable(name = "id") Integer id) {
         employeeService.deleteById(id);
     }
