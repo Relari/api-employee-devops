@@ -171,7 +171,6 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void save(@RequestBody @Valid EmployeeRequest employeeRequest) {
-        System.out.println(employeeRequest.toString());
         var employeeEntity = EmployeeMapper.mapEmployee(employeeRequest);
         employeeService.save(employeeEntity);
     }
