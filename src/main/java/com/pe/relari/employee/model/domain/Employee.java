@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Class: Employee.
+ * @author Relari
+ */
+
 @Builder
 @Getter
 @ToString

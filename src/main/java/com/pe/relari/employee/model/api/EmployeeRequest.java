@@ -12,6 +12,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Class: EmployeeRequest.
+ * @author Relari
+ */
+
 @Builder
 @Getter
 @Setter

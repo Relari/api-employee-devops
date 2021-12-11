@@ -4,6 +4,10 @@ import com.pe.relari.employee.model.domain.Employee;
 
 import java.util.List;
 
+/**
+ * Interface: EmployeeService.
+ * @author Relari
+ */
 public interface EmployeeService {
 
     List<Employee> findAll();

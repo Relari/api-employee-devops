@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * <b>Class:</b> Address.<br/>
+ * Class: Address.
  * @author RLR
- * @version 1.0.0
  */
 
 @Getter

@@ -1,57 +1,52 @@
 package com.pe.relari.employee.service;
 
-import com.pe.relari.employee.dao.EmployeeDao;
 import com.pe.relari.employee.model.domain.Employee;
-import lombok.AllArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+/**
+ * Class: EmployeeServiceImpl.
+ * @author Relari
+ */
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeDao employeeDao;
+    private List<Employee> employees = new ArrayList<>();
 
     @Override
     public List<Employee> findAll() {
-        return employeeDao.findAll();
+        log.debug("get all employees");
+        return employees;
     }
 
     @Override
     public void save(Employee employee) {
-
-        var employeeModel = employeeDao.findAll()
-                .stream()
-                .filter(employeeDomain -> employeeDomain.getId().equals(employee.getId()))
-                .findFirst()
-                .orElseGet(() -> saveEmployee(employee));
-
-        log.trace(employeeModel.toString());
-    }
-
-    private Employee saveEmployee(Employee employee) {
-        employeeDao.save(employee);
-        return employee;
+        log.debug("save new employee");
+        employees.add(employee);
     }
 
     @Override
     public void deleteAll() {
-        employeeDao.deleteAll();
+        log.debug("delete all employee");
+        employees = new ArrayList<>();
     }
 
     @Override
     public void deleteById(Integer id) {
-
-        var employeeId = employeeDao.findById(id).getId();
-        employeeDao.deleteById(employeeId);
-
+        log.debug("delete employee by id = {}", id);
+        employees.removeIf(employee -> employee.getId().equals(id));
     }
 
     @Override
     public Employee findById(Integer id) {
-        return employeeDao.findById(id);
+        log.debug("search employee by id = {}", id);
+        return employees.stream()
+                .filter(employee -> employee.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("The employee was not found."));
     }
 }

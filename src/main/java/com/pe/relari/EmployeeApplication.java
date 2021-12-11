@@ -3,6 +3,11 @@ package com.pe.relari;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Class: EmployeeApplication.
+ * @author Relari
+ */
+
 @SpringBootApplication
 public class EmployeeApplication {
 

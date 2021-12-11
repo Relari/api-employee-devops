@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Class: AddressResponse.
+ * @author Relari
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor

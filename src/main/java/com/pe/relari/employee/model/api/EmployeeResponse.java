@@ -7,6 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Class: EmployeeResponse.
+ * @author Relari
+ */
+
 @Builder
 @Getter
 @NoArgsConstructor

@@ -33,6 +33,11 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class: EmployeeController.
+ * @author Relari
+ */
+
 @Tag(name = "Employee", description = "Employee Controller")
 @OpenAPIDefinition(
         info = @Info(
