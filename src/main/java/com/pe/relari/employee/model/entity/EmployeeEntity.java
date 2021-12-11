@@ -15,5 +15,7 @@ public class EmployeeEntity {
     private String name;
     private String lastName;
     private String sex;
+    private String email;
+    private String phoneNumber;
 
 }

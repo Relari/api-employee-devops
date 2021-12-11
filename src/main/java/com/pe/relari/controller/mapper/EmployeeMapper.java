@@ -26,7 +26,6 @@ public class EmployeeMapper {
 
     public static Employee mapEmployee(EmployeeRequest employeeRequest) {
         return Employee.builder()
-                .id(employeeRequest.getId())
                 .name(employeeRequest.getName())
                 .lastName(employeeRequest.getLastName())
                 .sex(employeeRequest.getSex())

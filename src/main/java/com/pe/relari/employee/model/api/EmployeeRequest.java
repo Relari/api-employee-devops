@@ -20,15 +20,6 @@ import lombok.NoArgsConstructor;
 public class EmployeeRequest {
 
     @Schema(
-            description = "Id del Empleado",
-            name = "firstName",
-            type = "Integer",
-            example = "1",
-            required = true)
-    @NotNull
-    private Integer id;
-
-    @Schema(
             description = "Nombre del Empleado",
             name = "name",
             type = "String",
