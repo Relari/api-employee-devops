@@ -20,6 +20,17 @@ pipeline {
                 bat "mvn clean install"
             }
         }
+
+        stage('Code Coverage') {
+            steps {
+                publishHTML (target: [
+                    reportDir: 'target/site/jacoco',
+                    reportFiles: 'index.html',
+                    reportName: 'JacocoReport'
+
+                ])
+            }
+        }
         
         stage('Analize SonarQube') {
             steps {
