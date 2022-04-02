@@ -30,14 +30,14 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo "Build Docker Image"
-                bat "docker build -t employee ."
+                sh """docker build -t employee ."""
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploy App'
-                bat "docker run --name service-api-employee -it -p 8081:8081 employee"
+                sh """docker run --name service-api-employee -it -p 8081:8081 employee"""
             }
         }
     }
