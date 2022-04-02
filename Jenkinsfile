@@ -9,7 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Build Project'
-                git 'https://github.com/Relari/Employee-Mock-Docker.git'
+                //git 'https://github.com/Relari/Employee-Mock-Docker.git'
                 bat "mvn -Dmaven.test.skip=true clean package"
             }
         }
