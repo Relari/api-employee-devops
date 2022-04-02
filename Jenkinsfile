@@ -21,9 +21,23 @@ pipeline {
             }
         }
         
+        stage('Analize SonarQube') {
+            steps {
+                echo "Analize SonarQube"
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                echo "Build Docker Image"
+                bat "docker build -t employee ."
+            }
+        }
+
         stage('Deploy') {
             steps {
                 echo 'Deploy App'
+                bat "docker run --name service-api-employee -it -p 8080:8080 employee"
             }
         }
     }
