@@ -37,7 +37,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploy App'
-                bat "docker run --name service-api-employee -it -p 8080:8080 employee"
+                bat "docker run --name service-api-employee -it -p 8081:8081 employee"
             }
         }
     }
