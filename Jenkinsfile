@@ -35,6 +35,9 @@ pipeline {
         stage('Analize SonarQube') {
             steps {
                 echo "Analize SonarQube"
+                sh """
+                mvn clean verify sonar:sonar -Dsonar.projectKey=EmployeeMockDocker -Dsonar.host.url=http://localhost:9000 -Dsonar.login=254898c9a5cd5ad68d2b02958190aed305afe041
+                """
             }
         }
 
