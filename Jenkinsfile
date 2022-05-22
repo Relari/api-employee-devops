@@ -51,8 +51,8 @@ pipeline {
 
         stage('Create Branch') {
             steps {
-                sh 'git branch RC-${IMAGE}:${VERSION}'
-                sh 'git push'
+                bat 'git branch RC-${IMAGE}:${VERSION}'
+                bat 'git push'
             }
         }
         
