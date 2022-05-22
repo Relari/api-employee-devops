@@ -8,11 +8,15 @@ pipeline {
 
     agent any
 
-//     environment {
-//         //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
+    environment {
+        //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
 //         IMAGE = readMavenPom().getArtifactId()
 //         VERSION = readMavenPom().getVersion()
-//     }
+
+        def pom = readMavenPom 'pom.xml'
+        def projectArtifactId = pom.artifactId
+        def projectVersion = pom.version
+    }
     
     tools {
         maven "MAVEN_HOME"
@@ -52,9 +56,9 @@ pipeline {
 //                 }
 //
 
-                def pom = readMavenPom 'pom.xml'
-                def projectArtifactId = pom.artifactId
-                def projectVersion = pom.version
+//                 def pom = readMavenPom 'pom.xml'
+//                 def projectArtifactId = pom.artifactId
+//                 def projectVersion = pom.version
                 echo "Building ${projectArtifactId}:${projectVersion}"
             }
         }
