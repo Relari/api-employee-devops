@@ -14,8 +14,8 @@ pipeline {
 //         VERSION = readMavenPom().getVersion()
 
 //         def pom = readMavenPom 'pom.xml'
-        def projectArtifactId = readMavenPom().artifactId
-        def projectVersion = readMavenPom().version
+//         def projectArtifactId = readMavenPom().artifactId
+//         def projectVersion = readMavenPom().version
 //     }
     
     tools {
@@ -47,7 +47,7 @@ pipeline {
 //                  echo "IMAGE: ${IMAGE}"
 //                  echo "VERSION: ${VERSION}"
 
-//                 script {
+                script {
 //                         pom = readMavenPom(file: 'target/pom-effective.xml')
 //                         projectArtifactId = pom.getArtifactId()
 //                         projectGroupId = pom.getGroupId()
@@ -56,10 +56,11 @@ pipeline {
 //                 }
 //
 
-//                 def pom = readMavenPom 'pom.xml'
-//                 def projectArtifactId = pom.artifactId
-//                 def projectVersion = pom.version
+                def pom = readMavenPom 'pom.xml'
+                def projectArtifactId = pom.artifactId
+                def projectVersion = pom.version
                 echo "Building ${projectArtifactId}:${projectVersion}"
+                }
             }
         }
         
