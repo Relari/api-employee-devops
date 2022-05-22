@@ -12,18 +12,6 @@ pipeline {
             }
         }
 
-//         stage('Install') {
-//             steps {
-//                 sh "mvn -Dmaven.test.skip=true install"
-//             }
-//         }
-        
-//         stage('Test') {
-//             steps {
-//                 sh "mvn test"
-//             }
-//         }
-
         stage('Code Coverage') {
             steps {
                 publishHTML (target: [
@@ -62,13 +50,16 @@ pipeline {
     }
     
     post {
-        /**always {
-            emailext body: 'Summary', subject: 'Pipeline Status', to: 'renzolavador@gmail.com'
-        }*/
-        
         success {
             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
+            slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+        }
+        failure {
+            slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+        }
+        always {
+            slackSend message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
         }
     }
 }
