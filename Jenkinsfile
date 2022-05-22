@@ -13,9 +13,9 @@ pipeline {
 //         IMAGE = readMavenPom().getArtifactId()
 //         VERSION = readMavenPom().getVersion()
 
-        def pom = readMavenPom 'pom.xml'
-        def projectArtifactId = pom.artifactId
-        def projectVersion = pom.version
+//         def pom = readMavenPom 'pom.xml'
+        def projectArtifactId = readMavenPom().artifactId
+        def projectVersion = readMavenPom().version
     }
     
     tools {
