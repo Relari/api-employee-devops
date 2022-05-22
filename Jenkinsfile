@@ -22,6 +22,15 @@ pipeline {
                 ])
             }
         }
+
+        stage('Values') {
+            steps {
+                 IMAGE = readMavenPom().getArtifactId()
+                 VERSION = readMavenPom().getVersion()
+                 echo "IMAGE: ${IMAGE}"
+                 echo "VERSION: ${VERSION}"
+            }
+        }
         
 //         stage('Analize SonarQube') {
 //             steps {
