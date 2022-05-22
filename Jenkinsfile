@@ -40,8 +40,8 @@ pipeline {
             steps {
 //                  IMAGE = readMavenPom().getArtifactId()
 //                  VERSION = readMavenPom().getVersion()
-                 echo "IMAGE: ${IMAGE}"
-                 echo "VERSION: ${VERSION}"
+//                  echo "IMAGE: ${IMAGE}"
+//                  echo "VERSION: ${VERSION}"
 
 //                 script {
 //                         pom = readMavenPom(file: 'target/pom-effective.xml')
@@ -51,7 +51,11 @@ pipeline {
 //                         projectName = pom.getName()
 //                 }
 //
-//                 echo "Building ${projectArtifactId}:${projectVersion}"
+
+                def pom = readMavenPom()
+                def projectArtifactId = pom.artifactId
+                def projectVersion = pom.version
+                echo "Building ${projectArtifactId}:${projectVersion}"
             }
         }
         
