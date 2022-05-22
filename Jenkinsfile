@@ -51,7 +51,7 @@ pipeline {
     
     post {
         success {
-            junit '**/target/surefire-reports/TEST-*.xml'
+//             junit '**/target/surefire-reports/TEST-*.xml'
             archiveArtifacts 'target/*.jar'
             slackSend message: "Build Success - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
         }
