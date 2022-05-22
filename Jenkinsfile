@@ -1,10 +1,10 @@
 pipeline {
 
-    node {
-        def pom = readMavenPom()
-        def artifactId = pom.artifactId
-        def version = pom.version
-    }
+//     node {
+//         def pom = readMavenPom()
+//         def artifactId = pom.artifactId
+//         def version = pom.version
+//     }
 
     agent any
     
@@ -34,8 +34,18 @@ pipeline {
             steps {
 //                  IMAGE = readMavenPom().getArtifactId()
 //                  VERSION = readMavenPom().getVersion()
-                 echo "IMAGE: ${artifactId}"
-                 echo "VERSION: ${version}"
+//                  echo "IMAGE: ${artifactId}"
+//                  echo "VERSION: ${version}"
+
+                script {
+                        pom = readMavenPom(file: 'target/pom-effective.xml')
+                        projectArtifactId = pom.getArtifactId()
+                        projectGroupId = pom.getGroupId()
+                        projectVersion = pom.getVersion()
+                        projectName = pom.getName()
+                }
+
+                echo "Building ${projectArtifactId}:${projectVersion}"
             }
         }
         
