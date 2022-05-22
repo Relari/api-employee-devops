@@ -6,9 +6,9 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Clean And Build') {
             steps {
-                sh "mvn -Dmaven.test.skip=true clean install"
+                sh "mvn clean install"
             }
         }
 
@@ -18,11 +18,11 @@ pipeline {
 //             }
 //         }
         
-        stage('Test') {
-            steps {
-                sh "mvn test"
-            }
-        }
+//         stage('Test') {
+//             steps {
+//                 sh "mvn test"
+//             }
+//         }
 
         stage('Code Coverage') {
             steps {
