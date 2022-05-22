@@ -8,15 +8,15 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh "mvn -Dmaven.test.skip=true clean package"
+                sh "mvn -Dmaven.test.skip=true clean install"
             }
         }
 
-        stage('Install') {
-            steps {
-                sh "mvn -Dmaven.test.skip=true install"
-            }
-        }
+//         stage('Install') {
+//             steps {
+//                 sh "mvn -Dmaven.test.skip=true install"
+//             }
+//         }
         
         stage('Test') {
             steps {
