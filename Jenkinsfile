@@ -56,7 +56,7 @@ pipeline {
 //                 }
 //
 
-                def pom = readMavenPom 'pom.xml'
+                def pom = readMavenPom file: 'pom.xml'
                 def projectArtifactId = pom.artifactId
                 def projectVersion = pom.version
                 echo "Building ${projectArtifactId}:${projectVersion}"
