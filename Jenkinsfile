@@ -1,4 +1,11 @@
 pipeline {
+
+    node {
+        def pom = readMavenPom()
+        def artifactId = pom.artifactId
+        def version = pom.version
+    }
+
     agent any
     
     tools {
@@ -25,10 +32,10 @@ pipeline {
 
         stage('Values') {
             steps {
-                 IMAGE = readMavenPom().getArtifactId()
-                 VERSION = readMavenPom().getVersion()
-                 echo "IMAGE: ${IMAGE}"
-                 echo "VERSION: ${VERSION}"
+//                  IMAGE = readMavenPom().getArtifactId()
+//                  VERSION = readMavenPom().getVersion()
+                 echo "IMAGE: ${artifactId}"
+                 echo "VERSION: ${version}"
             }
         }
         
