@@ -48,6 +48,13 @@ pipeline {
 
             }
         }
+
+        stage('Create Branch') {
+            steps {
+                sh 'git branch RC-${IMAGE}:${VERSION}'
+                sh 'git push'
+            }
+        }
         
 //         stage('Analize SonarQube') {
 //             steps {
