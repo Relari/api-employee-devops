@@ -1,22 +1,16 @@
 pipeline {
 
-//     node {
-//         def pom = readMavenPom()
-//         def artifactId = pom.artifactId
-//         def version = pom.version
-//     }
-
     agent any
 
-//     environment {
+    environment {
         //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
-//         IMAGE = readMavenPom().getArtifactId()
-//         VERSION = readMavenPom().getVersion()
+        IMAGE = readMavenPom().getArtifactId()
+        VERSION = readMavenPom().getVersion()
 
-//         def pom = readMavenPom 'pom.xml'
-//         def projectArtifactId = readMavenPom().artifactId
-//         def projectVersion = readMavenPom().version
-//     }
+//         def pom = readMavenPom file: 'pom.xml'
+//         def projectArtifactId = pom.artifactId
+//         def projectVersion = pom.version
+    }
     
     tools {
         maven "MAVEN_HOME"
@@ -44,23 +38,15 @@ pipeline {
             steps {
 //                  IMAGE = readMavenPom().getArtifactId()
 //                  VERSION = readMavenPom().getVersion()
-//                  echo "IMAGE: ${IMAGE}"
-//                  echo "VERSION: ${VERSION}"
+                 echo "IMAGE: ${IMAGE}"
+                 echo "VERSION: ${VERSION}"
 
-                script {
-//                         pom = readMavenPom(file: 'target/pom-effective.xml')
-//                         projectArtifactId = pom.getArtifactId()
-//                         projectGroupId = pom.getGroupId()
-//                         projectVersion = pom.getVersion()
-//                         projectName = pom.getName()
+//                 script {
+//                 def pom = readMavenPom file: 'pom.xml'
+//                 def projectArtifactId = pom.artifactId
+//                 def projectVersion = pom.version
+//                 echo "Building ${projectArtifactId}:${projectVersion}"
 //                 }
-//
-
-                def pom = readMavenPom file: 'pom.xml'
-                def projectArtifactId = pom.artifactId
-                def projectVersion = pom.version
-                echo "Building ${projectArtifactId}:${projectVersion}"
-                }
             }
         }
         
