@@ -58,14 +58,14 @@ pipeline {
 //             }
 //         }
         
-        stage('Analyze SonarQube') {
-            steps {
-                sh "mvn clean verify sonar:sonar \
-                      -Dsonar.projectKey=employee-mock-docker \
-                      -Dsonar.host.url=http://192.168.43.222:9000 \
-                      -Dsonar.login=d3fdc4c23dec2dec8caf4137e3cfe3f03f8d7429"
-            }
-        }
+        // stage('Analyze SonarQube') {
+        //     steps {
+        //         sh "mvn clean verify sonar:sonar \
+        //               -Dsonar.projectKey=employee-mock-docker \
+        //               -Dsonar.host.url=http://192.168.43.222:9000 \
+        //               -Dsonar.login=d3fdc4c23dec2dec8caf4137e3cfe3f03f8d7429"
+        //     }
+        // }
 
         stage('Analyze SonarQube 2') {
             steps {
@@ -75,16 +75,16 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
+        // stage('Build Docker Image') {
+        //     steps {
 
-                // script {
-                //     dockerImage = docker.build "relari/${IMAGE}"
-                // }
+        //         // script {
+        //         //     dockerImage = docker.build "relari/${IMAGE}"
+        //         // }
 
-                sh "docker build -t relari/${IMAGE} ."
-            }
-        }
+        //         sh "docker build -t relari/${IMAGE} ."
+        //     }
+        // }
 //
 //         stage('Deploy') {
 //             steps {
