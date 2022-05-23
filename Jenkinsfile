@@ -67,7 +67,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t ${IMAGE} ."
+                sh "docker build -t relari/${IMAGE} ."
             }
         }
 //
