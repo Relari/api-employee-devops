@@ -11,6 +11,8 @@ pipeline {
 
         def dockerImage = ""
 
+        SECRET_TEXT = credentials('SonarQube-Credential')
+
     }
     
     tools {
@@ -67,14 +69,23 @@ pipeline {
         //     }
         // }
 
-        stage('Analyze SonarQube 2') {
+        stage('Analyze SonarQube') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'mvn clean verify sonar:sonar'
-                }
-                // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+                sh "mvn clean verify sonar:sonar \
+                      -Dsonar.projectKey=${IMAGE} \
+                      -Dsonar.host.url=${env.SONAR_HOST_URL} \
+                      -Dsonar.login=${SECRET_TEXT}"
             }
         }
+
+        // stage('Analyze SonarQube 2') {
+        //     steps {
+        //         withSonarQubeEnv('sonarqube') {
+        //             sh 'mvn clean verify sonar:sonar'
+        //         }
+        //         // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+        //     }
+        // }
 
         // stage('Build Docker Image') {
         //     steps {
