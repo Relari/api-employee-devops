@@ -11,6 +11,7 @@ pipeline {
 
         def dockerImage = ""
 
+        SECRET_HOST = credentials('SONAR_HOST_URL')
         SECRET_TEXT = credentials('SonarQube-Credential')
 
     }
@@ -73,7 +74,7 @@ pipeline {
             steps {
                 sh "mvn clean verify sonar:sonar \
                       -Dsonar.projectKey=${IMAGE} \
-                      -Dsonar.host.url=${SONAR_HOST_URL} \
+                      -Dsonar.host.url=${SECRET_HOST} \
                       -Dsonar.login=${SECRET_TEXT}"
             }
         }
