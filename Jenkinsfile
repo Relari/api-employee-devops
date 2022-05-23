@@ -49,21 +49,19 @@ pipeline {
             }
         }
 
-        stage('Create Branch') {
-            steps {
-                bat 'git branch RC-${IMAGE}:${VERSION}'
-                bat 'git push'
-            }
-        }
-        
-//         stage('Analize SonarQube') {
+//         stage('Create Branch') {
 //             steps {
-//                 echo "Analize SonarQube"
-//                 sh """
-//                 mvn clean verify sonar:sonar -Dsonar.projectKey=EmployeeMockDocker -Dsonar.host.url=http://localhost:9000 -Dsonar.login=254898c9a5cd5ad68d2b02958190aed305afe041
-//                 """
+//                 bat 'git branch RC-${IMAGE}:${VERSION}'
+//                 bat 'git push'
 //             }
 //         }
+        
+        stage('Analize SonarQube') {
+            steps {
+                echo "Analize SonarQube"
+                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=employee-mock-docker -Dsonar.host.url=http://localhost:9000 -Dsonar.login=d3fdc4c23dec2dec8caf4137e3cfe3f03f8d7429"
+            }
+        }
 
 //         stage('Build Docker Image') {
 //             steps {
