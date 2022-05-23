@@ -11,7 +11,7 @@
     <groupId>com.pe.relari</groupId>
     <artifactId>employee-mock-docker</artifactId>
     <version>1.2.2-SNAPSHOT</version>
-    <name>employee</name>
+    <name>employee-mock-docker</name>
     <description>Employee project for Spring Boot</description>
 
     <properties>
