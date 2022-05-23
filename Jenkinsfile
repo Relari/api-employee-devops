@@ -9,6 +9,8 @@ pipeline {
         IMAGE = archivePom.getArtifactId()
         VERSION = archivePom.getVersion()
 
+        def dockerImage = ""
+
     }
     
     tools {
@@ -67,7 +69,12 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t relari/${IMAGE} ."
+
+                script {
+                    dockerImage = docker.build ${IMAGE}-${VERSION}
+                }
+
+                // sh "docker build -t relari/${IMAGE} ."
             }
         }
 //
