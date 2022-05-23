@@ -67,6 +67,14 @@ pipeline {
             }
         }
 
+        stage('Analyze SonarQube 2') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn clean package sonar:sonar'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
 
