@@ -70,11 +70,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
 
-                script {
-                    dockerImage = docker.build "relari/${IMAGE}"
-                }
+                // script {
+                //     dockerImage = docker.build "relari/${IMAGE}"
+                // }
 
-                // sh "docker build -t relari/${IMAGE} ."
+                sh "docker build -t relari/${IMAGE} ."
             }
         }
 //
