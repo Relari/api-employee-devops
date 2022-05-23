@@ -67,9 +67,9 @@ pipeline {
 
         stage('Analyze SonarQube') {
             steps {
-                withSonarQubeEnv('SonarQube') {
+                // withSonarQubeEnv('SonarQube') {
                     sh "mvn clean verify sonar:sonar"
-                }
+                // }
             }
         }
 
