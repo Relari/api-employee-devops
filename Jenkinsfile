@@ -71,7 +71,7 @@ pipeline {
             steps {
 
                 script {
-                    dockerImage = docker.build ${IMAGE}-${VERSION}
+                    dockerImage = docker.build "relari/${IMAGE}"
                 }
 
                 // sh "docker build -t relari/${IMAGE} ."
