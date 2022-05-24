@@ -74,7 +74,7 @@ pipeline {
             steps {
                 sh "mvn clean verify sonar:sonar \
                       -Dsonar.projectKey=${IMAGE} \
-                      -Dsonar.host.url=${SECRET_HOST} \
+                      -Dsonar.host.url=http://192.168.43.222:9000 \
                       -Dsonar.login=${SECRET_TEXT}"
             }
         }
