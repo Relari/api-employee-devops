@@ -71,34 +71,34 @@ pipeline {
         //     }
         // }
 
-        // stage('Analyze SonarQube') {
-        //     steps {
-        //         sh "mvn clean verify sonar:sonar \
-        //               -Dsonar.projectKey=${IMAGE} \
-        //               -Dsonar.host.url=http://192.168.43.222:9000 \
-        //               -Dsonar.login=${SECRET_TEXT}"
-        //     }
-        // }
-
-        stage('Analyze SonarQube 2') {
+        stage('Analyze SonarQube') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'mvn clean verify sonar:sonar'
-                }
-                // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+                sh "mvn clean verify sonar:sonar \
+                      -Dsonar.projectKey=${IMAGE} \
+                      -Dsonar.host.url=http://192.168.43.222:9000 \
+                      -Dsonar.login=${SECRET_TEXT}"
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
+//         stage('Analyze SonarQube 2') {
+//             steps {
+//                 withSonarQubeEnv('sonarqube') {
+//                     sh 'mvn clean verify sonar:sonar'
+//                 }
+//                 // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+//             }
+//         }
 
-                // script {
-                //     dockerImage = docker.build "relari/${IMAGE}"
-                // }
-
-                sh "docker build -t relari/${IMAGE}:${gitcommit} ."
-            }
-        }
+//         stage('Build Docker Image') {
+//             steps {
+//
+//                 // script {
+//                 //     dockerImage = docker.build "relari/${IMAGE}"
+//                 // }
+//
+//                 sh "docker build -t relari/${IMAGE}:${gitcommit} ."
+//             }
+//         }
         // stage('Docker Build & Push') {
         //   steps {
         //     script {  
