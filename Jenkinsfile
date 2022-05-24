@@ -11,7 +11,6 @@ pipeline {
 
         def dockerImage = ""
 
-        SECRET_HOST = credentials('SONAR_HOST_URL')
         SECRET_TEXT = credentials('SonarQube-Credential')
 
     }
