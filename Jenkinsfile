@@ -11,7 +11,7 @@ pipeline {
 
         def dockerImage = ""
 
-        // SECRET_TEXT = credentials('SonarQube-Credential')
+        SECRET_TEXT = credentials('SonarQube-Credential')
 
         gitcommit = "${gitcommit}"
 
