@@ -11,7 +11,7 @@ pipeline {
 
         def dockerImage = ""
 
-        SECRET_TEXT = credentials('SonarQube-Credential')
+        // SECRET_TEXT = credentials('SonarQube-Credential')
 
     }
     
@@ -20,38 +20,38 @@ pipeline {
     }
 
     stages {
-        stage('Clean And Build') {
+        stage('Build And Unit Test') {
             steps {
                 sh "mvn clean install"
             }
         }
 
-        stage('Code Coverage') {
-            steps {
-                publishHTML (target: [
-                    reportDir: 'target/site/jacoco',
-                    reportFiles: 'index.html',
-                    reportName: 'JacocoReport'
+        // stage('Code Coverage') {
+        //     steps {
+        //         publishHTML (target: [
+        //             reportDir: 'target/site/jacoco',
+        //             reportFiles: 'index.html',
+        //             reportName: 'JacocoReport'
 
-                ])
-            }
-        }
+        //         ])
+        //     }
+        // }
 
-        stage('Values') {
-            steps {
-                 echo "IMAGE: ${IMAGE}"
-                 echo "VERSION: ${VERSION}"
+        // stage('Values') {
+        //     steps {
+        //          echo "IMAGE: ${IMAGE}"
+        //          echo "VERSION: ${VERSION}"
 
-                script {
-                    def pom = readMavenPom file: 'pom.xml'
-                    def projectArtifactId = pom.artifactId
-                    def projectVersion = pom.version
+        //         script {
+        //             def pom = readMavenPom file: 'pom.xml'
+        //             def projectArtifactId = pom.artifactId
+        //             def projectVersion = pom.version
 
-                    echo "Building ${projectArtifactId}:${projectVersion}"
-                }
+        //             echo "Building ${projectArtifactId}:${projectVersion}"
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
 //         stage('Create Branch') {
 //             steps {
@@ -69,23 +69,23 @@ pipeline {
         //     }
         // }
 
-        stage('Analyze SonarQube') {
-            steps {
-                sh "mvn clean verify sonar:sonar \
-                      -Dsonar.projectKey=${IMAGE} \
-                      -Dsonar.host.url=http://192.168.43.222:9000 \
-                      -Dsonar.login=${SECRET_TEXT}"
-            }
-        }
-
-        // stage('Analyze SonarQube 2') {
+        // stage('Analyze SonarQube') {
         //     steps {
-        //         withSonarQubeEnv('sonarqube') {
-        //             sh 'mvn clean verify sonar:sonar'
-        //         }
-        //         // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+        //         sh "mvn clean verify sonar:sonar \
+        //               -Dsonar.projectKey=${IMAGE} \
+        //               -Dsonar.host.url=http://192.168.43.222:9000 \
+        //               -Dsonar.login=${SECRET_TEXT}"
         //     }
         // }
+
+        stage('Analyze SonarQube 2') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn clean verify sonar:sonar'
+                }
+                // sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+            }
+        }
 
         // stage('Build Docker Image') {
         //     steps {
