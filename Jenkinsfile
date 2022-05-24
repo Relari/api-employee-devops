@@ -89,26 +89,26 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Image') {
-        //     steps {
+        stage('Build Docker Image') {
+            steps {
 
-        //         // script {
-        //         //     dockerImage = docker.build "relari/${IMAGE}"
-        //         // }
+                // script {
+                //     dockerImage = docker.build "relari/${IMAGE}"
+                // }
 
-        //         sh "docker build -t relari/${IMAGE} ."
-        //     }
-        // }
-        stage('Docker Build & Push') {
-          steps {
-            script {  
-              docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-                def appmavenjenkins = docker.build("relari/${IMAGE}:${gitcommit}", ".")
-                appmavenjenkins.push()
-              }
-            }  
-          }  
+                sh "docker build -t relari/${IMAGE}:${gitcommit} ."
+            }
         }
+        // stage('Docker Build & Push') {
+        //   steps {
+        //     script {  
+        //       docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+        //         def appmavenjenkins = docker.build("relari/${IMAGE}:${gitcommit}", ".")
+        //         appmavenjenkins.push()
+        //       }
+        //     }  
+        //   }  
+        // }
 //
 //         stage('Deploy') {
 //             steps {
