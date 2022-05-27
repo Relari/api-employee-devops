@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pe.relari</groupId>
-    <artifactId>employee-mock-docker</artifactId>
+    <artifactId>employee-example-devops</artifactId>
     <version>1.2.2-SNAPSHOT</version>
-    <name>employee-mock-docker</name>
+    <name>employee-example-devops</name>
     <description>Employee project for Spring Boot</description>
 
     <properties>
