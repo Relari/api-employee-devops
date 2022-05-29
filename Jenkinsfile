@@ -6,14 +6,10 @@ pipeline {
         //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
         def archivePom = readMavenPom()
 
-        IMAGE = archivePom.getArtifactId()
-        VERSION = archivePom.getVersion()
+        ARTIFACT_ID = archivePom.getArtifactId()
+        PROJECT_VERSION = archivePom.getVersion()
 
         def dockerImage = ""
-
-        SECRET_TEXT = credentials('SonarQube-Credential')
-
-        gitcommit = "${gitcommit}"
 
     }
     
@@ -28,58 +24,6 @@ pipeline {
             }
         }
 
-        // stage('Code Coverage') {
-        //     steps {
-        //         publishHTML (target: [
-        //             reportDir: 'target/site/jacoco',
-        //             reportFiles: 'index.html',
-        //             reportName: 'JacocoReport'
-
-        //         ])
-        //     }
-        // }
-
-        // stage('Values') {
-        //     steps {
-        //          echo "IMAGE: ${IMAGE}"
-        //          echo "VERSION: ${VERSION}"
-
-        //         script {
-        //             def pom = readMavenPom file: 'pom.xml'
-        //             def projectArtifactId = pom.artifactId
-        //             def projectVersion = pom.version
-
-        //             echo "Building ${projectArtifactId}:${projectVersion}"
-        //         }
-
-        //     }
-        // }
-
-//         stage('Create Branch') {
-//             steps {
-//                 bat 'git branch RC-${IMAGE}:${VERSION}'
-//                 bat 'git push'
-//             }
-//         }
-        
-        // stage('Analyze SonarQube') {
-        //     steps {
-        //         sh "mvn clean verify sonar:sonar \
-        //               -Dsonar.projectKey=employee-mock-docker \
-        //               -Dsonar.host.url=http://192.168.43.222:9000 \
-        //               -Dsonar.login=d3fdc4c23dec2dec8caf4137e3cfe3f03f8d7429"
-        //     }
-        // }
-
-//         stage('Analyze SonarQube') {
-//             steps {
-//                 sh "mvn clean verify sonar:sonar \
-//                       -Dsonar.projectKey=${IMAGE} \
-//                       -Dsonar.host.url=http://192.168.43.222:9000 \
-//                       -Dsonar.login=${SECRET_TEXT}"
-//             }
-//         }
-
         stage('Analyze SonarQube') {
             steps {
                 withSonarQubeEnv('sonarqube') {
@@ -87,6 +31,13 @@ pipeline {
                 }
             }
         }
+
+//         stage('Create Branch') {
+//             steps {
+//                 bat 'git branch RC-${IMAGE}:${VERSION}'
+//                 bat 'git push'
+//             }
+//         }
 
 //         stage('Build Docker Image') {
 //             steps {
@@ -102,7 +53,7 @@ pipeline {
         //   steps {
         //     script {  
         //       docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-        //         def appmavenjenkins = docker.build("relari/${IMAGE}:${gitcommit}", ".")
+        //         def appmavenjenkins = docker.build("relari/${ARTIFACT_ID}:${gitcommit}", ".")
         //         appmavenjenkins.push()
         //       }
         //     }  
