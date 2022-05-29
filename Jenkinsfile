@@ -39,16 +39,18 @@ pipeline {
 //             }
 //         }
 
-//         stage('Build Docker Image') {
-//             steps {
-//
-//                 // script {
-//                 //     dockerImage = docker.build "relari/${IMAGE}"
-//                 // }
-//
-//                 sh "docker build -t relari/${IMAGE}:${gitcommit} ."
-//             }
-//         }
+        stage('Build Docker Image') {
+            steps {
+
+                script {
+                    // dockerImage = docker.build "relari/${IMAGE}"
+
+                    sh "docker build -t relari/${ARTIFACT_ID}:test ."
+
+                }
+
+            }
+        }
         // stage('Docker Build & Push') {
         //   steps {
         //     script {  
