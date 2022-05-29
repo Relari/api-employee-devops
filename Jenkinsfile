@@ -44,23 +44,25 @@ pipeline {
 
                 script {
                     // dockerImage = docker.build "relari/${IMAGE}"
-
                     sh "docker build -t relari/${ARTIFACT_ID}:test ."
-
                 }
-
             }
         }
-        // stage('Docker Build & Push') {
-        //   steps {
-        //     script {  
-        //       docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-        //         def appmavenjenkins = docker.build("relari/${ARTIFACT_ID}:${gitcommit}", ".")
-        //         appmavenjenkins.push()
-        //       }
-        //     }  
-        //   }  
-        // }
+        stage('Docker Push') {
+            steps {
+                script {  
+                    // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+                    // def appmavenjenkins = docker.build("relari/${ARTIFACT_ID}:${gitcommit}", ".")
+                    // appmavenjenkins.push()
+                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+                        sh 'docker login -u relari -p ${dockerhubpwd}'
+
+                        sh 'docker push relari/${ARTIFACT_ID}:test .'
+                    }
+                }
+            }
+          }
+        }
 //
 //         stage('Deploy') {
 //             steps {
