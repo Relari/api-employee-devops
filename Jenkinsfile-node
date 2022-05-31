@@ -1,0 +1,24 @@
+node {
+    checkout scm
+
+    environment {
+        //Use Pipeline Utility Steps plugin to read information from pom.xml into env variables
+        def archivePom = readMavenPom()
+
+        ARTIFACT_ID = archivePom.getArtifactId()
+        PROJECT_VERSION = archivePom.getVersion()
+
+        def dockerImage = ""
+
+    }
+
+    docker.withRegistry('https://registry.hub.docker.com', 'DockerHub-Credential') {
+
+
+
+        def customImage = docker.build("relari:example")
+
+        /* Push the container to the custom Registry */
+        customImage.push()
+    }
+}
