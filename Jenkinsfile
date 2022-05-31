@@ -32,36 +32,38 @@ pipeline {
             }
         }
 
-//         stage('Create Branch') {
-//             steps {
-//                 bat 'git branch RC-${IMAGE}:${VERSION}'
-//                 bat 'git push'
-//             }
-//         }
-
-        stage('Build Docker Image') {
+        stage('Create Branch') {
             steps {
 
-                script {
-                    // dockerImage = docker.build "relari/${IMAGE}"
-                    sh "docker build -t relari/${ARTIFACT_ID}:test ."
-                }
-            }
-        }
-        stage('Docker Push') {
-            steps {
-                script {  
-                    // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-                    // def appmavenjenkins = docker.build("relari/${ARTIFACT_ID}:${gitcommit}", ".")
-                    // appmavenjenkins.push()
-                    withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-                        sh 'docker login -u relari -p ${dockerhubpwd}'
 
-                        sh 'docker push relari/${ARTIFACT_ID}:test .'
-                    }
-                }
+                sh 'git branch RC-${ARTIFACT_ID}:${PROJECT_VERSION}'
+                sh 'git push origin RC-${ARTIFACT_ID}:${PROJECT_VERSION}'
             }
         }
+
+        // stage('Build Docker Image') {
+        //     steps {
+
+        //         script {
+        //             // dockerImage = docker.build "relari/${IMAGE}"
+        //             sh "docker build -t relari/${ARTIFACT_ID}:test ."
+        //         }
+        //     }
+        // }
+        // stage('Docker Push') {
+        //     steps {
+        //         script {  
+        //             // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+        //             // def appmavenjenkins = docker.build("relari/${ARTIFACT_ID}:${gitcommit}", ".")
+        //             // appmavenjenkins.push()
+        //             withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
+        //                 sh 'docker login -u relari -p ${dockerhubpwd}'
+
+        //                 sh 'docker push relari/${ARTIFACT_ID}:test .'
+        //             }
+        //         }
+        //     }
+        // }
 //
 //         stage('Deploy') {
 //             steps {
