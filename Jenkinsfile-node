@@ -1,11 +1,9 @@
 node {
     checkout scm
 
-    stages {
-        stage('Build And Unit Test') {
-            steps {
-                sh "mvn clean install"
-            }
+    stage('Build And Unit Test') {
+        steps {
+            sh "mvn clean install"
         }
     }
 
