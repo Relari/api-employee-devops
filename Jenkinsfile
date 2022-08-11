@@ -31,48 +31,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Create Branch') {
-            steps {
-
-
-                sh 'git branch RC-${ARTIFACT_ID}:${PROJECT_VERSION}'
-                sh 'git push origin RC-${ARTIFACT_ID}:${PROJECT_VERSION}'
-            }
-        }
-
-        // stage('Build Docker Image') {
-        //     steps {
-
-        //         script {
-        //             // dockerImage = docker.build "relari/${IMAGE}"
-        //             sh "docker build -t relari/${ARTIFACT_ID}:test ."
-        //         }
-        //     }
-        // }
-        // stage('Docker Push') {
-        //     steps {
-        //         script {  
-        //             // docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
-        //             // def appmavenjenkins = docker.build("relari/${ARTIFACT_ID}:${gitcommit}", ".")
-        //             // appmavenjenkins.push()
-        //             withCredentials([string(credentialsId: 'dockerhub-pwd', variable: 'dockerhubpwd')]) {
-        //                 sh 'docker login -u relari -p ${dockerhubpwd}'
-
-        //                 sh 'docker push relari/${ARTIFACT_ID}:test .'
-        //             }
-        //         }
-        //     }
-        // }
-//
-//         stage('Deploy') {
-//             steps {
-//                 echo 'Deploy App'
-//                 sh """
-//                     docker run --name service-api-employee -it -p 8081:8081 employee
-//                 """
-//             }
-//         }
     }
     
     post {
@@ -84,8 +42,5 @@ pipeline {
         failure {
             slackSend message: "Build Failure - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
         }
-//         always {
-//             slackSend message: "Build Always - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
-//         }
     }
 }
