@@ -22,32 +22,49 @@ public class EmployeeResponse {
             description = "Id del Empleado",
             name = "firstName",
             type = "Integer",
-            example = "1",
-            required = true)
+            example = "1")
     private Integer id;
 
     @Schema(
             description = "Nombre del Empleado",
             name = "name",
             type = "String",
-            example = "Renzo",
-            required = true)
+            example = "Renzo")
     private String name;
 
     @Schema(
             description = "Apellido del Empleado",
             name = "lastName",
             type = "String",
-            example = "Lavado",
-            required = true)
+            example = "Lavado")
     private String lastName;
 
     @Schema(
             description = "Sexo del Empleado",
             name = "sex",
             type = "String",
-            example = "M o F",
-            required = true)
+            example = "M o F")
     private String sex;
+
+    @Schema(
+            description = "Cargo del Empleado",
+            name = "position",
+            type = "String",
+            example = "Developer")
+    private String position;
+
+    @Schema(
+            description = "Salario del Empleado",
+            name = "salary",
+            type = "Double",
+            example = "1000.00")
+    private Double salary;
+
+    @Schema(
+            description = "Estado del Empleado",
+            name = "status",
+            type = "Double",
+            example = "true")
+    private Boolean status;
 
 }

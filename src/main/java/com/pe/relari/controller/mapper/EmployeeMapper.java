@@ -25,6 +25,9 @@ public class EmployeeMapper {
                 .name(employee.getName())
                 .lastName(employee.getLastName())
                 .sex(employee.getSex())
+                .position(employee.getPosition())
+                .salary(employee.getSalary())
+                .status(employee.getStatus())
                 .build();
     }
 
@@ -38,12 +41,15 @@ public class EmployeeMapper {
                 .name(employeeRequest.getName())
                 .lastName(employeeRequest.getLastName())
                 .sex(employeeRequest.getSex())
+                .position(employeeRequest.getPosition())
+                .salary(employeeRequest.getSalary())
                 .address(
                         new Address(
                                 employeeRequest.getAddress().getEmail(),
                                 employeeRequest.getAddress().getPhoneNumber()
                         )
                 )
+                .status(Boolean.TRUE)
                 .build();
     }
 

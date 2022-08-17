@@ -22,6 +22,9 @@ public class Employee {
     private String name;
     private String lastName;
     private String sex;
+    private String position;
+    private Double salary;
     private Address address;
+    private Boolean status;
 
 }
