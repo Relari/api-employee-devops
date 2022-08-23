@@ -33,14 +33,14 @@ public class EmployeeRequest {
     @NotBlank
     private String name;
 
-    @Schema(
-            description = "Apellido del Empleado",
-            name = "lastName",
-            type = "String",
-            example = "Lavado",
-            required = true)
-    @NotBlank
-    private String lastName;
+//    @Schema(
+//            description = "Apellido del Empleado",
+//            name = "lastName",
+//            type = "String",
+//            example = "Lavado",
+//            required = true)
+//    @NotBlank
+//    private String lastName;
 
     @Schema(
             description = "Sexo del Empleado",

@@ -20,7 +20,7 @@ public class Employee {
 
     private Integer id;
     private String name;
-    private String lastName;
+//    private String lastName;
     private String sex;
     private String position;
     private Double salary;

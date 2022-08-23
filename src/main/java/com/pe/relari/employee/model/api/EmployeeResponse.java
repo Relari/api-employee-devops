@@ -32,12 +32,12 @@ public class EmployeeResponse {
             example = "Renzo")
     private String name;
 
-    @Schema(
-            description = "Apellido del Empleado",
-            name = "lastName",
-            type = "String",
-            example = "Lavado")
-    private String lastName;
+//    @Schema(
+//            description = "Apellido del Empleado",
+//            name = "lastName",
+//            type = "String",
+//            example = "Lavado")
+//    private String lastName;
 
     @Schema(
             description = "Sexo del Empleado",

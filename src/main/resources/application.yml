@@ -5,6 +5,17 @@ application:
     description: '@project.description@'
   api:
     path: '/api/v1/employees'
+  backend:
+    errors:
+      EMPLOYEE_NOT_SAVE:
+        description: 'Error al guardar al empleado.'
+        category: INTERNAL_ERROR
+      EMPLOYEE_NOT_FOUND:
+        description: 'Empleado no encontrado.'
+        category: NOT_FOUND
+      EMPLOYEE_NOT_UPDATE:
+        description: 'Error al actualizar al empleado.'
+        category: INTERNAL_ERROR
 
 springdoc:
   api-docs:

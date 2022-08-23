@@ -42,7 +42,7 @@ class EmployeeControllerTest {
 
         assertEquals(employee.getId(), employeeResponses.get(0).getId());
         assertEquals(employee.getName(), employeeResponses.get(0).getName());
-        assertEquals(employee.getLastName(), employeeResponses.get(0).getLastName());
+//        assertEquals(employee.getLastName(), employeeResponses.get(0).getLastName());
         assertEquals(employee.getSex(), employeeResponses.get(0).getSex());
     }
 
@@ -73,7 +73,7 @@ class EmployeeControllerTest {
 
         assertEquals(employee.getId(), employeeResponse.getId());
         assertEquals(employee.getName(), employeeResponse.getName());
-        assertEquals(employee.getLastName(), employeeResponse.getLastName());
+//        assertEquals(employee.getLastName(), employeeResponse.getLastName());
         assertEquals(employee.getSex(), employeeResponse.getSex());
 
     }
@@ -100,7 +100,7 @@ class EmployeeControllerTest {
 
         var employeeRequest = EmployeeRequest.builder()
                 .name("Name")
-                .lastName("Last Name")
+//                .lastName("Last Name")
                 .sex("Sex")
                 .address(new AddressRequest("email", "phone number"))
                 .build();

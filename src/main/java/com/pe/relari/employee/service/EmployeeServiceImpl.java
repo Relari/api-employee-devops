@@ -1,5 +1,7 @@
 package com.pe.relari.employee.service;
 
+import com.pe.relari.employee.exception.ApiException;
+import com.pe.relari.employee.exception.ErrorCategory;
 import com.pe.relari.employee.model.domain.Employee;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream()
                 .filter(employee -> employee.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("The employee was not found."));
+                .orElseThrow(() -> ApiException.of(ErrorCategory.EMPLOYEE_NOT_FOUND));
     }
 }
