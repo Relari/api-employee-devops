@@ -2,7 +2,8 @@ package com.pe.relari.employee.exception;
 
 import com.pe.relari.config.ErrorProperties;
 import com.pe.relari.employee.model.error.ErrorResponse;
-import com.pe.relari.employee.util.Utils;
+import com.pe.relari.employee.util.ConverterUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ErrorFactory {
     ErrorResponse errorResponse = new ErrorResponse();
     errorResponse.setMessage(properties.getDescription());
 
-    if (Objects.isNull(apiException.getMessage()) || apiException.getMessage().isEmpty()) {
+    if (StringUtils.isBlank(apiException.getMessage())) {
 
       errorResponse.setErrorDetails(Collections.singletonList(errorDetail));
 
@@ -53,7 +54,7 @@ public class ErrorFactory {
       String json = apiException.getMessage()
               .substring(apiException.getMessage().indexOf("["));
 
-      var responses = Utils.readData(json, ErrorResponse[].class);
+      var responses = ConverterUtil.readData(json, ErrorResponse[].class);
 
       assert responses != null;
       var errorDetails = responses[0].getErrorDetails();
