@@ -18,16 +18,22 @@ pipeline {
     }
 
     stages {
-        stage('Build And Unit Test') {
+        stage('Build') {
             steps {
-                sh "mvn clean install"
+                sh "mvn install -DskipTests"
+            }
+        }
+
+        stage('Unit Test') {
+            steps {
+                sh "mvn test"
             }
         }
 
         stage('Analyze SonarQube') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh 'mvn clean verify sonar:sonar'
+                    sh 'mvn verify sonar:sonar'
                 }
             }
         }
