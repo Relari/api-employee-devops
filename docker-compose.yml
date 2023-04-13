@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  # Configuración de Jenkins
+  jenkins:
+    container_name: JENKINS_DEV
+    image: 'jenkins/jenkins:jdk11'
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - c:\jenkins\jenkins_home:/var/jenkins
+
+  # Configuración de SonarQube
+  sonarqube:
+    container_name: SONARQUBE_DEV
+    image: 'sonarqube:community'
+    ports:
+      - "9000:9000"
