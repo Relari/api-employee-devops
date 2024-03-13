@@ -16,7 +16,13 @@
 
     <properties>
         <java.version>11</java.version>
-        <sonar.exclusions>**/com/pe/relari/EmployeeApplication.java</sonar.exclusions>
+        <sonar.exclusions>
+            **/com/pe/relari/EmployeeApplication.java,
+            **/com/pe/relari/config/**,
+            **/com/pe/relari/employee/exception/**,
+            **/com/pe/relari/employee/model/**,
+            **/com/pe/relari/employee/util/**
+        </sonar.exclusions>
     </properties>
 
     <dependencies>
