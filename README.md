@@ -84,6 +84,16 @@ Para poder ejecutar el pipeline de Jenkins se deben instalar los siguientes plug
 
 # Docker
 
+Install Jenkins
+```
+docker run -p 8080:8080 -p 50000:50000 -v c:\jenkins\jenkins_home:/var/jenkins -d --name JENKINS_DEV jenkins/jenkins:jdk11
+```
+
+Install SonarQube
+```
+docker run -p 9000:9000 -d --name SONARQUBE_DEV sonarqube:community
+```
+
 ## Como saco mi usuario en windows
 
 En Windows, puedes verificar tu nombre de usuario de varias maneras, aquí te mostramos tres opciones:
