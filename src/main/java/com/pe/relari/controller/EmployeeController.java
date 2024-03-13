@@ -50,6 +50,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EmployeeController {
 
+    private static final String REGEXP_NUMBER = "\\d+"; // equivalent to [0-9]*
+
     private EmployeeService employeeService;
 
     @Operation(
@@ -121,7 +123,7 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
-            @Pattern(regexp = "[0-9]*")
+            @Pattern(regexp = REGEXP_NUMBER)
             @PathVariable(name = "id") Integer id) {
         return EmployeeMapper.mapEmployeeResponse(
                 employeeService.findById(id)
@@ -157,7 +159,7 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
-            @Pattern(regexp = "[0-9]*")
+            @Pattern(regexp = REGEXP_NUMBER)
             @PathVariable(name = "id") Integer id) {
         return EmployeeMapper.mapAddressResponse(
                 employeeService.findById(id).getAddress()
@@ -213,7 +215,7 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
-            @Pattern(regexp = "[0-9]*")
+            @Pattern(regexp = REGEXP_NUMBER)
             @PathVariable(name = "id") Integer id) {
         employeeService.deleteById(id);
     }
