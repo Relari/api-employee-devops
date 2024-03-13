@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.pe.relari.employee.dao.impl.EmployeeDaoImpl;
 import com.pe.relari.employee.dao.repository.EmployeeRepository;
 import com.pe.relari.employee.exception.ApiException;
+import com.pe.relari.employee.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -57,6 +58,8 @@ class EmployeeDaoTest {
 
         employeeRepository.deleteAll();
 
+        employeeDao.deleteAll();
+
         assertNotNull(employee);
 
     }
@@ -66,7 +69,9 @@ class EmployeeDaoTest {
 
         Integer id = 1;
 
-        employeeRepository.deleteById(id);
+        employeeRepository.deleteById(Mockito.anyInt());
+
+        employeeDao.deleteById(id);
 
         assertNotNull(id);
     }
@@ -97,6 +102,26 @@ class EmployeeDaoTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(ApiException.class, () -> employeeDao.findById(2));
+
+    }
+
+    @Test
+    void save() {
+
+        var employeeEntity = TestUtil.buildEmployeeEntity();
+
+        Mockito.when(employeeRepository.save(Mockito.any()))
+                .thenReturn(employeeEntity);
+
+        var employee = TestUtil.buildEmployee();
+        employeeDao.save(employee);
+
+        //        assertEquals(employeeEntity.getIdEmployee(), employeeDomain.getIdEmployee());
+        assertEquals(employeeEntity.getFirstName(), employee.getFirstName());
+//        assertEquals(employee.getLastName(), employees.get(0).getLastName());
+        assertEquals(employeeEntity.getSex(), employee.getSex());
+//        assertEquals(employeeEntity.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
+//        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
 
     }
 }

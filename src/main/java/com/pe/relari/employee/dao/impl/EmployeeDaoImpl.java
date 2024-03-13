@@ -45,7 +45,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void deleteById(Integer id) {
-        // Todo asdasdsd
+        employeeRepository.deleteById(id);
     }
 
     @Override

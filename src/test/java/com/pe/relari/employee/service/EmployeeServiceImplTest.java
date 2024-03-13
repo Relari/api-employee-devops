@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.pe.relari.employee.dao.EmployeeDao;
+import com.pe.relari.employee.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -53,6 +54,8 @@ class EmployeeServiceImplTest {
 
         employeeDao.deleteAll();
 
+        employeeService.deleteAll();
+
         assertNotNull(employee);
 
     }
@@ -62,7 +65,9 @@ class EmployeeServiceImplTest {
 
         Integer id = 1;
 
-        employeeDao.deleteById(id);
+        employeeDao.deleteById(Mockito.anyInt());
+
+        employeeService.deleteById(id);
 
         assertNotNull(id);
     }
@@ -85,5 +90,16 @@ class EmployeeServiceImplTest {
 
 
     }
+
+    @Test
+    void save() {
+        employeeDao.save(Mockito.any());
+
+        var employee = TestUtil.buildEmployee();
+        employeeService.save(employee);
+
+        assertNotNull(employee);
+    }
+
 
 }
