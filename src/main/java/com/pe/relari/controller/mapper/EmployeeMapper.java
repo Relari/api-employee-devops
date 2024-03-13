@@ -5,7 +5,7 @@ import com.pe.relari.employee.model.api.EmployeeRequest;
 import com.pe.relari.employee.model.api.EmployeeResponse;
 import com.pe.relari.employee.model.domain.Address;
 import com.pe.relari.employee.model.domain.Employee;
-import java.util.concurrent.atomic.AtomicInteger;
+import com.pe.relari.employee.util.GenderEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,17 +17,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmployeeMapper {
 
-    private static final AtomicInteger id = new AtomicInteger(1);
-
     public static EmployeeResponse mapEmployeeResponse(Employee employee) {
         return EmployeeResponse.builder()
-                .id(employee.getId())
-                .name(employee.getName())
-//                .lastName(employee.getLastName())
-                .sex(employee.getSex())
+                .id(employee.getIdEmployee())
+                .firstName(employee.getFirstName())
+                .fatherLastName(employee.getFatherLastName())
+                .motherLastName(employee.getMotherLastName())
+                .sex(employee.getSex().name())
                 .position(employee.getPosition())
                 .salary(employee.getSalary())
-                .status(employee.getStatus())
+                .status(employee.getIsActive())
                 .build();
     }
 
@@ -37,10 +36,10 @@ public class EmployeeMapper {
 
     public static Employee mapEmployee(EmployeeRequest employeeRequest) {
         return Employee.builder()
-                .id(id.getAndIncrement())
-                .name(employeeRequest.getName())
-//                .lastName(employeeRequest.getLastName())
-                .sex(employeeRequest.getSex())
+                .firstName(employeeRequest.getFirstName())
+                .fatherLastName(employeeRequest.getFatherLastName())
+                .motherLastName(employeeRequest.getMotherLastName())
+                .sex(GenderEnum.valueOf(employeeRequest.getSex()))
                 .position(employeeRequest.getPosition())
                 .salary(employeeRequest.getSalary())
                 .address(
@@ -49,7 +48,7 @@ public class EmployeeMapper {
                                 employeeRequest.getAddress().getPhoneNumber()
                         )
                 )
-                .status(Boolean.TRUE)
+                .isActive(Boolean.TRUE)
                 .build();
     }
 

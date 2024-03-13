@@ -30,14 +30,21 @@ public class EmployeeResponse {
             name = "name",
             type = "String",
             example = "Renzo")
-    private String name;
+    private String firstName;
 
-//    @Schema(
-//            description = "Apellido del Empleado",
-//            name = "lastName",
-//            type = "String",
-//            example = "Lavado")
-//    private String lastName;
+    @Schema(
+            description = "Apellido del Empleado",
+            name = "fatherLastName",
+            type = "String",
+            example = "Lavado")
+    private String fatherLastName;
+
+    @Schema(
+            description = "Apellido del Empleado",
+            name = "motherLastName",
+            type = "String",
+            example = "Lavado")
+    private String motherLastName;
 
     @Schema(
             description = "Sexo del Empleado",

@@ -26,21 +26,30 @@ public class EmployeeRequest {
 
     @Schema(
             description = "Nombre del Empleado",
-            name = "name",
+            name = "firstName",
             type = "String",
             example = "Renzo",
             required = true)
     @NotBlank
-    private String name;
+    private String firstName;
 
-//    @Schema(
-//            description = "Apellido del Empleado",
-//            name = "lastName",
-//            type = "String",
-//            example = "Lavado",
-//            required = true)
-//    @NotBlank
-//    private String lastName;
+    @Schema(
+            description = "Apellido del Empleado",
+            name = "fatherLastName",
+            type = "String",
+            example = "Lavado",
+            required = true)
+    @NotBlank
+    private String fatherLastName;
+
+    @Schema(
+            description = "Apellido del Empleado",
+            name = "motherLastName",
+            type = "String",
+            example = "Lavado",
+            required = true)
+    @NotBlank
+    private String motherLastName;
 
     @Schema(
             description = "Sexo del Empleado",

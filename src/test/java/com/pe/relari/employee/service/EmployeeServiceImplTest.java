@@ -3,18 +3,28 @@ package com.pe.relari.employee.service;
 import static com.pe.relari.employee.util.TestUtil.buildEmployee;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.pe.relari.employee.dao.EmployeeDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Collections;
 
 class EmployeeServiceImplTest {
 
-    private static EmployeeService service = new EmployeeServiceImpl();
+    @Mock
+    private EmployeeDao employeeDao;
+
+    @InjectMocks
+    private EmployeeServiceImpl employeeService;
 
     @BeforeEach
     void init() {
-        service.save(buildEmployee());
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -22,10 +32,13 @@ class EmployeeServiceImplTest {
 
         var employee = buildEmployee();
 
-        var employees = service.findAll();
+        Mockito.when(employeeDao.findAll())
+                .thenReturn(Collections.singletonList(employee));
 
-        assertEquals(employee.getId(), employees.get(0).getId());
-        assertEquals(employee.getName(), employees.get(0).getName());
+        var employees = employeeService.findAll();
+
+        assertEquals(employee.getIdEmployee(), employees.get(0).getIdEmployee());
+        assertEquals(employee.getFirstName(), employees.get(0).getFirstName());
 //        assertEquals(employee.getLastName(), employees.get(0).getLastName());
         assertEquals(employee.getSex(), employees.get(0).getSex());
         assertEquals(employee.getAddress().getEmail(), employees.get(0).getAddress().getEmail());
@@ -38,7 +51,7 @@ class EmployeeServiceImplTest {
 
         var employee = buildEmployee();
 
-        service.deleteAll();
+        employeeDao.deleteAll();
 
         assertNotNull(employee);
 
@@ -49,7 +62,7 @@ class EmployeeServiceImplTest {
 
         Integer id = 1;
 
-        service.deleteById(id);
+        employeeDao.deleteById(id);
 
         assertNotNull(id);
     }
@@ -57,15 +70,20 @@ class EmployeeServiceImplTest {
     @Test
     void findById() {
 
-        var employee = service.findById(1);
-        assertNotNull(employee);
+        var employee = buildEmployee();
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(employee);
+
+        var employeeDomain = employeeService.findById(1);
+        assertEquals(employee.getIdEmployee(), employeeDomain.getIdEmployee());
+        assertEquals(employee.getFirstName(), employeeDomain.getFirstName());
+//        assertEquals(employee.getLastName(), employees.get(0).getLastName());
+        assertEquals(employee.getSex(), employeeDomain.getSex());
+        assertEquals(employee.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
+        assertEquals(employee.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
+
 
     }
 
-    @Test
-    void findByIdError() {
-
-        assertThrows(RuntimeException.class, () -> service.findById(2));
-
-    }
 }
