@@ -43,12 +43,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
-      - name: Step 7 - Build Docker image
-        run: docker build -t relari/api-employee-devops .
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:latest
 
-      - name: Step 8 - Push Docker image
-        run: docker push relari/api-employee-devops
-
+#      - name: Step 7 - Build Docker image
+#        run: docker build -t relari/api-employee-devops .
+#
+#      - name: Step 8 - Push Docker image
+#        run: docker push relari/api-employee-devops
+#
 #      - name: Build & push Docker image
 #        uses: mr-smithers-excellent/docker-build-push@v5
 #        with:
