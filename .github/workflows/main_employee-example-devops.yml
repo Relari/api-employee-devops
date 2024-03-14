@@ -22,40 +22,25 @@ jobs:
           java-version: '11'
 
       - name: Step 3 - Build with Maven
-        run: mvn clean package -DskipTests
+        run: mvn clean package
 
-#      - name: Step 4 - List the current directory
-#        run: dir
-#
-#      - name: Step 5 - What is in the target folder
-#        run: |
-#          cd target
-#          dir
-#
+      - name: Step 4 - List the current directory
+        run: dir
+
+      - name: Step 5 - What is in the target folder
+        run: |
+          cd target
+          dir
+
 #      - name: Step 6 - Run project
 #        run: mvn spring-boot:run
-
+#
 #      - name: Upload artifact for deployment job
 #        uses: actions/upload-artifact@v2
 #        with:
 #          name: java-app
 #          path: '${{ github.workspace }}/target/*.jar'
 #
-  test:
-    runs-on: windows-latest
-    needs: build
-    steps:
-#      - name: Step 1 - Checkout main branch from GitHub
-#        uses: actions/checkout@v2
-#
-#      - name: Step 2 - Set up Java version
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: '11'
-
-      - name: Step 3 - Build with Maven
-        run: mvn test
-
 #  deploy:
 #    runs-on: windows-latest
 #    needs: build
