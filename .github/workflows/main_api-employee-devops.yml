@@ -58,7 +58,7 @@ jobs:
 #        id: deploy-to-webapp
 #        uses: azure/webapps-deploy@v2
 #        with:
-#          app-name: 'employee-example-devops'
+#          app-name: 'api-employee-devops'
 #          slot-name: 'Production'
 #          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91FB24DF2BD4406F936D7B4AD5A1DB65 }}
 #          package: '*.jar'
