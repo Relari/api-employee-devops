@@ -38,7 +38,7 @@ public class AddressRequest {
           example = "999999999",
           required = true)
   @NotBlank
-  @Pattern(regexp = "[0-9]{9}")
+  @Pattern(regexp = "\\d{9}")
   private String phoneNumber;
 
 }
