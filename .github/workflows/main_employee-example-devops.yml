@@ -22,25 +22,40 @@ jobs:
           java-version: '11'
 
       - name: Step 3 - Build with Maven
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
-      - name: Step 4 - List the current directory
-        run: dir
-
-      - name: Step 5 - What is in the target folder
-        run: |
-          cd target
-          dir
-
-      - name: Step 6 - Run project
-        run: mvn spring-boot:run
-
-   #   - name: Upload artifact for deployment job
-   #     uses: actions/upload-artifact@v2
-   #     with:
-   #       name: java-app
-   #       path: '${{ github.workspace }}/target/*.jar'
+#      - name: Step 4 - List the current directory
+#        run: dir
 #
+#      - name: Step 5 - What is in the target folder
+#        run: |
+#          cd target
+#          dir
+#
+#      - name: Step 6 - Run project
+#        run: mvn spring-boot:run
+
+#      - name: Upload artifact for deployment job
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: java-app
+#          path: '${{ github.workspace }}/target/*.jar'
+#
+  test:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Step 1 - Checkout main branch from GitHub
+        uses: actions/checkout@v2
+
+      - name: Step 2 - Set up Java version
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+
+      - name: Step 3 - Build with Maven
+        run: mvn test
+
 #  deploy:
 #    runs-on: windows-latest
 #    needs: build
@@ -48,17 +63,17 @@ jobs:
 #      name: 'Production'
 #      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 #
-  #  steps:
-  #    - name: Download artifact from build job
-  #      uses: actions/download-artifact@v2
-  #      with:
-   #       name: java-app
+#    steps:
+#      - name: Download artifact from build job
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: java-app
 #
-      #- name: Deploy to Azure Web App
-      #  id: deploy-to-webapp
-      #  uses: azure/webapps-deploy@v2
-      #  with:
-      #    app-name: 'employee-example-devops'
-      #    slot-name: 'Production'
-      #    publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91FB24DF2BD4406F936D7B4AD5A1DB65 }}
-      #    package: '*.jar'
+#      - name: Deploy to Azure Web App
+#        id: deploy-to-webapp
+#        uses: azure/webapps-deploy@v2
+#        with:
+#          app-name: 'employee-example-devops'
+#          slot-name: 'Production'
+#          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91FB24DF2BD4406F936D7B4AD5A1DB65 }}
+#          package: '*.jar'
