@@ -24,23 +24,34 @@ jobs:
       - name: Step 3 - Build with Maven
         run: mvn clean package
 
-#      - name: Step 4 - List the current directory
-#        run: dir
-#
-#      - name: Step 5 - What is in the target folder
-#        run: |
-#          cd target
-#          dir
+      - name: Step 4 - List the current directory
+        run: dir
 
-      - name: Build & push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v5
-        with:
-          image: relari/api-employee-devops
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Step 5 - What is in the target folder
+        run: |
+          cd target
+          dir
+
+      - name: Step 6 - Return root project
+        run: |
+          cd ..
+          dir
+
+      - name: Step 7 - Build Docker image
+        run: docker build -t relari/api-employee-devops .
+
+      - name: Step 8 - Push Docker image
+        run: docker push relari/api-employee-devops
+
+#      - name: Build & push Docker image
+#        uses: mr-smithers-excellent/docker-build-push@v5
+#        with:
+#          image: relari/api-employee-devops
+#          tags: latest
+#          registry: docker.io
+#          dockerfile: Dockerfile
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
 #      - name: Step 6 - Run project
 #        run: mvn spring-boot:run
