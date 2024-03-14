@@ -31,6 +31,9 @@ jobs:
         run: |
           cd target
           dir
+
+      - name: Step 6 - Run project
+        run: spring-boot:run
    #   - name: Upload artifact for deployment job
    #     uses: actions/upload-artifact@v2
    #     with:
