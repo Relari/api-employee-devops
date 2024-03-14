@@ -35,6 +35,7 @@ jobs:
       - name: Step 6 - Return root project
         run: |
           cd ..
+          cd api-employee-devops
           dir
 
       - name: Step 7 - Build Docker image
