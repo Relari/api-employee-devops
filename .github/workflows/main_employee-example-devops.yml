@@ -24,17 +24,17 @@ jobs:
       - name: Step 3 - Build with Maven
         run: mvn clean package
 
-#      - name: Step 4 - List the current directory
-#        run: dir
+      - name: Step 4 - List the current directory
+        run: dir
+
+      - name: Step 5 - What is in the target folder
+        run: |
+          cd target
+          dir
+
+#      - name: Step 6 - Run project
+#        run: mvn spring-boot:run
 #
-#      - name: Step 5 - What is in the target folder
-#        run: |
-#          cd target
-#          dir
-
-      - name: Step 6 - Run project
-        run: mvn spring-boot:run
-
 #      - name: Upload artifact for deployment job
 #        uses: actions/upload-artifact@v2
 #        with:
