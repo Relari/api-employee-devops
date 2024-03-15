@@ -27,20 +27,11 @@ jobs:
       - name: Step 4 - Run unit tests
         run: mvn test
 
-      - name: Analizar código con SonarCloud
-        uses: sonarsource/sonarcloud-github-action@v1
-        with:
-          organization: ${{ secrets.DOCKERHUB_USERNAME }}
-          token: ${{ secrets.SONAR_TOKEN }}
-          projectKey: "api-employee-devops"
-          projectName: "Nombre de tu proyecto"
-          extraProperties: |
-            sonar.projectDescription=Proyecto Spring Boot en Docker
-            sonar.projectVersion=1.0.0
-            sonar.sources=src
-            sonar.tests=src/test
-            sonar.java.binaries=target/classes
-            sonar.java.test.binaries=target/test-classes
+      - name: Build with Maven - SonarCloud
+        run:  mvn -B verify sonar:sonar -Dsonar.projectKey=relari -Dsonar.organization=${{ secrets.DOCKERHUB_USERNAME }} -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONARCLOUD_TOKEN }}
+        env:
+          GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+          SONARCLOUD_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
       - name: Obtener hash corto del commit
         id: short_commit_hash
