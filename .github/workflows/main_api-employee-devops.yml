@@ -28,7 +28,7 @@ jobs:
         run: mvn test
 
       - name: Analizar código con SonarCloud
-        uses: SonarSource/sonarcloud-github-action@v2
+        uses: SonarSource/sonarcloud-github-action@v1
         with:
           organization: "relari"
           token: ${{ secrets.SONAR_TOKEN }}
