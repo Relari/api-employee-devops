@@ -28,7 +28,7 @@ jobs:
         run: mvn test
 
       - name: Build with Maven - SonarCloud
-        run:  mvn -B verify sonar:sonar -Dsonar.projectKey='Renzo Lavado Rivas' -Dsonar.organization='Renzo Lavado Rivas' -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN }}
+        run:  mvn -B verify sonar:sonar -Dsonar.projectKey=Relari_api-employee-devops -Dsonar.organization=relari -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN }}
         env:
           GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
           SONARCLOUD_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -52,11 +52,10 @@ jobs:
 #            echo "La prueba falló: La aplicación no está respondiendo correctamente. Código de respuesta: $response"
 #            exit 1
 #          fi
-
-      - name: Detener contenedor de prueba
-        run: docker stop app-test
-        if: always()  # Asegurarse de que este paso siempre se ejecute, incluso si las pruebas fallan
-
+#
+#      - name: Detener contenedor de prueba
+#        run: docker stop app-test
+#        if: always()  # Asegurarse de que este paso siempre se ejecute, incluso si las pruebas fallan
 
       - name: Step 6 - Login to Docker Hub
         uses: docker/login-action@v3
