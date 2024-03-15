@@ -34,6 +34,24 @@ jobs:
       - name: Step 5 - Docker build image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }} .
 
+      - name: Iniciar contenedor Docker para pruebas
+        run: docker run -d --name app-test -p 8081:8081 ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
+
+      - name: Realizar prueba con curl
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/api/v1/employees)
+          if [ $response -eq 200 ]; then
+            echo "La prueba pasó: La aplicación está respondiendo correctamente."
+          else
+            echo "La prueba falló: La aplicación no está respondiendo correctamente. Código de respuesta: $response"
+            exit 1
+          fi
+
+      - name: Detener contenedor de prueba
+        run: docker stop app-test
+        if: always()  # Asegurarse de que este paso siempre se ejecute, incluso si las pruebas fallan
+
+
       - name: Step 6 - Login to Docker Hub
         uses: docker/login-action@v3
         with:
