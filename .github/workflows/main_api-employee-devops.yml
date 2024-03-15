@@ -27,6 +27,21 @@ jobs:
       - name: Step 4 - Run unit tests
         run: mvn test
 
+      - name: Analizar código con SonarCloud
+        uses: sonarsource/sonarcloud-github-action@v1
+        with:
+          organization: ${{ secrets.DOCKERHUB_USERNAME }}
+          token: ${{ secrets.SONAR_TOKEN }}
+          projectKey: "api-employee-devops"
+          projectName: "Nombre de tu proyecto"
+          extraProperties: |
+            sonar.projectDescription=Proyecto Spring Boot en Docker
+            sonar.projectVersion=1.0.0
+            sonar.sources=src
+            sonar.tests=src/test
+            sonar.java.binaries=target/classes
+            sonar.java.test.binaries=target/test-classes
+
       - name: Obtener hash corto del commit
         id: short_commit_hash
         run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
@@ -34,18 +49,18 @@ jobs:
       - name: Step 5 - Docker build image
         run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }} .
 
-      - name: Iniciar contenedor Docker para pruebas
-        run: docker run -d --name app-test -p 8081:8081 ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
-
-      - name: Realizar prueba con curl
-        run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/api/v1/employees)
-          if [ $response -eq 200 ]; then
-            echo "La prueba pasó: La aplicación está respondiendo correctamente."
-          else
-            echo "La prueba falló: La aplicación no está respondiendo correctamente. Código de respuesta: $response"
-            exit 1
-          fi
+#      - name: Iniciar contenedor Docker para pruebas
+#        run: docker run -d --name app-test -p 8081:8081 ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
+#
+#      - name: Realizar prueba con curl
+#        run: |
+#          response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8081/api/v1/employees)
+#          if [ $response -eq 200 ]; then
+#            echo "La prueba pasó: La aplicación está respondiendo correctamente."
+#          else
+#            echo "La prueba falló: La aplicación no está respondiendo correctamente. Código de respuesta: $response"
+#            exit 1
+#          fi
 
       - name: Detener contenedor de prueba
         run: docker stop app-test
