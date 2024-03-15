@@ -30,10 +30,10 @@ jobs:
       - name: Analizar código con SonarCloud
         uses: SonarSource/sonarcloud-github-action@v2
         with:
-          organization: "relari"
+          organization: 'relari'
           token: ${{ secrets.SONAR_TOKEN }}
-          projectKey: "Relari_api-employee-devops"
-          projectName: "Api Employee DevOps"
+          projectKey: 'Relari_api-employee-devops'
+          projectName: 'Api Employee DevOps'
           extraProperties: |
             sonar.projectDescription='Proyecto Spring Boot en Docker'
             sonar.projectVersion='1.0.0'
