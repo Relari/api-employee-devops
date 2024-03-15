@@ -33,7 +33,7 @@ jobs:
           organization: 'relari'
           token: ${{ secrets.SONAR_TOKEN }}
           projectKey: 'Relari_api-employee-devops'
-          projectName: 'Api Employee DevOps'
+          projectName: 'api-employee-devops'
           extraProperties: |
             sonar.projectDescription='Proyecto Spring Boot en Docker'
             sonar.projectVersion='1.0.0'
