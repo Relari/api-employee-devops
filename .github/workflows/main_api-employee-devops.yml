@@ -27,36 +27,50 @@ jobs:
       - name: Step 4 - Run unit tests
         run: mvn test
 
-      - name: Analizar código con SonarCloud
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          organization: 'relari'
-          token: ${{ secrets.SONAR_TOKEN }}
-          projectKey: 'Relari_api-employee-devops'
-          projectName: 'api-employee-devops'
-          extraProperties: |
-            sonar.projectDescription='Proyecto Spring Boot en Docker'
-            sonar.projectVersion='1.0.0'
-            sonar.sources='src'
-            sonar.tests='src/test'
-            sonar.java.binaries='target/classes'
-            sonar.java.test.binaries='target/test-classes'
+      - name: Step 5 - List the current directory
+        run: dir
 
+      - name: Step 6 - What is in the target folder
+        run: |
+          cd target
+          dir
+
+      - name: Step 7 - Return root project
+        run: |
+          cd ..
+          cd api-employee-devops
+          dir
+
+#      - name: Analizar código con SonarCloud
+#        uses: SonarSource/sonarcloud-github-action@v2
+#        with:
+#          organization: 'relari'
+#          token: ${{ secrets.SONAR_TOKEN }}
+#          projectKey: 'Relari_api-employee-devops'
+#          projectName: 'api-employee-devops'
+#          extraProperties: |
+#            sonar.projectDescription='Proyecto Spring Boot en Docker'
+#            sonar.projectVersion='1.0.0'
+#            sonar.sources='src'
+#            sonar.tests='src/test'
+#            sonar.java.binaries='target/classes'
+#            sonar.java.test.binaries='target/test-classes'
+#
 #      - name: Build with Maven - SonarCloud
-#        run:  mvn -B verify sonar:sonar -Dsonar.projectKey=Relari_api-employee-devops -Dsonar.organization=relari -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN }}
+#        run:  mvn verify sonar:sonar -Dsonar.projectKey=Relari_api-employee-devops -Dsonar.organization=relari -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
 #        env:
-#          GIT_HUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+#          GIT_HUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #          SONARCLOUD_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Obtener hash corto del commit
+      - name: Step 8 - Obtener hash corto del commit
         id: short_commit_hash
         run: echo "::set-output name=hash::$(git rev-parse --short HEAD)"
 
-      - name: Step 5 - Docker build image
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }} .
+      - name: Step 9 - Build Docker Image.
+        run: docker build -t ${{ secrets.USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }} .
 
 #      - name: Iniciar contenedor Docker para pruebas
-#        run: docker run -d --name app-test -p 8081:8081 ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
+#        run: docker run -p 8081:8081 --name app-test ${{ secrets.USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
 #
 #      - name: Realizar prueba con curl
 #        run: |
@@ -72,26 +86,11 @@ jobs:
 #        run: docker stop app-test
 #        if: always()  # Asegurarse de que este paso siempre se ejecute, incluso si las pruebas fallan
 
-      - name: Step 6 - Login to Docker Hub
+      - name: Step 10 - Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Step 7 - Push de la imagen Docker
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
-
-#      - name: Step 4 - List the current directory
-#        run: dir
-#
-#      - name: Step 5 - What is in the target folder
-#        run: |
-#          cd target
-#          dir
-#
-#      - name: Step 6 - Return root project
-#        run: |
-#          cd ..
-#          cd api-employee-devops
-#          dir
-
+      - name: Step 11 - Push de la imagen Docker
+        run: docker push ${{ secrets.USERNAME }}/api-employee-devops:${{ steps.short_commit_hash.outputs.hash }}
