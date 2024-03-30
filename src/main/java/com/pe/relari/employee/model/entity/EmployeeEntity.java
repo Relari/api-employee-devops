@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import com.pe.relari.employee.model.domain.Employee;
 import com.pe.relari.employee.util.GenderEnum;
+import com.pe.relari.employee.util.PositionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,8 +38,9 @@ public class EmployeeEntity {
     @Column(name = "firstName", length = 50, nullable = false)
     private String firstName;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "position", length = 50, nullable = false)
-    private String position;
+    private PositionEnum position;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sex", length = 1, nullable = false)

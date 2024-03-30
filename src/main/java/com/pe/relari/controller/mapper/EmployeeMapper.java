@@ -6,6 +6,7 @@ import com.pe.relari.employee.model.api.EmployeeResponse;
 import com.pe.relari.employee.model.domain.Address;
 import com.pe.relari.employee.model.domain.Employee;
 import com.pe.relari.employee.util.GenderEnum;
+import com.pe.relari.employee.util.PositionEnum;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +25,7 @@ public class EmployeeMapper {
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
                 .sex(employee.getSex().name())
-                .position(employee.getPosition())
+                .position(employee.getPosition().name())
                 .salary(employee.getSalary())
                 .status(employee.getIsActive())
                 .build();
@@ -40,7 +41,7 @@ public class EmployeeMapper {
                 .fatherLastName(employeeRequest.getFatherLastName())
                 .motherLastName(employeeRequest.getMotherLastName())
                 .sex(GenderEnum.valueOf(employeeRequest.getSex()))
-                .position(employeeRequest.getPosition())
+                .position(PositionEnum.valueOf(employeeRequest.getPosition()))
                 .salary(employeeRequest.getSalary())
                 .address(
                         new Address(

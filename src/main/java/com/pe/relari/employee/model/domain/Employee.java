@@ -2,6 +2,7 @@ package com.pe.relari.employee.model.domain;
 
 import com.pe.relari.employee.model.entity.EmployeeEntity;
 import com.pe.relari.employee.util.GenderEnum;
+import com.pe.relari.employee.util.PositionEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class Employee {
     private String fatherLastName;
     private String motherLastName;
     private String firstName;
-    private String position;
+    private PositionEnum position;
     private GenderEnum sex;
     private Double salary;
     private Address address;

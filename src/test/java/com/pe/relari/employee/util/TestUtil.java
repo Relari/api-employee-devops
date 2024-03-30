@@ -18,7 +18,7 @@ public class TestUtil {
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
                 .sex(GenderEnum.M)
-                .position("Developer")
+                .position(PositionEnum.DEVELOPER)
                 .salary(2500.00)
                 .address(new Address("email@mail.com", "999000999"))
                 .isActive(Boolean.TRUE)
@@ -44,7 +44,7 @@ public class TestUtil {
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
                 .sex(GenderEnum.M)
-                .position("Developer")
+                .position(PositionEnum.DEVELOPER)
                 .salary(2500.00)
                 .isActive(Boolean.TRUE)
                 .build();
