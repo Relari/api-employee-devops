@@ -17,6 +17,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # Exporta las variables para que el job de Integración las use
+    outputs:
+      VERSION: ${{ steps.get_version.outputs.VERSION }}
+      FULL_JAR_NAME: ${{ steps.get_version.outputs.FULL_JAR_NAME }}
+
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -29,19 +34,21 @@ jobs:
           cache: 'maven'
 
       # --- PASO CLAVE: EXTRAER LA VERSIÓN DEL POM.XML ---
-      - name: Obtener la Versión del Proyecto desde pom.xml
+      - name: Obtener la Versión del Proyecto y Nombres
         id: get_version
         run: |
-          # El comando de Maven evalúa la expresión ${project.version} y la imprime.
-          # Luego la redirigimos al archivo $GITHUB_ENV para que esté disponible en los siguientes pasos
+          # Obtiene la versión del proyecto
           PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          # Define el nombre completo del JAR (e.g., api-employee-devops-1.0.0-SNAPSHOT.jar)
+          FULL_JAR_NAME="${{ env.REPO_ARTIFACT_ID }}-$PROJECT_VERSION.jar"
+          
+          # Define variables de ENTORNO
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          echo "FULL_JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_ENV
           
-          # También definimos el nombre completo del JAR y de la Imagen para el resto del flujo
-          echo "JAR_FILE_NAME=${{ env.REPO_NAME }}-$PROJECT_VERSION.jar" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_NAME=${{ env.REPO_NAME }}" >> $GITHUB_ENV
-          
-          echo "::notice::Versión del proyecto: $PROJECT_VERSION"
+          # Define variables de OUTPUT para el siguiente Job
+          echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
+          echo "FULL_JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT
           
       - name: Compilar y Ejecutar pruebas (JUnit y JaCoCo)
         # Ahora el flujo sabe la versión y puede usarla en el JAR
@@ -57,45 +64,69 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           # Usamos la variable de entorno que definimos dinámicamente
-          name: ${{ env.JAR_FILE_NAME }}
+          name: ${{ env.FULL_JAR_NAME }}
           # Maven genera el JAR con el formato <artifactId>-<version>.jar.
           # ¡Asegúrate de que este path sea correcto para tu proyecto!
-          path: target/${{ env.JAR_FILE_NAME }}
+          path: target/${{ env.FULL_JAR_NAME }}
 
-      - name: Descargar el JAR (con nombre de repo y versión)
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.JAR_FILE_NAME }} # Usamos el nombre completo del JAR
+integration-test:
+  needs: build-and-test # Depende de que las pruebas unitarias pasen
+  runs-on: ubuntu-latest
 
-      # - name: Step 4 - List the current directory
-      #   run: dir
+  # Accede a las variables del job anterior
+  env:
+    VERSION: ${{ needs.build-and-test.outputs.VERSION }}
+    FULL_JAR_NAME: ${{ needs.build-and-test.outputs.FULL_JAR_NAME }}
 
-      # - name: Step 5 - What is in the target folder
-      #   run: |
-      #     cd target
-      #     dir
+  steps:
+    - name: Checkout del código (Para Dockerfile y colección Postman)
+      uses: actions/checkout@v4
 
-#      - name: Step 6 - Run project
-#        run: mvn spring-boot:run
+    - name: Descargar el JAR y prepararlo para Docker
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ env.FULL_JAR_NAME }}
+
+    - name: Mover el JAR a target/ para la construcción de Docker
+      # Tu Dockerfile espera el JAR en target/*.jar
+      run: |
+        mkdir -p target
+        mv ${{ env.FULL_JAR_NAME }} target/
+
+    # --- PASO CLAVE: CONSTRUIR LA IMAGEN DE FORMA LOCAL ---
+    - name: Construir la imagen Docker localmente
+      id: docker_build
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: false # Solo construcción local, no push a un registro
+        tags: ${{ env.REPO_ARTIFACT_ID }}:${{ env.VERSION }}
+
+    - name: Levantar el contenedor para Pruebas
+      id: container_run
+      # El comando 'docker run' levanta el contenedor en segundo plano (-d)
+      run: |
+        docker run -d \
+          --name ${{ env.REPO_ARTIFACT_ID }} \
+          -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
+          ${{ env.REPO_ARTIFACT_ID }}:${{ env.VERSION }}
+
+    - name: Instalar Newman (CLI de Postman)
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm install -g newman
+
+    - name: Esperar a que el Webservice esté listo
+      run: sleep 40s # Se puede optimizar, pero es seguro para Spring Boot
+
+#    - name: Ejecutar la Colección de Postman con Newman
+#      run: |
+#        newman run ./postman-collection.json \
+#          --delay-request 500 \
+#          --global-var "baseUrl=http://localhost:${{ env.APP_PORT }}"
 #
-#  deploy:
-#    runs-on: windows-latest
-#    needs: build
-#    environment:
-#      name: 'Production'
-#      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-#
-#    steps:
-#      - name: Download artifact from build job
-#        uses: actions/download-artifact@v2
-#        with:
-#          name: java-app
-#
-#      - name: Deploy to Azure Web App
-#        id: deploy-to-webapp
-#        uses: azure/webapps-deploy@v2
-#        with:
-#          app-name: 'employee-example-devops'
-#          slot-name: 'Production'
-#          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_91FB24DF2BD4406F936D7B4AD5A1DB65 }}
-#          package: '*.jar'
+#    - name: Detener y Eliminar el Contenedor
+#      # Se ejecuta SIEMPRE (if: always) para limpiar el runner, incluso si las pruebas fallan
+#      if: always()
+#      run: docker rm -f ${{ env.REPO_ARTIFACT_ID }}
