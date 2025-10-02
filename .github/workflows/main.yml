@@ -34,18 +34,19 @@ jobs:
         id: get_version
         run: |
           PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          REPO_ARTIFACT_ID="${{ env.REPO_NAME }}"
+          REPO_ARTIFACT_ID="${{ env.REPO_NAME }}" # Variable local de Shell
           FULL_JAR_NAME="$REPO_ARTIFACT_ID-$PROJECT_VERSION.jar"
 
-          # 1. Definir variables de ENTORNO (para uso en el job 'build')
+          # 1. Definir variables de ENTORNO (para uso en pasos posteriores del job 'build')
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
           echo "FULL_JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_ENV # Define el nombre de la imagen
+          echo "DOCKER_IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_ENV 
 
-          # 2. Definir variables de OUTPUT (para uso en el job 'integration-test')
+          # 2. Definir variables de OUTPUT (para el job 'integration-test')
+          # Usamos la variable de Shell $REPO_ARTIFACT_ID, que ya está definida.
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
-          echo "JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT # Usamos JAR_NAME como output name
-          echo "IMAGE_NAME=$DOCKER_IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_OUTPUT
           
           echo "::notice::Versión del proyecto: $PROJECT_VERSION"
 
@@ -58,8 +59,8 @@ jobs:
       - name: Subir el JAR como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.FULL_JAR_NAME }} # Usamos FULL_JAR_NAME
-          path: target/${{ env.FULL_JAR_NAME }} # Usamos FULL_JAR_NAME
+          name: ${{ env.FULL_JAR_NAME }}
+          path: target/${{ env.FULL_JAR_NAME }}
 
   integration-test:
     needs: build
@@ -68,8 +69,8 @@ jobs:
     env:
       # --- CORRECCIÓN 2: Acceso a los outputs del job 'build' ---
       VERSION: ${{ needs.build.outputs.VERSION }}
-      FULL_JAR_NAME: ${{ needs.build.outputs.JAR_NAME }} # Usamos JAR_NAME
-      DOCKER_IMAGE_NAME: ${{ needs.build.outputs.IMAGE_NAME }} # Necesitas definir esta en el job 'build'
+      FULL_JAR_NAME: ${{ needs.build.outputs.JAR_NAME }}
+      DOCKER_IMAGE_NAME: ${{ needs.build.outputs.IMAGE_NAME }} # Ahora sí accede al output correcto
 
     steps:
       - name: Checkout del código (para Dockerfile y colección Postman)
@@ -85,13 +86,14 @@ jobs:
           mkdir -p target
           mv ${{ env.FULL_JAR_NAME }} target/
 
-      # --- PASOS FALTANTES: CONSTRUCCIÓN, EJECUCIÓN Y PRUEBAS ---
+      # --- CONSTRUCCIÓN, EJECUCIÓN Y PRUEBAS ---
 
       - name: Construir la imagen Docker (Localmente)
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false # Solo construcción local
+          push: false
+          # Usa DOCKER_IMAGE_NAME y VERSION que vienen del job anterior
           tags: ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
 
       - name: Levantar el contenedor para Pruebas (Puerto 8081)
@@ -112,10 +114,9 @@ jobs:
         run: sleep 40s
 
 #      - name: Ejecutar la Colección de Postman con Newman
-#        # Reemplaza 'postman-collection.json' con el nombre de tu archivo
+#        # ¡Asegúrate de que este archivo exista en la raíz del repositorio!
 #        run: newman run ./postman-collection.json --global-var "baseUrl=http://localhost:8081"
 
       - name: Detener y Eliminar el Contenedor
-        # Se ejecuta SIEMPRE para limpiar el runner
         if: always()
         run: docker rm -f ${{ env.DOCKER_IMAGE_NAME }}
