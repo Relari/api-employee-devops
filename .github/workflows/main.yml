@@ -45,7 +45,7 @@ jobs:
           # 2. Definir variables de OUTPUT (para uso en el job 'integration-test')
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
           echo "JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT # Usamos JAR_NAME como output name
-          echo "IMAGE_NAME=DOCKER_IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME=$DOCKER_IMAGE_NAME" >> $GITHUB_OUTPUT
           
           echo "::notice::Versión del proyecto: $PROJECT_VERSION"
 
