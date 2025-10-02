@@ -63,7 +63,7 @@ jobs:
           path: target/${{ env.JAR_FILE_NAME }}
 
   integration-test:
-    needs: build-and-test # Depende de que las pruebas unitarias pasen
+    needs: build # Depende de que las pruebas unitarias pasen
     runs-on: ubuntu-latest
 
     env:
