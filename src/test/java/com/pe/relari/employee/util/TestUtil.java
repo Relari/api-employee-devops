@@ -4,7 +4,7 @@ import com.pe.relari.employee.model.api.AddressRequest;
 import com.pe.relari.employee.model.api.EmployeeRequest;
 import com.pe.relari.employee.model.domain.Address;
 import com.pe.relari.employee.model.domain.Employee;
-import com.pe.relari.employee.model.entity.EmployeeEntity;
+import com.pe.relari.employee.dao.repository.entity.EmployeeEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,7 +17,7 @@ public class TestUtil {
                 .firstName("Name")
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
-                .sex(GenderEnum.M)
+                .gender(GenderEnum.M)
                 .position(PositionEnum.DEVELOPER)
                 .salary(2500.00)
                 .address(new Address("email@mail.com", "999000999"))
@@ -30,8 +30,8 @@ public class TestUtil {
                 .firstName("Name")
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
-                .sex("M")
-                .position("Developer")
+                .gender("M")
+                .position("DEVELOPER")
                 .salary(2500.00)
                 .address(new AddressRequest("email@mail.com", "999000999"))
                 .build();
@@ -43,7 +43,7 @@ public class TestUtil {
                 .firstName("Name")
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
-                .sex(GenderEnum.M)
+                .gender(GenderEnum.M)
                 .position(PositionEnum.DEVELOPER)
                 .salary(2500.00)
                 .isActive(Boolean.TRUE)

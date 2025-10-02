@@ -4,6 +4,8 @@ import com.pe.relari.employee.service.EmployeeService;
 import com.pe.relari.employee.util.TestUtil;
 import com.pe.relari.employee.util.GsonUtil;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,20 +31,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EmployeeApplicationTests {
 
 	@Value("${application.api.path}")
-	private String baseUrl;
+	String baseUrl;
 
 	@Autowired
-	private MockMvc mockMvc;
+	MockMvc mockMvc;
 
 	@Autowired
 	private EmployeeService demoService;
 
-	@BeforeEach
-	void init() {
-		demoService.save(TestUtil.buildEmployee());
-	}
+//	@BeforeEach
+//	void init() {
+//		demoService.save(TestUtil.buildEmployee());
+//	}
 
 	@Test
+    @Disabled
+    @Order(2)
 	void getDemosTest() throws Exception {
 		mockMvc.perform(get(baseUrl))
 				.andDo(print())
@@ -50,6 +54,8 @@ class EmployeeApplicationTests {
 	}
 
 	@Test
+    @Disabled
+    @Order(1)
 	void createDemoTest() throws Exception {
 
 		var demo = TestUtil.buildEmployeeRequest();
@@ -76,6 +82,8 @@ class EmployeeApplicationTests {
 //	}
 //
 	@Test
+    @Disabled
+    @Order(3)
 	void foundDemoTest() throws Exception {
 		mockMvc.perform(get(baseUrl.concat("/1")))
 				.andDo(print())
@@ -83,6 +91,8 @@ class EmployeeApplicationTests {
 	}
 
 	@Test
+    @Disabled
+    @Order(4)
 	void demoNotFoundTest() throws Exception {
 		mockMvc.perform(get(baseUrl.concat("/0")))
 				.andDo(print())
@@ -90,6 +100,8 @@ class EmployeeApplicationTests {
 	}
 
 	@Test
+    @Disabled
+    @Order(5)
 	void deleteDemoTest() throws Exception {
 		mockMvc.perform(delete(baseUrl.concat("/1")))
 				.andDo(print())

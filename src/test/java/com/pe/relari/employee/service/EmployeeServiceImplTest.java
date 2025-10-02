@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.pe.relari.employee.dao.EmployeeDao;
+import com.pe.relari.employee.service.impl.EmployeeServiceImpl;
 import com.pe.relari.employee.util.TestUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,7 @@ class EmployeeServiceImplTest {
         assertEquals(employee.getIdEmployee(), employees.get(0).getIdEmployee());
         assertEquals(employee.getFirstName(), employees.get(0).getFirstName());
 //        assertEquals(employee.getLastName(), employees.get(0).getLastName());
-        assertEquals(employee.getSex(), employees.get(0).getSex());
+        assertEquals(employee.getGender(), employees.get(0).getGender());
         assertEquals(employee.getAddress().getEmail(), employees.get(0).getAddress().getEmail());
         assertEquals(employee.getAddress().getPhoneNumber(), employees.get(0).getAddress().getPhoneNumber());
 
@@ -84,7 +85,7 @@ class EmployeeServiceImplTest {
         assertEquals(employee.getIdEmployee(), employeeDomain.getIdEmployee());
         assertEquals(employee.getFirstName(), employeeDomain.getFirstName());
 //        assertEquals(employee.getLastName(), employees.get(0).getLastName());
-        assertEquals(employee.getSex(), employeeDomain.getSex());
+        assertEquals(employee.getGender(), employeeDomain.getGender());
         assertEquals(employee.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
         assertEquals(employee.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
 

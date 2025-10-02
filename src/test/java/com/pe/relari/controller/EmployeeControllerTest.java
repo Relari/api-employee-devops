@@ -44,7 +44,7 @@ class EmployeeControllerTest {
         assertEquals(employee.getFirstName(), employeeResponses.get(0).getFirstName());
         assertEquals(employee.getFatherLastName(), employeeResponses.get(0).getFatherLastName());
         assertEquals(employee.getMotherLastName(), employeeResponses.get(0).getMotherLastName());
-        assertEquals(employee.getSex().name(), employeeResponses.get(0).getSex());
+        assertEquals(employee.getGender().name(), employeeResponses.get(0).getGender());
     }
 
     @Test
@@ -75,7 +75,7 @@ class EmployeeControllerTest {
         assertEquals(employee.getIdEmployee(), employeeResponse.getId());
         assertEquals(employee.getFirstName(), employeeResponse.getFirstName());
 //        assertEquals(employee.getLastName(), employeeResponse.getLastName());
-        assertEquals(employee.getSex().name(), employeeResponse.getSex());
+        assertEquals(employee.getGender().name(), employeeResponse.getGender());
 
     }
 

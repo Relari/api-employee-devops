@@ -45,7 +45,7 @@ class EmployeeDaoTest {
 //        assertEquals(employeeEntity.getId(), employees.get(0).getIdEmployee());
         assertEquals(employeeEntity.getFirstName(), employees.get(0).getFirstName());
 //        assertEquals(employee.getLastName(), employees.get(0).getLastName());
-        assertEquals(employeeEntity.getSex(), employees.get(0).getSex());
+        assertEquals(employeeEntity.getGender(), employees.get(0).getGender());
 //        assertEquals(employeeEntity.getAddress().getEmail(), employees.get(0).getAddress().getEmail());
 //        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employees.get(0).getAddress().getPhoneNumber());
 
@@ -88,7 +88,7 @@ class EmployeeDaoTest {
 //        assertEquals(employeeEntity.getIdEmployee(), employeeDomain.getIdEmployee());
         assertEquals(employeeEntity.getFirstName(), employeeDomain.getFirstName());
 //        assertEquals(employee.getLastName(), employees.get(0).getLastName());
-        assertEquals(employeeEntity.getSex(), employeeDomain.getSex());
+        assertEquals(employeeEntity.getGender(), employeeDomain.getGender());
 //        assertEquals(employeeEntity.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
 //        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
 
@@ -116,10 +116,10 @@ class EmployeeDaoTest {
         var employee = TestUtil.buildEmployee();
         employeeDao.save(employee);
 
-        //        assertEquals(employeeEntity.getIdEmployee(), employeeDomain.getIdEmployee());
+//        assertEquals(employeeEntity.getIdEmployee(), employeeDomain.getIdEmployee());
         assertEquals(employeeEntity.getFirstName(), employee.getFirstName());
 //        assertEquals(employee.getLastName(), employees.get(0).getLastName());
-        assertEquals(employeeEntity.getSex(), employee.getSex());
+        assertEquals(employeeEntity.getGender(), employee.getGender());
 //        assertEquals(employeeEntity.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
 //        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
 
