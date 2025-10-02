@@ -16,7 +16,10 @@ jobs:
       JAVA_VERSION: '17'
 
     runs-on: ubuntu-latest
-
+    # Exporta las variables para que el job de Integración las use
+    outputs:
+#      VERSION: ${{ steps.get_version.outputs.VERSION }}
+      FULL_JAR_NAME: ${{ steps.get_version.outputs.JAR_FILE_NAME }}
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
