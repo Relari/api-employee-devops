@@ -48,10 +48,10 @@ public class EmployeeResponse {
 
     @Schema(
             description = "Sexo del Empleado",
-            name = "sex",
+            name = "gender",
             type = "String",
             example = "M o F")
-    private String sex;
+    private String gender;
 
     @Schema(
             description = "Cargo del Empleado",

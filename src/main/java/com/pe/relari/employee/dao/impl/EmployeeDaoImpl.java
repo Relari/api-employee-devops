@@ -5,7 +5,7 @@ import com.pe.relari.employee.dao.repository.EmployeeRepository;
 import com.pe.relari.employee.exception.ApiException;
 import com.pe.relari.employee.exception.ErrorCategory;
 import com.pe.relari.employee.model.domain.Employee;
-import com.pe.relari.employee.model.entity.EmployeeEntity;
+import com.pe.relari.employee.dao.repository.entity.EmployeeEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Interface: EmployeeDao.
+ * Class: EmployeeDaoImpl.
  * @author Relari
  */
 
@@ -28,7 +28,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return employeeRepository.findAll()
                 .stream()
                 .map(Employee::to)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

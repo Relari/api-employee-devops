@@ -73,7 +73,7 @@ public class EmployeeController {
         return employeeService.findAll()
                 .stream()
                 .map(EmployeeMapper::mapEmployeeResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Operation(

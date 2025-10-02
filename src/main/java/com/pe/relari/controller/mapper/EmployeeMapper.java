@@ -7,16 +7,15 @@ import com.pe.relari.employee.model.domain.Address;
 import com.pe.relari.employee.model.domain.Employee;
 import com.pe.relari.employee.util.GenderEnum;
 import com.pe.relari.employee.util.PositionEnum;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 /**
  * Class: EmployeeMapper.
  * @author Relari
  */
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmployeeMapper {
+
+    private EmployeeMapper() {}
 
     public static EmployeeResponse mapEmployeeResponse(Employee employee) {
         return EmployeeResponse.builder()
@@ -24,7 +23,7 @@ public class EmployeeMapper {
                 .firstName(employee.getFirstName())
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
-                .sex(employee.getSex().name())
+                .gender(employee.getGender().name())
                 .position(employee.getPosition().name())
                 .salary(employee.getSalary())
                 .status(employee.getIsActive())
@@ -40,7 +39,7 @@ public class EmployeeMapper {
                 .firstName(employeeRequest.getFirstName())
                 .fatherLastName(employeeRequest.getFatherLastName())
                 .motherLastName(employeeRequest.getMotherLastName())
-                .sex(GenderEnum.valueOf(employeeRequest.getSex()))
+                .gender(GenderEnum.valueOf(employeeRequest.getGender()))
                 .position(PositionEnum.valueOf(employeeRequest.getPosition()))
                 .salary(employeeRequest.getSalary())
                 .address(

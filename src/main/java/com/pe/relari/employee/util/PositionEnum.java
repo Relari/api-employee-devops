@@ -2,6 +2,7 @@ package com.pe.relari.employee.util;
 
 import lombok.Getter;
 
+@Getter
 public enum PositionEnum {
 
     DEVELOPER("developer"),
@@ -10,7 +11,6 @@ public enum PositionEnum {
     SCRUM_MASTER("scrum-master"),
     TEAM_LEAD("team-lead");
     
-    @Getter
     private final String value;
     
     PositionEnum(String value) {

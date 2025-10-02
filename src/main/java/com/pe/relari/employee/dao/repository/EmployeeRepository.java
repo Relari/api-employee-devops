@@ -1,6 +1,6 @@
 package com.pe.relari.employee.dao.repository;
 
-import com.pe.relari.employee.model.entity.EmployeeEntity;
+import com.pe.relari.employee.dao.repository.entity.EmployeeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

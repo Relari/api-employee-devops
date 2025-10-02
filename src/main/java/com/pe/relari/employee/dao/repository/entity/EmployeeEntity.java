@@ -1,4 +1,4 @@
-package com.pe.relari.employee.model.entity;
+package com.pe.relari.employee.dao.repository.entity;
 
 import jakarta.persistence.*;
 
@@ -43,8 +43,8 @@ public class EmployeeEntity {
     private PositionEnum position;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sex", length = 1, nullable = false)
-    private GenderEnum sex;
+    @Column(name = "gender", length = 1, nullable = false)
+    private GenderEnum gender;
 
     @Column(name = "salary", nullable = false)
     private Double salary;
@@ -57,7 +57,7 @@ public class EmployeeEntity {
                 .firstName(employee.getFirstName())
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
-                .sex(employee.getSex())
+                .gender(employee.getGender())
                 .position(employee.getPosition())
                 .salary(employee.getSalary())
                 .isActive(Boolean.TRUE)

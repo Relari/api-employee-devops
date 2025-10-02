@@ -1,7 +1,8 @@
-package com.pe.relari.employee.service;
+package com.pe.relari.employee.service.impl;
 
 import com.pe.relari.employee.dao.EmployeeDao;
 import com.pe.relari.employee.model.domain.Employee;
+import com.pe.relari.employee.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

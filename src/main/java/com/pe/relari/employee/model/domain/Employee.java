@@ -1,6 +1,6 @@
 package com.pe.relari.employee.model.domain;
 
-import com.pe.relari.employee.model.entity.EmployeeEntity;
+import com.pe.relari.employee.dao.repository.entity.EmployeeEntity;
 import com.pe.relari.employee.util.GenderEnum;
 import com.pe.relari.employee.util.PositionEnum;
 import lombok.AllArgsConstructor;
@@ -26,7 +26,7 @@ public class Employee {
     private String motherLastName;
     private String firstName;
     private PositionEnum position;
-    private GenderEnum sex;
+    private GenderEnum gender;
     private Double salary;
     private Address address;
     private Boolean isActive;
@@ -37,7 +37,7 @@ public class Employee {
                 .firstName(employeeEntity.getFirstName())
                 .fatherLastName(employeeEntity.getFatherLastName())
                 .motherLastName(employeeEntity.getMotherLastName())
-                .sex(employeeEntity.getSex())
+                .gender(employeeEntity.getGender())
                 .position(employeeEntity.getPosition())
                 .salary(employeeEntity.getSalary())
                 .isActive(employeeEntity.getIsActive())
