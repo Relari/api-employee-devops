@@ -16,6 +16,7 @@ jobs:
     outputs:
       VERSION: ${{ steps.get_version.outputs.VERSION }}
       JAR_NAME: ${{ steps.get_version.outputs.JAR_NAME }}
+      IMAGE_NAME: ${{ steps.get_version.outputs.IMAGE_NAME }}
 
     steps:
       - name: Checkout del código
@@ -44,6 +45,7 @@ jobs:
           # 2. Definir variables de OUTPUT (para uso en el job 'integration-test')
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
           echo "JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT # Usamos JAR_NAME como output name
+          echo "IMAGE_NAME=DOCKER_IMAGE_NAME" >> $GITHUB_OUTPUT
           
           echo "::notice::Versión del proyecto: $PROJECT_VERSION"
 
@@ -67,7 +69,7 @@ jobs:
       # --- CORRECCIÓN 2: Acceso a los outputs del job 'build' ---
       VERSION: ${{ needs.build.outputs.VERSION }}
       FULL_JAR_NAME: ${{ needs.build.outputs.JAR_NAME }} # Usamos JAR_NAME
-      DOCKER_IMAGE_NAME: ${{ needs.build.outputs.DOCKER_IMAGE_NAME }} # Necesitas definir esta en el job 'build'
+      DOCKER_IMAGE_NAME: ${{ needs.build.outputs.IMAGE_NAME }} # Necesitas definir esta en el job 'build'
 
     steps:
       - name: Checkout del código (para Dockerfile y colección Postman)
