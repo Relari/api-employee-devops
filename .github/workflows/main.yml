@@ -15,7 +15,7 @@ jobs:
     # --- CORRECCIÓN 1: Definir los outputs correctamente ---
     outputs:
       VERSION: ${{ steps.get_version.outputs.VERSION }}
-      JAR_FILE_NAME: ${{ steps.get_version.outputs.JAR_FILE_NAME }}
+      JAR_NAME: ${{ steps.get_version.outputs.JAR_NAME }}
 
     steps:
       - name: Checkout del código
@@ -43,7 +43,7 @@ jobs:
 
           # 2. Definir variables de OUTPUT (para uso en el job 'integration-test')
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
-          echo "JAR_FILE_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT # Usamos JAR_NAME como output name
+          echo "JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT # Usamos JAR_NAME como output name
           
           echo "::notice::Versión del proyecto: $PROJECT_VERSION"
 
@@ -56,8 +56,8 @@ jobs:
       - name: Subir el JAR como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.JAR_FILE_NAME }} # Usamos JAR_FILE_NAME
-          path: target/${{ env.JAR_FILE_NAME }} # Usamos JAR_FILE_NAME
+          name: ${{ env.FULL_JAR_NAME }} # Usamos FULL_JAR_NAME
+          path: target/${{ env.FULL_JAR_NAME }} # Usamos FULL_JAR_NAME
 
   integration-test:
     needs: build
@@ -66,7 +66,7 @@ jobs:
     env:
       # --- CORRECCIÓN 2: Acceso a los outputs del job 'build' ---
       VERSION: ${{ needs.build.outputs.VERSION }}
-      FULL_JAR_NAME: ${{ needs.build.outputs.JAR_FILE_NAME }} # Usamos JAR_NAME
+      FULL_JAR_NAME: ${{ needs.build.outputs.JAR_NAME }} # Usamos JAR_NAME
       DOCKER_IMAGE_NAME: ${{ needs.build.outputs.DOCKER_IMAGE_NAME }} # Necesitas definir esta en el job 'build'
 
     steps:
