@@ -38,11 +38,17 @@ jobs:
           # El comando de Maven evalúa la expresión ${project.version} y la imprime.
           # Luego la redirigimos al archivo $GITHUB_ENV para que esté disponible en los siguientes pasos
           PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          REPO_ARTIFACT_ID="${{ env.REPO_NAME }}"
+          FULL_JAR_NAME="$REPO_ARTIFACT_ID-$PROJECT_VERSION.jar"
           
-          # También definimos el nombre completo del JAR y de la Imagen para el resto del flujo
-          echo "JAR_FILE_NAME=${{ env.REPO_NAME }}-$PROJECT_VERSION.jar" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_NAME=${{ env.REPO_NAME }}" >> $GITHUB_ENV
+          # 1. Definir variables de ENTORNO (para uso en el job 'build')
+          echo "VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          echo "FULL_JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_ENV # Define el nombre de la imagen
+
+          # 2. Definir variables de OUTPUT (para uso en el job 'integration-test')
+          echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
+          echo "JAR_FILE_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT # Usamos JAR_NAME como output name
           
           echo "::notice::Versión del proyecto: $PROJECT_VERSION"
           
