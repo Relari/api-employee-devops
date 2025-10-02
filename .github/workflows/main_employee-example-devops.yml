@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - employee-example-devops
+name: CI/CD Java Spring Dinámico
 
 on:
   push:
@@ -10,27 +10,53 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+
+    env:
+      REPO_NAME: ${{ github.event.repository.name }}
+      JAVA_VERSION: '17'
+
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Step 1 - Checkout main branch from GitHub
-        uses: actions/checkout@v2
+      - name: Checkout del código
+        uses: actions/checkout@v4
 
-      - name: Step 2 - Set up Java version
-        uses: actions/setup-java@v1
+      - name: Configurar version de Java
+        uses: actions/setup-java@v4
         with:
-          java-version: '11'
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
 
-      - name: Step 3 - Build with Maven
-        run: mvn clean package
-
-      - name: Step 4 - List the current directory
-        run: dir
-
-      - name: Step 5 - What is in the target folder
+      # --- PASO CLAVE: EXTRAER LA VERSIÓN DEL POM.XML ---
+      - name: Obtener la Versión del Proyecto desde pom.xml
+        id: get_version
         run: |
-          cd target
-          dir
+          # El comando de Maven evalúa la expresión ${project.version} y la imprime.
+          # Luego la redirigimos al archivo $GITHUB_ENV para que esté disponible en los siguientes pasos
+          PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
+          
+          # También definimos el nombre completo del JAR y de la Imagen para el resto del flujo
+          echo "JAR_FILE_NAME=${{ env.REPO_NAME }}-$PROJECT_VERSION.jar" >> $GITHUB_ENV
+          echo "DOCKER_IMAGE_NAME=${{ env.REPO_NAME }}" >> $GITHUB_ENV
+          
+          echo "::notice::Versión del proyecto: $PROJECT_VERSION"
+          
+      - name: Compilar y Ejecutar pruebas (JUnit y JaCoCo)
+        # Ahora el flujo sabe la versión y puede usarla en el JAR
+        run: mvn -B verify
+
+      - name: Empaquetar el JAR
+        run: mvn -B package -DskipTests
+
+      # - name: Step 4 - List the current directory
+      #   run: dir
+
+      # - name: Step 5 - What is in the target folder
+      #   run: |
+      #     cd target
+      #     dir
 
 #      - name: Step 6 - Run project
 #        run: mvn spring-boot:run
