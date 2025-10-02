@@ -48,7 +48,24 @@ jobs:
         run: mvn -B verify
 
       - name: Empaquetar el JAR
+        # Usamos el comando package. Es crucial que tu pom.xml genere el JAR
+        # con el formato: <artifactId>-<version>.jar
         run: mvn -B package -DskipTests
+
+      # Asegúrate de que el path coincida con el JAR_FILE_NAME definido
+      - name: Subir el JAR como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          # Usamos la variable de entorno que definimos dinámicamente
+          name: ${{ env.JAR_FILE_NAME }}
+          # Maven genera el JAR con el formato <artifactId>-<version>.jar.
+          # ¡Asegúrate de que este path sea correcto para tu proyecto!
+          path: target/${{ env.JAR_FILE_NAME }}
+
+      - name: Descargar el JAR (con nombre de repo y versión)
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.JAR_FILE_NAME }} # Usamos el nombre completo del JAR
 
       # - name: Step 4 - List the current directory
       #   run: dir
@@ -60,12 +77,6 @@ jobs:
 
 #      - name: Step 6 - Run project
 #        run: mvn spring-boot:run
-#
-#      - name: Upload artifact for deployment job
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: java-app
-#          path: '${{ github.workspace }}/target/*.jar'
 #
 #  deploy:
 #    runs-on: windows-latest
