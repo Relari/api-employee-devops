@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.14</version>
+        <version>3.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pe.relari</groupId>
@@ -15,7 +15,7 @@
     <description>Employee project for Spring Boot</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <sonar.exclusions>
             **/com/pe/relari/EmployeeApplication.java,
             **/com/pe/relari/config/**,

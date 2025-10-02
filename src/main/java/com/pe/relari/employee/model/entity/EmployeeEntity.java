@@ -1,6 +1,6 @@
 package com.pe.relari.employee.model.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.pe.relari.employee.model.domain.Employee;
 import com.pe.relari.employee.util.GenderEnum;
