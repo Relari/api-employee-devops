@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
- * <b>Class:</b> ErrorProperties.</br>
+ * <b>Class:</b> ApplicationProperties.</br>
  * @author Renzo Lavado Rivas.
  * @version 1.0.0
  */
@@ -17,8 +17,8 @@ import org.springframework.context.annotation.Lazy;
 @Data
 @Lazy
 @Configuration
-@ConfigurationProperties(prefix = "application.backend")
-public class ErrorProperties {
+@ConfigurationProperties(prefix = "application")
+public class ApplicationProperties {
 
   private GenericMap<ErrorCategory, ErrorDetail> errors;
 

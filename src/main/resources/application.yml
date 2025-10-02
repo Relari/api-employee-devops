@@ -4,8 +4,8 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: 'sa'
-    password: '123456'
+    username: '${DB_USER:sa}'
+    password: '${DB_PASS:123456}'
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
@@ -24,17 +24,16 @@ application:
     description: '@project.description@'
   api:
     path: '/api/v1/employees'
-  backend:
-    errors:
-      EMPLOYEE_NOT_SAVE:
-        description: 'Error al guardar al empleado.'
-        category: INTERNAL_ERROR
-      EMPLOYEE_NOT_FOUND:
-        description: 'Empleado no encontrado.'
-        category: NOT_FOUND
-      EMPLOYEE_NOT_UPDATE:
-        description: 'Error al actualizar al empleado.'
-        category: INTERNAL_ERROR
+  errors:
+    EMPLOYEE_NOT_SAVE:
+      description: 'Error al guardar al empleado.'
+      category: INTERNAL_ERROR
+    EMPLOYEE_NOT_FOUND:
+      description: 'Empleado no encontrado.'
+      category: NOT_FOUND
+    EMPLOYEE_NOT_UPDATE:
+      description: 'Error al actualizar al empleado.'
+      category: INTERNAL_ERROR
 
 springdoc:
   api-docs:
@@ -50,4 +49,4 @@ server:
 
 logging:
   level:
-    com.pe.relari: TRACE
+    pe.com.relari: TRACE
