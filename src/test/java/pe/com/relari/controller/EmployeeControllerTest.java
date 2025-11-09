@@ -70,7 +70,7 @@ class EmployeeControllerTest {
         when(service.findById(anyInt()))
                 .thenReturn(employee);
 
-        var employeeResponse = controller.findById(1);
+        var employeeResponse = controller.findById("1");
 
         assertEquals(employee.getIdEmployee(), employeeResponse.getId());
         assertEquals(employee.getFirstName(), employeeResponse.getFirstName());
@@ -87,7 +87,7 @@ class EmployeeControllerTest {
         when(service.findById(anyInt()))
                 .thenReturn(employee);
 
-        var address = controller.getAddressById(1);
+        var address = controller.getAddressById("1");
 
         assertEquals(employee.getAddress().getEmail(), address.getEmail());
         assertEquals(employee.getAddress().getPhoneNumber(), address.getPhoneNumber());
@@ -124,7 +124,7 @@ class EmployeeControllerTest {
 
         service.deleteById(anyInt());
 
-        Integer id = 1;
+        String id = "1";
 
         controller.deleteById(id);
 
