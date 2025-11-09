@@ -39,15 +39,21 @@ public class EmployeeEntity {
     private String firstName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "position", length = 50, nullable = false)
-    private PositionEnum position;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 1, nullable = false)
     private GenderEnum gender;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "position", length = 50, nullable = false)
+    private PositionEnum position;
+
     @Column(name = "salary", nullable = false)
     private Double salary;
+
+    @Column(name = "email", length = 100, nullable = false)
+    private String email;
+
+    @Column(name = "phoneNumber", length = 15, nullable = false)
+    private String phoneNumber;
 
     @Column(name = "isActive", nullable = false)
     private Boolean isActive;
@@ -58,8 +64,10 @@ public class EmployeeEntity {
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
                 .gender(employee.getGender())
-                .position(employee.getPosition())
-                .salary(employee.getSalary())
+                .position(PositionEnum.valueOf(employee.getCompany().getJobTitle()))
+                .salary(employee.getCompany().getSalary())
+                .email(employee.getAddress().getEmail())
+                .phoneNumber(employee.getAddress().getPhoneNumber())
                 .isActive(Boolean.TRUE)
                 .build();
     }

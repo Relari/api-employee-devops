@@ -1,9 +1,11 @@
 package pe.com.relari.controller.mapper;
 
 import pe.com.relari.employee.model.api.AddressResponse;
+import pe.com.relari.employee.model.api.CompanyResponse;
 import pe.com.relari.employee.model.api.EmployeeRequest;
 import pe.com.relari.employee.model.api.EmployeeResponse;
 import pe.com.relari.employee.model.domain.Address;
+import pe.com.relari.employee.model.domain.Company;
 import pe.com.relari.employee.model.domain.Employee;
 import pe.com.relari.employee.util.GenderEnum;
 import pe.com.relari.employee.util.PositionEnum;
@@ -24,8 +26,11 @@ public class EmployeeMapper {
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
                 .gender(employee.getGender().name())
-                .position(employee.getPosition().name())
-                .salary(employee.getSalary())
+                .address(mapAddressResponse(employee.getAddress()))
+                .company(new CompanyResponse(
+                        employee.getCompany().getJobTitle(),
+                        employee.getCompany().getSalary()
+                ))
                 .status(employee.getIsActive())
                 .build();
     }
@@ -40,14 +45,14 @@ public class EmployeeMapper {
                 .fatherLastName(employeeRequest.getFatherLastName())
                 .motherLastName(employeeRequest.getMotherLastName())
                 .gender(GenderEnum.valueOf(employeeRequest.getGender()))
-                .position(PositionEnum.valueOf(employeeRequest.getPosition()))
-                .salary(employeeRequest.getSalary())
-                .address(
-                        new Address(
-                                employeeRequest.getAddress().getEmail(),
-                                employeeRequest.getAddress().getPhoneNumber()
-                        )
-                )
+                .company(Company.of(
+                        employeeRequest.getCompany().getJobTitle(),
+                        employeeRequest.getCompany().getSalary()
+                ))
+                .address(Address.of(
+                        employeeRequest.getAddress().getEmail(),
+                        employeeRequest.getAddress().getPhoneNumber()
+                ))
                 .isActive(Boolean.TRUE)
                 .build();
     }

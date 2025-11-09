@@ -53,19 +53,8 @@ public class EmployeeResponse {
             example = "M o F")
     private String gender;
 
-    @Schema(
-            description = "Cargo del Empleado",
-            name = "position",
-            type = "String",
-            example = "Developer")
-    private String position;
-
-    @Schema(
-            description = "Salario del Empleado",
-            name = "salary",
-            type = "Double",
-            example = "1000.00")
-    private Double salary;
+    private AddressResponse address;
+    private CompanyResponse company;
 
     @Schema(
             description = "Estado del Empleado",

@@ -25,10 +25,9 @@ public class Employee {
     private String fatherLastName;
     private String motherLastName;
     private String firstName;
-    private PositionEnum position;
     private GenderEnum gender;
-    private Double salary;
     private Address address;
+    private Company company;
     private Boolean isActive;
 
     public static Employee to(EmployeeEntity employeeEntity) {
@@ -38,8 +37,8 @@ public class Employee {
                 .fatherLastName(employeeEntity.getFatherLastName())
                 .motherLastName(employeeEntity.getMotherLastName())
                 .gender(employeeEntity.getGender())
-                .position(employeeEntity.getPosition())
-                .salary(employeeEntity.getSalary())
+                .address(Address.of(employeeEntity.getEmail(), employeeEntity.getPhoneNumber()))
+                .company(Company.of(employeeEntity.getPosition().name(), employeeEntity.getSalary()))
                 .isActive(employeeEntity.getIsActive())
                 .build();
     }

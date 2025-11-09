@@ -123,9 +123,9 @@ public class EmployeeController {
                     example = "1",
                     required = true)
             @Pattern(regexp = REGEXP_NUMBER)
-            @PathVariable(name = "id") Integer id) {
+            @PathVariable(name = "id") String id) {
         return EmployeeMapper.mapEmployeeResponse(
-                employeeService.findById(id)
+                employeeService.findById(Integer.valueOf(id))
         );
     }
 
@@ -159,9 +159,9 @@ public class EmployeeController {
                     example = "1",
                     required = true)
             @Pattern(regexp = REGEXP_NUMBER)
-            @PathVariable(name = "id") Integer id) {
+            @PathVariable(name = "id") String id) {
         return EmployeeMapper.mapAddressResponse(
-                employeeService.findById(id).getAddress()
+                employeeService.findById(Integer.valueOf(id)).getAddress()
         );
     }
 
@@ -215,7 +215,7 @@ public class EmployeeController {
                     example = "1",
                     required = true)
             @Pattern(regexp = REGEXP_NUMBER)
-            @PathVariable(name = "id") Integer id) {
-        employeeService.deleteById(id);
+            @PathVariable(name = "id") String id) {
+        employeeService.deleteById(Integer.valueOf(id));
     }
 }
