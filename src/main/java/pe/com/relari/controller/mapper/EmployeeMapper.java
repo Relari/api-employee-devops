@@ -28,7 +28,7 @@ public class EmployeeMapper {
                 .gender(employee.getGender().name())
                 .address(mapAddressResponse(employee.getAddress()))
                 .company(new CompanyResponse(
-                        employee.getCompany().getJobTitle(),
+                        employee.getCompany().getJobTitle().name(),
                         employee.getCompany().getSalary()
                 ))
                 .status(employee.getIsActive())
@@ -46,7 +46,7 @@ public class EmployeeMapper {
                 .motherLastName(employeeRequest.getMotherLastName())
                 .gender(GenderEnum.valueOf(employeeRequest.getGender()))
                 .company(Company.of(
-                        employeeRequest.getCompany().getJobTitle(),
+                        PositionEnum.valueOf(employeeRequest.getCompany().getJobTitle()),
                         employeeRequest.getCompany().getSalary()
                 ))
                 .address(Address.of(

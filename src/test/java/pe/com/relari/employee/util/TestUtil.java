@@ -20,7 +20,7 @@ public class TestUtil {
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
                 .gender(GenderEnum.M)
-                .company(Company.of(PositionEnum.DEVELOPER.name(), 2500.00))
+                .company(Company.of(PositionEnum.DEVELOPER, 2500.00))
                 .address(Address.of("email@mail.com", "999000999"))
                 .isActive(Boolean.TRUE)
                 .build();

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pe.com.relari.employee.util.PositionEnum;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor(staticName = "of")
 public class Company {
 
-    private String jobTitle;
+    private PositionEnum jobTitle;
     private Double salary;
 
 }

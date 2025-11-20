@@ -64,7 +64,7 @@ public class EmployeeEntity {
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
                 .gender(employee.getGender())
-                .position(PositionEnum.valueOf(employee.getCompany().getJobTitle()))
+                .position(employee.getCompany().getJobTitle())
                 .salary(employee.getCompany().getSalary())
                 .email(employee.getAddress().getEmail())
                 .phoneNumber(employee.getAddress().getPhoneNumber())
