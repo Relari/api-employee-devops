@@ -37,4 +37,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify sonar:sonar
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=pe.com.relari:api-employee-devops \
+            -Dsonar.organization=pe.com.relari:api-employee-devops \
+            -Dsonar.host.url=https://sonarcloud.io
