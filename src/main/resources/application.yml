@@ -25,15 +25,12 @@ application:
   api:
     path: '/api/v1/employees'
   errors:
-    EMPLOYEE_NOT_SAVE:
+    EMPLOYEE_SAVE_FAILED:
       description: 'Error al guardar al empleado.'
-      category: INTERNAL_ERROR
     EMPLOYEE_NOT_FOUND:
       description: 'Empleado no encontrado.'
-      category: NOT_FOUND
-    EMPLOYEE_NOT_UPDATE:
+    EMPLOYEE_UPDATE_FAILED:
       description: 'Error al actualizar al empleado.'
-      category: INTERNAL_ERROR
 
 springdoc:
   api-docs:
@@ -49,4 +46,4 @@ server:
 
 logging:
   level:
-    pe.com.relari: TRACE
+    'pe.com.relari': TRACE
