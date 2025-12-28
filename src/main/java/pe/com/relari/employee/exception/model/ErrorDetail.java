@@ -1,37 +1,25 @@
 package pe.com.relari.employee.exception.model;
 
-import pe.com.relari.employee.exception.StatusCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@Builder
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class ErrorDetail {
 
     @Schema(
             description = "Representa el nombre del componente.",
-            name = "component",
+            name = "data",
             implementation = String.class,
-            example = "business-api-employee")
-    private String component;
+            example = "parametro")
+    private String data;
 
     @Schema(
             description = "Representa la descripcion del error programado.",
             name = "description",
             implementation = String.class,
-            example = "Error al guardar al empleado.")
+            example = "El parametros es requerido y no puede ser nulo.")
     private String description;
-    private StatusCategory status;
 
-    public ErrorDetailBuilder mutate() {
-        return builder()
-                .component(component)
-                .description(description)
-                .status(status);
-    }
 }
