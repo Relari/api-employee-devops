@@ -3,16 +3,22 @@ name: CI/CD Java Spring Dinámico
 on:
   push:
     branches:
-      - disabled-main
+      - main
+#      - develop
+  pull_request:
+    branches:
+      - main
+#      - develop
+  workflow_dispatch:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+#    # --- CORRECCIÓN 1: Definir los outputs correctamente ---
     env:
       REPO_NAME: ${{ github.event.repository.name }}
-      JAVA_VERSION: '17'
-
-    runs-on: ubuntu-latest
-    # --- CORRECCIÓN 1: Definir los outputs correctamente ---
+      JAVA_VERSION: 17
+      APP_PORT: 8081
     outputs:
       VERSION: ${{ steps.get_version.outputs.VERSION }}
       JAR_NAME: ${{ steps.get_version.outputs.JAR_NAME }}
@@ -22,39 +28,38 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      - name: Configurar version de Java
+      - name: Configurar version de Java ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
           cache: 'maven'
 
-      # --- PASO CLAVE: EXTRAER LA VERSIÓN DEL POM.XML ---
-      - name: Obtener la Versión del Proyecto desde pom.xml
+      - name: Obtener la Versión del Proyecto
         id: get_version
         run: |
           PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          REPO_ARTIFACT_ID="${{ env.REPO_NAME }}" # Variable local de Shell
+          REPO_ARTIFACT_ID="${{ env.REPO_NAME }}"
           FULL_JAR_NAME="$REPO_ARTIFACT_ID-$PROJECT_VERSION.jar"
 
-          # 1. Definir variables de ENTORNO (para uso en pasos posteriores del job 'build')
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
           echo "FULL_JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_ENV
-          echo "DOCKER_IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_ENV 
+          echo "DOCKER_IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_ENV
 
-          # 2. Definir variables de OUTPUT (para el job 'integration-test')
-          # Usamos la variable de Shell $REPO_ARTIFACT_ID, que ya está definida.
           echo "VERSION=$PROJECT_VERSION" >> $GITHUB_OUTPUT
           echo "JAR_NAME=$FULL_JAR_NAME" >> $GITHUB_OUTPUT
           echo "IMAGE_NAME=$REPO_ARTIFACT_ID" >> $GITHUB_OUTPUT
           
-          echo "::notice::Versión del proyecto: $PROJECT_VERSION"
+          echo "::notice::Versión detectada: $PROJECT_VERSION"
 
-      - name: Compilar y Ejecutar pruebas (JUnit y JaCoCo)
-        run: mvn -B verify
+      - name: Compilar, Probar y Empaquetar
+        run: mvn -B verify -Pcoverage
 
-      - name: Empaquetar el JAR
-        run: mvn -B package -DskipTests
+      # Paso Nuevo: Imprimir Cobertura en Consola
+      - name: Imprimir Cobertura JaCoCo
+        run: |
+          echo "Coverage Report Summary:"
+          awk -F, 'NR>1 {covered+=$4; missed+=$5} END {print "Instruction Coverage: " int((covered/(covered+missed))*100) "%"}' target/site/jacoco/jacoco.csv
 
       - name: Subir el JAR como artefacto
         uses: actions/upload-artifact@v4
@@ -81,20 +86,21 @@ jobs:
         with:
           name: ${{ env.FULL_JAR_NAME }}
 
-      - name: Mover el JAR a target/ para la construcción de Docker
+      - name: Preparar JAR para Docker
         run: |
           mkdir -p target
           mv ${{ env.FULL_JAR_NAME }} target/
 
-      # --- CONSTRUCCIÓN, EJECUCIÓN Y PRUEBAS ---
-
-      - name: Construir la imagen Docker (Localmente)
+      - name: Construir y Empujar Imagen Docker
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
-          # Usa DOCKER_IMAGE_NAME y VERSION que vienen del job anterior
-          tags: ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
+          push: ${{ github.event_name != 'pull_request' && secrets.DOCKER_USERNAME != '' }}
+          tags: |
+            ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
+            ${{ env.DOCKER_IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Levantar el contenedor para Pruebas (Puerto 8081)
         id: container_run
@@ -113,10 +119,15 @@ jobs:
       - name: Esperar a que el Webservice esté listo
         run: sleep 40s
 
-#      - name: Ejecutar la Colección de Postman con Newman
-#        # ¡Asegúrate de que este archivo exista en la raíz del repositorio!
-#        run: newman run ./postman-collection.json --global-var "baseUrl=http://localhost:8081"
+      - name: Ejecutar Pruebas de API (Postman)
+        continue-on-error: true # No fallar el pipeline si no hay colección
+        run: |
+          if [ -f "./API_EMPLOYEE_DEVOPS.postman-collection.json" ]; then
+            newman run ./API_EMPLOYEE_DEVOPS.postman-collection.json
+          else
+            echo "::warning::No se encontró postman-collection.json, saltando pruebas."
+          fi
 
-      - name: Detener y Eliminar el Contenedor
+      - name: Limpieza
         if: always()
         run: docker rm -f ${{ env.DOCKER_IMAGE_NAME }}
