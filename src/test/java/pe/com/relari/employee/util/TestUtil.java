@@ -1,17 +1,18 @@
 package pe.com.relari.employee.util;
 
+import pe.com.relari.employee.dao.repository.entity.EmployeeEntity;
 import pe.com.relari.employee.model.api.AddressRequest;
 import pe.com.relari.employee.model.api.CompanyRequest;
 import pe.com.relari.employee.model.api.EmployeeRequest;
 import pe.com.relari.employee.model.domain.Address;
 import pe.com.relari.employee.model.domain.Company;
 import pe.com.relari.employee.model.domain.Employee;
-import pe.com.relari.employee.dao.repository.entity.EmployeeEntity;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import pe.com.relari.employee.model.domain.Gender;
+import pe.com.relari.employee.model.domain.JobTitle;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestUtil {
+
+    private TestUtil() {}
 
     public static Employee buildEmployee() {
         return Employee.builder()
@@ -19,8 +20,8 @@ public class TestUtil {
                 .firstName("Name")
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
-                .gender(GenderEnum.M)
-                .company(Company.of(PositionEnum.DEVELOPER, 2500.00))
+                .gender(Gender.M)
+                .company(Company.of(JobTitle.DEVELOPER, 2500.00))
                 .address(Address.of("email@mail.com", "999000999"))
                 .isActive(Boolean.TRUE)
                 .build();
@@ -43,8 +44,8 @@ public class TestUtil {
                 .firstName("Name")
                 .fatherLastName("Father Last Name")
                 .motherLastName("Mother Last Name")
-                .gender(GenderEnum.M)
-                .position(PositionEnum.DEVELOPER)
+                .gender(Gender.M)
+                .jobTitle(JobTitle.DEVELOPER)
                 .salary(2500.00)
                 .email("email@mail.com")
                 .phoneNumber("999000999")

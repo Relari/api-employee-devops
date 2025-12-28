@@ -1,12 +1,12 @@
 package pe.com.relari;
 
+import lombok.RequiredArgsConstructor;
 import pe.com.relari.employee.service.EmployeeService;
+import pe.com.relari.employee.util.JsonConverter;
 import pe.com.relari.employee.util.TestUtil;
-import pe.com.relari.employee.util.GsonUtil;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,16 +27,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 class EmployeeApplicationTests {
 
 	@Value("${application.api.path}")
 	String baseUrl;
 
-	@Autowired
-	MockMvc mockMvc;
-
-	@Autowired
-	private EmployeeService demoService;
+	private final MockMvc mockMvc;
+	private final EmployeeService demoService;
 
 //	@BeforeEach
 //	void init() {
@@ -61,7 +59,7 @@ class EmployeeApplicationTests {
 
 		mockMvc.perform(post(baseUrl)
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(GsonUtil.toJson(demo))
+						.content(JsonConverter.toJsonString(demo))
 				)
 				.andDo(print())
 				.andExpect(status().isCreated());
