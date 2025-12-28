@@ -1,0 +1,14 @@
+{
+  "firstName": "Renzo Daniel",
+  "fatherLastName": "Lavado",
+  "motherLastName": "Rivas",
+  "gender": "M",
+  "address": {
+      "phone": "999000999",
+      "email": "relari@corporation.com.pe"
+  },
+  "company": {
+    "jobTitle": "DEVELOPER",
+    "salary": "1000.00"
+  }
+}
