@@ -122,13 +122,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Visualizar imágenes Docker locales
+        run: docker images
+
       - name: Levantar el contenedor para Pruebas (Puerto 8081)
         id: container_run
         run: |
-          docker run -d \
-            --name ${{ env.DOCKER_IMAGE_NAME }} \
-            -p 8081:8081 \
-            ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
+          docker run -d --name ${{ env.DOCKER_IMAGE_NAME }} -p 8081:8081 ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
 
       - name: Instalar Node.js y Newman
         uses: actions/setup-node@v4
