@@ -1,12 +1,12 @@
 package pe.com.relari.employee.dao.impl;
 
+import lombok.RequiredArgsConstructor;
 import pe.com.relari.employee.dao.EmployeeDao;
 import pe.com.relari.employee.dao.repository.EmployeeRepository;
 import pe.com.relari.employee.exception.ApiException;
 import pe.com.relari.employee.exception.ErrorCategory;
 import pe.com.relari.employee.model.domain.Employee;
 import pe.com.relari.employee.dao.repository.entity.EmployeeEntity;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeDaoImpl implements EmployeeDao {
 
     private final EmployeeRepository employeeRepository;

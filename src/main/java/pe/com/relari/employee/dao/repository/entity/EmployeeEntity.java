@@ -3,8 +3,8 @@ package pe.com.relari.employee.dao.repository.entity;
 import jakarta.persistence.*;
 
 import pe.com.relari.employee.model.domain.Employee;
-import pe.com.relari.employee.util.GenderEnum;
-import pe.com.relari.employee.util.PositionEnum;
+import pe.com.relari.employee.model.domain.Gender;
+import pe.com.relari.employee.model.domain.JobTitle;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,11 +40,11 @@ public class EmployeeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 1, nullable = false)
-    private GenderEnum gender;
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "position", length = 50, nullable = false)
-    private PositionEnum position;
+    @Column(name = "jobTitle", length = 50, nullable = false)
+    private JobTitle jobTitle;
 
     @Column(name = "salary", nullable = false)
     private Double salary;
@@ -64,7 +64,7 @@ public class EmployeeEntity {
                 .fatherLastName(employee.getFatherLastName())
                 .motherLastName(employee.getMotherLastName())
                 .gender(employee.getGender())
-                .position(employee.getCompany().getJobTitle())
+                .jobTitle(employee.getCompany().getJobTitle())
                 .salary(employee.getCompany().getSalary())
                 .email(employee.getAddress().getEmail())
                 .phoneNumber(employee.getAddress().getPhoneNumber())

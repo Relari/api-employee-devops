@@ -1,5 +1,6 @@
 package pe.com.relari.controller;
 
+import lombok.RequiredArgsConstructor;
 import pe.com.relari.controller.mapper.EmployeeMapper;
 import pe.com.relari.employee.model.api.AddressResponse;
 import pe.com.relari.employee.model.api.EmployeeDetailResponse;
@@ -16,7 +17,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,12 +46,12 @@ import java.util.List;
 )
 @RestController
 @RequestMapping(path = "${application.api.path}")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeController {
 
     private static final String REGEXP_NUMBER = "\\d+"; // equivalent to [0-9]*
 
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     @Operation(
             summary = "Listado de Empleados.",

@@ -7,8 +7,8 @@ import pe.com.relari.employee.model.api.EmployeeResponse;
 import pe.com.relari.employee.model.domain.Address;
 import pe.com.relari.employee.model.domain.Company;
 import pe.com.relari.employee.model.domain.Employee;
-import pe.com.relari.employee.util.GenderEnum;
-import pe.com.relari.employee.util.PositionEnum;
+import pe.com.relari.employee.model.domain.Gender;
+import pe.com.relari.employee.model.domain.JobTitle;
 
 /**
  * Class: EmployeeMapper.
@@ -44,9 +44,9 @@ public class EmployeeMapper {
                 .firstName(employeeRequest.getFirstName())
                 .fatherLastName(employeeRequest.getFatherLastName())
                 .motherLastName(employeeRequest.getMotherLastName())
-                .gender(GenderEnum.valueOf(employeeRequest.getGender()))
+                .gender(Gender.valueOf(employeeRequest.getGender()))
                 .company(Company.of(
-                        PositionEnum.valueOf(employeeRequest.getCompany().getJobTitle()),
+                        JobTitle.valueOf(employeeRequest.getCompany().getJobTitle()),
                         employeeRequest.getCompany().getSalary()
                 ))
                 .address(Address.of(

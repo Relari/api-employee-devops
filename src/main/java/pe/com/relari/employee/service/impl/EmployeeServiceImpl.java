@@ -1,9 +1,9 @@
 package pe.com.relari.employee.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import pe.com.relari.employee.dao.EmployeeDao;
 import pe.com.relari.employee.model.domain.Employee;
 import pe.com.relari.employee.service.EmployeeService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeDao employeeDao;
