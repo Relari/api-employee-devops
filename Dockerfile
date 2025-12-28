@@ -1,5 +1,5 @@
-FROM openjdk:17-alpine
+FROM eclipse-temurin:17-jdk-alpine
 EXPOSE 8081
 ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} *.jar
-ENTRYPOINT ["java","-jar","/api-employee-devops.jar"]
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
