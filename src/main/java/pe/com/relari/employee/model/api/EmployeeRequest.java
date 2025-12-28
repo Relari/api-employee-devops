@@ -27,36 +27,36 @@ public class EmployeeRequest {
     @Schema(
             description = "Nombre del Empleado",
             name = "firstName",
-            type = "String",
+            implementation = String.class,
             example = "Renzo",
-            required = true)
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String firstName;
 
     @Schema(
             description = "Apellido del Empleado",
             name = "fatherLastName",
-            type = "String",
+            implementation = String.class,
             example = "Lavado",
-            required = true)
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String fatherLastName;
 
     @Schema(
             description = "Apellido del Empleado",
             name = "motherLastName",
-            type = "String",
+            implementation = String.class,
             example = "Lavado",
-            required = true)
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String motherLastName;
 
     @Schema(
             description = "Sexo del Empleado",
             name = "gender",
-            type = "String",
+            implementation = String.class,
             example = "M o F",
-            required = true)
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     @Pattern(regexp = "[M|F]")
     private String gender;

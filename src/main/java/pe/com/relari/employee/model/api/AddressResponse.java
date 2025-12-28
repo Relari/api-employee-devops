@@ -20,14 +20,14 @@ public class AddressResponse {
   @Schema(
           description = "Correo Electronico del Empleado",
           name = "email",
-          type = "String",
+          implementation = String.class,
           example = "email@mail.com")
   private String email;
 
   @Schema(
           description = "Correo Electronico del Empleado",
-          name = "email",
-          type = "String",
+          name = "phoneNumber",
+          implementation = String.class,
           example = "999999999")
   private String phoneNumber;
 

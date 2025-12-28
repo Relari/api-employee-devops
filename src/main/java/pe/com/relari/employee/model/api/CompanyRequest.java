@@ -17,18 +17,18 @@ public class CompanyRequest {
     @Schema(
             description = "Cargo del Empleado",
             name = "jobTitle",
-            type = "String",
+            implementation = String.class,
             example = "Developer",
-            required = true)
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
     private String jobTitle;
 
     @Schema(
             description = "Salario del Empleado",
             name = "salary",
-            type = "Double",
+            implementation = Double.class,
             example = "1000.00",
-            required = true)
+            requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private Double salary;
 

@@ -21,35 +21,35 @@ public class EmployeeResponse {
     @Schema(
             description = "Id del Empleado",
             name = "firstName",
-            type = "Integer",
+            implementation = Integer.class,
             example = "1")
     private Integer id;
 
     @Schema(
             description = "Nombre del Empleado",
             name = "name",
-            type = "String",
+            implementation = String.class,
             example = "Renzo")
     private String firstName;
 
     @Schema(
             description = "Apellido del Empleado",
             name = "fatherLastName",
-            type = "String",
+            implementation = String.class,
             example = "Lavado")
     private String fatherLastName;
 
     @Schema(
             description = "Apellido del Empleado",
             name = "motherLastName",
-            type = "String",
+            implementation = String.class,
             example = "Lavado")
     private String motherLastName;
 
     @Schema(
             description = "Sexo del Empleado",
             name = "gender",
-            type = "String",
+            implementation = String.class,
             example = "M o F")
     private String gender;
 
@@ -59,7 +59,7 @@ public class EmployeeResponse {
     @Schema(
             description = "Estado del Empleado",
             name = "status",
-            type = "Double",
+            implementation = Boolean.class,
             example = "true")
     private Boolean status;
 

@@ -24,19 +24,19 @@ public class AddressRequest {
   @Schema(
           description = "Correo Electronico del Empleado",
           name = "email",
-          type = "String",
+          implementation = String.class,
           example = "email@mail.com",
-          required = true)
+          requiredMode = Schema.RequiredMode.REQUIRED)
   @NotBlank
   @Email
   private String email;
 
   @Schema(
           description = "Correo Electronico del Empleado",
-          name = "email",
-          type = "String",
+          name = "phoneNumber",
+          implementation = String.class,
           example = "999999999",
-          required = true)
+          requiredMode = Schema.RequiredMode.REQUIRED)
   @NotBlank
   @Pattern(regexp = "\\d{9}")
   private String phoneNumber;

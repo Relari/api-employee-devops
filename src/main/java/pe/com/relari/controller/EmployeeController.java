@@ -2,6 +2,7 @@ package pe.com.relari.controller;
 
 import lombok.RequiredArgsConstructor;
 import pe.com.relari.controller.mapper.EmployeeMapper;
+import pe.com.relari.employee.exception.model.ErrorResponse;
 import pe.com.relari.employee.model.api.AddressResponse;
 import pe.com.relari.employee.model.api.EmployeeDetailResponse;
 import pe.com.relari.employee.service.EmployeeService;
@@ -109,7 +110,7 @@ public class EmployeeController {
                             responseCode = "400",
                             description = "Error to Save",
                             content = @Content(
-                                    schema = @Schema(implementation = Error.class),
+                                    schema = @Schema(implementation = ErrorResponse.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE
                             )
                     )
@@ -145,7 +146,7 @@ public class EmployeeController {
                             responseCode = "400",
                             description = "Error to Save",
                             content = @Content(
-                                    schema = @Schema(implementation = Error.class),
+                                    schema = @Schema(implementation = ErrorResponse.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE
                             )
                     )

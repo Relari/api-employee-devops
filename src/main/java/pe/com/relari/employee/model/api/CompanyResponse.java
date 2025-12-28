@@ -15,14 +15,14 @@ public class CompanyResponse {
     @Schema(
             description = "Cargo del Empleado",
             name = "jobTitle",
-            type = "String",
+            implementation = String.class,
             example = "Developer")
     private String jobTitle;
 
     @Schema(
             description = "Salario del Empleado",
             name = "salary",
-            type = "Double",
+            implementation = Double.class,
             example = "1000.00")
     private Double salary;
 

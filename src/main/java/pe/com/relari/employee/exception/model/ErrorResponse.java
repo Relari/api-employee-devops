@@ -39,7 +39,7 @@ public class ErrorResponse {
             description = "Representa el nombre del componente.",
             name = "component",
             implementation = String.class,
-            example = "business-api-employee")
+            example = "api-employee-devops")
     private String component;
 
     @Schema(
