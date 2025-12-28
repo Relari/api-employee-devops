@@ -26,83 +26,83 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @SpringBootTest
-@AutoConfigureMockMvc
-@RequiredArgsConstructor
+//@AutoConfigureMockMvc
+//@RequiredArgsConstructor
 class EmployeeApplicationTests {
 
-	@Value("${application.api.path}")
-	String baseUrl;
-
-	private final MockMvc mockMvc;
-	private final EmployeeService demoService;
-
-//	@BeforeEach
-//	void init() {
-//		demoService.save(TestUtil.buildEmployee());
-//	}
-
-	@Test
-    @Disabled
-    @Order(2)
-	void getDemosTest() throws Exception {
-		mockMvc.perform(get(baseUrl))
-				.andDo(print())
-				.andExpect(status().isOk());
-	}
-
-	@Test
-    @Disabled
-    @Order(1)
-	void createDemoTest() throws Exception {
-
-		var demo = TestUtil.buildEmployeeRequest();
-
-		mockMvc.perform(post(baseUrl)
-						.contentType(MediaType.APPLICATION_JSON)
-						.content(JsonConverter.toJsonString(demo))
-				)
-				.andDo(print())
-				.andExpect(status().isCreated());
-	}
-
-//	@Test
-//	void createDemoButIsBadRequestTest() throws Exception {
+//	@Value("${application.api.path}")
+//	String baseUrl;
 //
-//		var demo = new DemoRequest("");
+//	private final MockMvc mockMvc;
+//	private final EmployeeService demoService;
+//
+////	@BeforeEach
+////	void init() {
+////		demoService.save(TestUtil.buildEmployee());
+////	}
+//
+//	@Test
+//    @Disabled
+//    @Order(2)
+//	void getDemosTest() throws Exception {
+//		mockMvc.perform(get(baseUrl))
+//				.andDo(print())
+//				.andExpect(status().isOk());
+//	}
+//
+//	@Test
+//    @Disabled
+//    @Order(1)
+//	void createDemoTest() throws Exception {
+//
+//		var demo = TestUtil.buildEmployeeRequest();
 //
 //		mockMvc.perform(post(baseUrl)
 //						.contentType(MediaType.APPLICATION_JSON)
-//						.content(objectMapper.writeValueAsString(demo))
+//						.content(JsonConverter.toJsonString(demo))
 //				)
 //				.andDo(print())
-//				.andExpect(status().isBadRequest());
+//				.andExpect(status().isCreated());
 //	}
 //
-	@Test
-    @Disabled
-    @Order(3)
-	void foundDemoTest() throws Exception {
-		mockMvc.perform(get(baseUrl.concat("/1")))
-				.andDo(print())
-				.andExpect(status().isOk());
-	}
-
-	@Test
-    @Disabled
-    @Order(4)
-	void demoNotFoundTest() throws Exception {
-		mockMvc.perform(get(baseUrl.concat("/0")))
-				.andDo(print())
-				.andExpect(status().isNotFound());
-	}
-
-	@Test
-    @Disabled
-    @Order(5)
-	void deleteDemoTest() throws Exception {
-		mockMvc.perform(delete(baseUrl.concat("/1")))
-				.andDo(print())
-				.andExpect(status().isNoContent());
-	}
+////	@Test
+////	void createDemoButIsBadRequestTest() throws Exception {
+////
+////		var demo = new DemoRequest("");
+////
+////		mockMvc.perform(post(baseUrl)
+////						.contentType(MediaType.APPLICATION_JSON)
+////						.content(objectMapper.writeValueAsString(demo))
+////				)
+////				.andDo(print())
+////				.andExpect(status().isBadRequest());
+////	}
+////
+//	@Test
+//    @Disabled
+//    @Order(3)
+//	void foundDemoTest() throws Exception {
+//		mockMvc.perform(get(baseUrl.concat("/1")))
+//				.andDo(print())
+//				.andExpect(status().isOk());
+//	}
+//
+//	@Test
+//    @Disabled
+//    @Order(4)
+//	void demoNotFoundTest() throws Exception {
+//		mockMvc.perform(get(baseUrl.concat("/0")))
+//				.andDo(print())
+//				.andExpect(status().isNotFound());
+//	}
+//
+//	@Test
+//    @Disabled
+//    @Order(5)
+//	void deleteDemoTest() throws Exception {
+//		mockMvc.perform(delete(baseUrl.concat("/1")))
+//				.andDo(print())
+//				.andExpect(status().isNoContent());
+//	}
 
 }
