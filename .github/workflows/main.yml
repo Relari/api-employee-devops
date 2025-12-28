@@ -23,6 +23,7 @@ jobs:
       VERSION: ${{ steps.get_version.outputs.VERSION }}
       JAR_NAME: ${{ steps.get_version.outputs.JAR_NAME }}
       IMAGE_NAME: ${{ steps.get_version.outputs.IMAGE_NAME }}
+      APP_PORT: 8081
 
     steps:
       - name: Checkout del código
@@ -82,7 +83,8 @@ jobs:
       # --- CORRECCIÓN 2: Acceso a los outputs del job 'build' ---
       VERSION: ${{ needs.build.outputs.VERSION }}
       FULL_JAR_NAME: ${{ needs.build.outputs.JAR_NAME }}
-      DOCKER_IMAGE_NAME: ${{ needs.build.outputs.IMAGE_NAME }} # Ahora sí accede al output correcto
+      DOCKER_IMAGE_NAME: ${{ needs.build.outputs.IMAGE_NAME }}
+      APP_PORT: ${{ needs.build.outputs.APP_PORT }}
 
     steps:
       - name: Checkout del código (para Dockerfile y colección Postman)
@@ -129,7 +131,7 @@ jobs:
       - name: Levantar el contenedor para Pruebas (Puerto 8081)
         id: container_run
         run: |
-          docker run -d --name ${{ env.DOCKER_IMAGE_NAME }} -p 8081:8081 ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
+          docker run -d --name ${{ env.DOCKER_IMAGE_NAME }} -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
 
       - name: Instalar Node.js y Newman
         uses: actions/setup-node@v4
@@ -141,7 +143,7 @@ jobs:
         run: sleep 40s
 
       - name: Ejecutar Pruebas de API (Postman)
-        run: newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json
+        run: newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json --env-var "baseUrl=http://localhost:${{ env.APP_PORT }}"
 
       - name: Limpieza
         if: always()
