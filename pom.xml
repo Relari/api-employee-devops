@@ -91,12 +91,12 @@
 <!--       </dependency>-->
 
 <!-- https://mvnrepository.com/artifact/com.intuit.karate/karate-junit5 -->
-        <dependency>
-            <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-junit5</artifactId>
-            <version>1.4.1</version>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.intuit.karate</groupId>-->
+<!--            <artifactId>karate-junit5</artifactId>-->
+<!--            <version>1.4.1</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -109,30 +109,31 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
-                <configuration>
-                    <excludes>
-<!--                        <exclude>**/pe/com/relari/config/**</exclude>-->
-<!--                        <exclude>**/pe/com/relari/employee/exception/**</exclude>-->
-<!--                        <exclude>**/pe/com/relari/employee/model/**</exclude>-->
-<!--                        <exclude>**/pe/com/relari/employee/util/**</exclude>-->
-                        <exclude>**/pe/com/relari/*</exclude>
-                    </excludes>
-                </configuration>
+
                 <executions>
                     <execution>
+                        <id>default-prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
-                        <phase>test</phase>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/config/**</exclude>
+                                <exclude>**/model/**</exclude>
+                                <exclude>**/EmployeeApplication.*</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>jacoco-check</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
