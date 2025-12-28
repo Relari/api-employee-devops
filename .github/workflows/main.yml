@@ -3,7 +3,7 @@ name: CI/CD Java Spring Dinámico
 on:
   push:
     branches:
-      - main
+      - disabled-main
 
 jobs:
   build:
