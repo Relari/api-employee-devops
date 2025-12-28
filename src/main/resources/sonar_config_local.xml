@@ -1,0 +1,4 @@
+<properties>
+    <sonar.host.url>http://localhost:9000</sonar.host.url>
+    <sonar.token>SONAR_TOKEN</sonar.token>
+</properties>
