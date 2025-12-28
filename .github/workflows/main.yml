@@ -143,8 +143,8 @@ jobs:
       - name: Ejecutar Pruebas de API (Postman)
         continue-on-error: true # No fallar el pipeline si no hay colección
         run: |
-          if [ -f "./API_EMPLOYEE_DEVOPS.postman-collection.json" ]; then
-            newman run ./API_EMPLOYEE_DEVOPS.postman-collection.json
+          if [ -f "./_postman/API_EMPLOYEE_DEVOPS.postman-collection.json" ]; then
+            newman run ./_postman/API_EMPLOYEE_DEVOPS.postman-collection.json
           else
             echo "::warning::No se encontró postman-collection.json, saltando pruebas."
           fi
