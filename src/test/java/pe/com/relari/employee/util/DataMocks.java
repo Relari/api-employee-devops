@@ -10,9 +10,9 @@ import pe.com.relari.employee.model.domain.Employee;
 import pe.com.relari.employee.model.domain.Gender;
 import pe.com.relari.employee.model.domain.JobTitle;
 
-public class TestUtil {
+public class DataMocks {
 
-    private TestUtil() {}
+    private DataMocks() {}
 
     public static Employee buildEmployee() {
         return Employee.builder()

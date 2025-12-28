@@ -1,6 +1,5 @@
 package pe.com.relari.controller;
 
-import static pe.com.relari.employee.util.TestUtil.buildEmployee;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
@@ -10,7 +9,7 @@ import static org.mockito.Mockito.when;
 import pe.com.relari.employee.service.EmployeeService;
 import java.util.Collections;
 
-import pe.com.relari.employee.util.TestUtil;
+import pe.com.relari.employee.util.DataMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -33,7 +32,7 @@ class EmployeeControllerTest {
     @Test
     void findAll() {
 
-        var employee = buildEmployee();
+        var employee = DataMocks.buildEmployee();
 
         when(service.findAll())
                 .thenReturn(Collections.singletonList(employee));
@@ -50,7 +49,7 @@ class EmployeeControllerTest {
     @Test
     void findAll2() {
 
-        var employee = buildEmployee();
+        var employee = DataMocks.buildEmployee();
 
         when(service.findAll())
                 .thenReturn(Collections.singletonList(employee));
@@ -65,7 +64,7 @@ class EmployeeControllerTest {
     @Test
     void findById() {
 
-        var employee = buildEmployee();
+        var employee = DataMocks.buildEmployee();
 
         when(service.findById(anyInt()))
                 .thenReturn(employee);
@@ -74,7 +73,8 @@ class EmployeeControllerTest {
 
         assertEquals(employee.getIdEmployee(), employeeResponse.getId());
         assertEquals(employee.getFirstName(), employeeResponse.getFirstName());
-//        assertEquals(employee.getLastName(), employeeResponse.getLastName());
+        assertEquals(employee.getFatherLastName(), employeeResponse.getFatherLastName());
+        assertEquals(employee.getMotherLastName(), employeeResponse.getMotherLastName());
         assertEquals(employee.getGender().name(), employeeResponse.getGender());
 
     }
@@ -82,7 +82,7 @@ class EmployeeControllerTest {
     @Test
     void getAddressById() {
 
-        var employee = buildEmployee();
+        var employee = DataMocks.buildEmployee();
 
         when(service.findById(anyInt()))
                 .thenReturn(employee);
@@ -99,7 +99,7 @@ class EmployeeControllerTest {
 
         service.save(any());
 
-        var employeeRequest = TestUtil.buildEmployeeRequest();
+        var employeeRequest = DataMocks.buildEmployeeRequest();
 
         controller.save(employeeRequest);
 

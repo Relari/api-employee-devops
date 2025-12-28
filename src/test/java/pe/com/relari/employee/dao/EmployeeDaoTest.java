@@ -1,6 +1,5 @@
 package pe.com.relari.employee.dao;
 
-import static pe.com.relari.employee.util.TestUtil.buildEmployeeEntity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import pe.com.relari.employee.dao.impl.EmployeeDaoImpl;
 import pe.com.relari.employee.dao.repository.EmployeeRepository;
 import pe.com.relari.employee.exception.ApiException;
-import pe.com.relari.employee.util.TestUtil;
+import pe.com.relari.employee.util.DataMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -35,26 +34,24 @@ class EmployeeDaoTest {
     @Test
     void findAll() {
 
-        var employeeEntity = buildEmployeeEntity();
+        var employeeEntity = DataMocks.buildEmployeeEntity();
 
         Mockito.when(employeeRepository.findAll())
                 .thenReturn(Collections.singletonList(employeeEntity));
 
         var employees = employeeDao.findAll();
 
-//        assertEquals(employeeEntity.getId(), employees.get(0).getIdEmployee());
         assertEquals(employeeEntity.getFirstName(), employees.get(0).getFirstName());
-//        assertEquals(employee.getLastName(), employees.get(0).getLastName());
+        assertEquals(employeeEntity.getFatherLastName(), employees.get(0).getFatherLastName());
+        assertEquals(employeeEntity.getMotherLastName(), employees.get(0).getMotherLastName());
         assertEquals(employeeEntity.getGender(), employees.get(0).getGender());
-//        assertEquals(employeeEntity.getAddress().getEmail(), employees.get(0).getAddress().getEmail());
-//        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employees.get(0).getAddress().getPhoneNumber());
 
     }
 
     @Test
     void deleteAll() {
 
-        var employee = buildEmployeeEntity();
+        var employee = DataMocks.buildEmployeeEntity();
 
         employeeRepository.deleteAll();
 
@@ -79,19 +76,17 @@ class EmployeeDaoTest {
     @Test
     void findById() {
 
-        var employeeEntity = buildEmployeeEntity();
+        var employeeEntity = DataMocks.buildEmployeeEntity();
 
         Mockito.when(employeeRepository.findById(Mockito.anyInt()))
                 .thenReturn(Optional.of(employeeEntity));
 
-        var employeeDomain = employeeDao.findById(1);
-//        assertEquals(employeeEntity.getIdEmployee(), employeeDomain.getIdEmployee());
-        assertEquals(employeeEntity.getFirstName(), employeeDomain.getFirstName());
-//        assertEquals(employee.getLastName(), employees.get(0).getLastName());
-        assertEquals(employeeEntity.getGender(), employeeDomain.getGender());
-//        assertEquals(employeeEntity.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
-//        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
+        var employee = employeeDao.findById(1);
 
+        assertEquals(employeeEntity.getFirstName(), employee.getFirstName());
+        assertEquals(employeeEntity.getFatherLastName(), employee.getFatherLastName());
+        assertEquals(employeeEntity.getMotherLastName(), employee.getMotherLastName());
+        assertEquals(employeeEntity.getGender(), employee.getGender());
 
     }
 
@@ -108,20 +103,18 @@ class EmployeeDaoTest {
     @Test
     void save() {
 
-        var employeeEntity = TestUtil.buildEmployeeEntity();
+        var employeeEntity = DataMocks.buildEmployeeEntity();
 
         Mockito.when(employeeRepository.save(Mockito.any()))
                 .thenReturn(employeeEntity);
 
-        var employee = TestUtil.buildEmployee();
+        var employee = DataMocks.buildEmployee();
         employeeDao.save(employee);
 
-//        assertEquals(employeeEntity.getIdEmployee(), employeeDomain.getIdEmployee());
         assertEquals(employeeEntity.getFirstName(), employee.getFirstName());
-//        assertEquals(employee.getLastName(), employees.get(0).getLastName());
+        assertEquals(employeeEntity.getFatherLastName(), employee.getFatherLastName());
+        assertEquals(employeeEntity.getMotherLastName(), employee.getMotherLastName());
         assertEquals(employeeEntity.getGender(), employee.getGender());
-//        assertEquals(employeeEntity.getAddress().getEmail(), employeeDomain.getAddress().getEmail());
-//        assertEquals(employeeEntity.getAddress().getPhoneNumber(), employeeDomain.getAddress().getPhoneNumber());
 
     }
 }
