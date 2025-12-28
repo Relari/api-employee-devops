@@ -1,20 +1,18 @@
-package pe.com.relari.employee.util;
+package pe.com.relari.employee.model.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-public enum PositionEnum {
+@AllArgsConstructor
+public enum JobTitle {
 
     DEVELOPER("developer"),
     MANAGER("manager"),
     ARCHITECT("architect"),
     SCRUM_MASTER("scrum-master"),
     TEAM_LEAD("team-lead");
-    
+
     private final String value;
-    
-    PositionEnum(String value) {
-        this.value = value;
-    }
-    
+
 }

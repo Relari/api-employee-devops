@@ -1,7 +1,6 @@
 package pe.com.relari.employee.model.domain;
 
 import pe.com.relari.employee.dao.repository.entity.EmployeeEntity;
-import pe.com.relari.employee.util.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class Employee {
     private String fatherLastName;
     private String motherLastName;
     private String firstName;
-    private GenderEnum gender;
+    private Gender gender;
     private Address address;
     private Company company;
     private Boolean isActive;
@@ -37,7 +36,7 @@ public class Employee {
                 .motherLastName(employeeEntity.getMotherLastName())
                 .gender(employeeEntity.getGender())
                 .address(Address.of(employeeEntity.getEmail(), employeeEntity.getPhoneNumber()))
-                .company(Company.of(employeeEntity.getPosition(), employeeEntity.getSalary()))
+                .company(Company.of(employeeEntity.getJobTitle(), employeeEntity.getSalary()))
                 .isActive(employeeEntity.getIsActive())
                 .build();
     }
