@@ -85,8 +85,8 @@ jobs:
           tags: |
             ${{ env.REPO_NAME }}:${{ env.VERSION }}
             ${{ env.REPO_NAME }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
 
   integration-test:
     needs: [build-and-unit-test, build-docker-image]
