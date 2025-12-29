@@ -46,6 +46,16 @@ jobs:
 
       - name: Compilar y pruebas unitarias (con cobertura)
         run: mvn -B clean verify -Pcoverage
+
+      - name: Mostrar cobertura JaCoCo
+        run: |
+          echo "=== Resumen Cobertura JaCoCo ==="
+          if [ -f target/site/jacoco/jacoco.csv ]; then
+            awk -F, 'NR>1 {c+=$4; m+=$5} END {if(c+m>0) printf "Cobertura: %.2f%%\n", (c/(c+m))*100}' target/site/jacoco/jacoco.csv
+          else
+            echo "No hay reporte JaCoCo"
+          fi
+
 #      - name: Build and analyze
 #        env:
 #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
