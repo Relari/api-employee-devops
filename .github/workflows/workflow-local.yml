@@ -96,7 +96,6 @@ jobs:
       REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
       VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
       APP_PORT: 8081
-      BASE_URL: http://localhost:${{ env.APP_PORT }}
 
     steps:
       - name: Checkout código
