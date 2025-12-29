@@ -8,7 +8,7 @@ on:
 
 jobs:
   call-workflow-local:
-    uses: ./.github/workflows/workflow-local.yml@main.
+    uses: relari/ci-templates/.github/workflows/template-local.yml@main
     with:
       java-version: '17'
 #      maven-goal: 'verify'          # incluye pruebas
