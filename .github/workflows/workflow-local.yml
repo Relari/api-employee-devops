@@ -1,35 +1,59 @@
-name: Workflow Local
+name: Reusable Java CI/CD
 
+# Esto hace que sea reutilizable
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
-
-permissions:
-  contents: read
+  workflow_call:
+    inputs:
+      java-version:
+        description: 'Versión de Java'
+        required: false
+        type: string
+        default: '17'
+      maven-goal:
+        description: 'Goal de Maven (ej: package, verify)'
+        required: false
+        type: string
+        default: 'package'
+      run-tests:
+        description: 'Ejecutar pruebas unitarias'
+        required: false
+        type: boolean
+        default: true
+      app-port:
+        description: 'Puerto de la aplicación Spring Boot'
+        required: false
+        type: string
+        default: '8081'
+      postman-collection:
+        description: 'Ruta a la colección Postman'
+        required: false
+        type: string
+        default: './_postman/API_EMPLOYEE_DEVOPS.postman_collection.json'
+    secrets:
+      GHCR_TOKEN:
+        description: 'Token para push a GHCR'
+        required: false
 
 jobs:
-  build-and-unit-test:
+  build-and-test:
     runs-on: ubuntu-latest
     outputs:
       REPO_NAME: ${{ steps.version.outputs.REPO_NAME }}
       VERSION: ${{ steps.version.outputs.VERSION }}
       JAR_NAME: ${{ steps.version.outputs.JAR_NAME }}
-    env:
-      APP_PORT: 8081
     steps:
-      - name: Checkout código
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configurar JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: ${{ inputs.java-version }}
           distribution: 'temurin'
           cache: maven
 
-      - name: Extraer versión y metadatos
-        id: version
+      - name: Variables
+        id: vars
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           REPO_NAME=${{ github.event.repository.name }}
@@ -41,8 +65,13 @@ jobs:
           
           echo "Versión: $VERSION | Repo: $REPO_NAME | JAR: $JAR_NAME"
 
-      - name: Compilar (sin pruebas)
-        run: mvn -B clean package -DskipTests
+      - name: Build con Maven
+        run: |
+          if ${{ inputs.run-tests }}; then
+            mvn -B clean ${{ inputs.maven-goal }}
+          else
+            mvn -B clean ${{ inputs.maven-goal }} -DskipTests
+          fi
 
       - name: Subir JAR como artefacto
         uses: actions/upload-artifact@v4
@@ -52,77 +81,37 @@ jobs:
           retention-days: 1
 
   integration-test:
-    needs: build-and-unit-test
-    if: always()
+    needs: build-and-test
     runs-on: ubuntu-latest
     env:
-      REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
-      VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
-      JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
-      APP_PORT: 8081
-
+      VERSION: ${{ needs.build-and-test.outputs.VERSION }}
+      JAR_NAME: ${{ needs.build-and-test.outputs.JAR_NAME }}
+      APP_PORT: ${{ inputs.app-port }}
     steps:
-      - name: Checkout código (¡OBLIGATORIO para Dockerfile y Postman!)
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Descargar JAR
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.JAR_NAME }}
-
-      - name: Mover JAR a target/
-        run: |
-          mkdir -p target
-          mv ${{ env.JAR_NAME }} target/
-
-      - name: Construir imagen Docker (local)
+      - name: Build Docker image (local)
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: false
           load: true
-          tags: |
-            ${{ env.REPO_NAME }}:${{ env.VERSION }}
+          push: false
+          tags: ${{ env.REPO_NAME }}:${{ env.VERSION }}
 
-      - name: Mostrar imágenes disponibles
-        run: |
-          echo "=== Imágenes Docker locales ==="
-          docker images
+      - name: Run container
+        run: docker run -d --name test-app -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
 
-      - name: Iniciar contenedor
-        run: |
-          echo "Iniciando contenedor: ${{ env.REPO_NAME }}:${{ env.VERSION }} en puerto ${{ env.APP_PORT }}"
-          docker run -d --name app-test -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} ${{ env.REPO_NAME }}:${{ env.VERSION }}
-
-      - name: Esperar health check
+      - name: Wait for health
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 2
           max_attempts: 10
           retry_wait_seconds: 6
-          command: curl -f http://localhost:${{ env.APP_PORT }}/api/v1/employees/actuator/health
+          command: curl -f ${{ inputs.base-url }}/api/v1/employees/actuator/health
 
       - name: Instalar Newman
         run: npm install -g newman
 
       - name: Ejecutar pruebas Postman
-        run: |
-          newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json \
-            --env-var "baseUrl=http://localhost:${{ env.APP_PORT }}" \
-            --reporters cli,junit \
-            --reporter-junit-export newman-report.xml
-
-      - name: Subir reporte Newman
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: newman-report
-          path: newman-report.xml
-
-      - name: Logs y limpieza final
-        if: always()
-        run: |
-          echo "=== Logs del contenedor ==="
-          docker logs app-test || true
-          echo "=== Deteniendo y eliminando contenedor ==="
-          docker rm -f app-test || true
+        run: newman run ${{ inputs.postman-collection }} --env-var baseUrl=${{ inputs.base-url }}

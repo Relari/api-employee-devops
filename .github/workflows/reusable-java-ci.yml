@@ -1,0 +1,17 @@
+name: CI Java App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  call-reusable-workflow:
+    uses: ./workflow-local.yml
+    with:
+      java-version: '17'
+#      maven-goal: 'verify'          # incluye pruebas
+      run-tests: false
+      app-port: '8081'
+      postman-collection: './_postman/API_EMPLOYEE_DEVOPS.postman_collection.json'
