@@ -101,11 +101,6 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Mostrar imágenes Docker disponibles
-        run: |
-          echo "=== Imágenes locales ==="
-          docker images
-
       - name: Iniciar contenedor
         run: |
           echo "Iniciando: ${{ env.REPO_NAME }}:${{ env.VERSION }} en puerto ${{ env.APP_PORT }}"
@@ -113,6 +108,11 @@ jobs:
             --name app-test \
             -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
             ${{ env.REPO_NAME }}:${{ env.VERSION }}
+
+      - name: Mostrar imágenes Docker disponibles
+        run: |
+          echo "=== Imágenes locales ==="
+          docker images
 
       - name: Esperar health check
         uses: nick-fields/retry@v3
