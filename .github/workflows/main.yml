@@ -95,8 +95,8 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
-          registry: ${{ vars.DOCKER_REGISTRY }}   # docker.io o ghcr.io/org
-          username: ${{ secrets.DOCKER_USERNAME }}
+          registry: ghcr.io   # docker.io o ghcr.io/org
+          username: ${{ github.actor }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Construir y pushear imagen
@@ -107,8 +107,8 @@ jobs:
 #          load: ${{ github.event_name == 'pull_request' }}  # Solo load en PR para pruebas locales
           load: true   # Necesario para pruebas locales
           tags: |
-            ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-            ${{ env.IMAGE_NAME }}:latest
+            ghcr.io/${{ github.repository }}:${{ env.VERSION }}
+            ghcr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
