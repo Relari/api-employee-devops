@@ -128,9 +128,9 @@ jobs:
       - name: Checkout código (para colección Postman)
         uses: actions/checkout@v4
 
-      - name: Pull imagen local (en PR) o usar la ya construida
-        if: github.event_name == 'pull_request'
-        run: docker pull ${{ env.IMAGE_NAME }}:${{ env.VERSION }} || true
+#      - name: Pull imagen local (en PR) o usar la ya construida
+#        if: github.event_name == 'pull_request'
+#        run: docker pull ${{ env.IMAGE_NAME }}:${{ env.VERSION }} || true
 
       - name: Iniciar contenedor
         run: |
