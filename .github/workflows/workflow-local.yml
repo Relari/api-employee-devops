@@ -102,7 +102,7 @@ jobs:
       JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
       HOST: localhost
       APP_PORT: 8081
-      BASE_URL: http://${{ env.HOST }}:${{ env.APP_PORT }}
+      BASE_URL: http://${{ HOST }}:${{ APP_PORT }}
     steps:
       - name: Checkout código (para colección Postman)
         uses: actions/checkout@v4
