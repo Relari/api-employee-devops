@@ -121,7 +121,7 @@ jobs:
           timeout_minutes: 2
           max_attempts: 8
           retry_wait_seconds: 5
-          command: curl -f ${{ env.BASE_URL }}/api/v1/employees/actuator/health
+          command: curl -f http://localhost:${{ env.APP_PORT }}/api/v1/employees/actuator/health
 
       - name: Instalar Newman
         run: npm install -g newman
@@ -129,7 +129,7 @@ jobs:
       - name: Ejecutar pruebas Postman
         run: |
           newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json \
-            --env-var "baseUrl=${{ env.BASE_URL }}" \
+            --env-var "baseUrl=http://localhost:${{ env.APP_PORT }}" \
             --reporters cli,junit \
             --reporter-junit-export newman-report.xml
 
