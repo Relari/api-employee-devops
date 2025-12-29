@@ -137,10 +137,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install -g newman
+        run: npm install -g newman
 
       - name: Esperar a que el Webservice esté listo
-        run: sleep 40s
+        run: |
+          echo "Esperando a que el servicio en puerto ${{ env.APP_PORT }} responda..."
+          for i in {1..30}; do
+            if curl -f http://localhost:${{ env.APP_PORT }}/api/v1/employees/actuator/health > /dev/null 2>&1; then
+              echo "✓ Servicio listo en el intento $i"
+              exit 0
+            fi
+            echo "Intento $i/30 - esperando..."
+            sleep 2
+          done
+          echo "⚠ Timeout: Servicio no respondió después de 60 segundos"
+          echo "Mostrando logs del contenedor:"
+          docker logs ${{ env.DOCKER_IMAGE_NAME }}
+          exit 1
 
       - name: Ejecutar Pruebas de API (Postman)
         run: newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json --env-var "baseUrl=http://localhost:${{ env.APP_PORT }}"
