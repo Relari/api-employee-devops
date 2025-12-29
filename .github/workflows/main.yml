@@ -133,11 +133,13 @@ jobs:
         run: |
           docker run -d --name ${{ env.DOCKER_IMAGE_NAME }} -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} ${{ env.DOCKER_IMAGE_NAME }}:${{ env.VERSION }}
 
-      - name: Instalar Node.js y Newman
+      - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm install -g newman
+
+      - name: Instalar Newman
+        run: npm install -g newman
 
       - name: Esperar a que el Webservice esté listo
         run: |
