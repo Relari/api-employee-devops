@@ -32,6 +32,22 @@ application:
     EMPLOYEE_UPDATE_FAILED:
       description: 'Error al actualizar al empleado.'
 
+management:
+  endpoints:
+    web:
+      base-path: ${application.api.path}/actuator
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: '${spring.application.name}'
+    description: '${application.info.description}'
+    version: '${application.info.version}'
+
 springdoc:
   api-docs:
     path: '${application.api.path}/openapi'
