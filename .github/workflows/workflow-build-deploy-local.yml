@@ -1,14 +1,14 @@
-name: CI Java App
+name: Build and Deploy Locally
 
 on:
   push:
-    branches: [ main ]
+    branches: [ disable-local-deploy ]
   pull_request:
   workflow_dispatch:
 
 jobs:
-  call-workflow-local:
-    uses: relari/ci-templates/.github/workflows/template-local.yml@main
+  call-template-build-deploy-local:
+    uses: relari/ci-templates/.github/workflows/template-build-deploy-local.yml@main
     with:
       java-version: '17'
       app-port: '8081'

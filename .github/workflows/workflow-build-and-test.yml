@@ -1,0 +1,13 @@
+name: Build and Deploy Locally
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  call-template-build-and-test:
+    uses: relari/ci-templates/.github/workflows/template-build-and-test.yml@main
+    with:
+      java-version: '17'
