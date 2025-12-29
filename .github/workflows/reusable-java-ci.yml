@@ -11,7 +11,7 @@ jobs:
     uses: relari/ci-templates/.github/workflows/template-local.yml@main
     with:
       java-version: '17'
-#      maven-goal: 'verify'          # incluye pruebas
+      maven-goal: 'package'          # incluye pruebas
       run-tests: false
       app-port: '8081'
       postman-collection: './_postman/API_EMPLOYEE_DEVOPS.postman_collection.json'
