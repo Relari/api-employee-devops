@@ -98,8 +98,29 @@ jobs:
       APP_PORT: 8081
 
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
+#      - name: Checkout código
+#        uses: actions/checkout@v4
+
+      - name: Descargar JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.JAR_NAME }}
+
+      - name: Mover JAR a target/
+        run: |
+          mkdir -p target
+          mv ${{ env.JAR_NAME }} target/
+
+      - name: Construir y pushear imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true   # Necesario para pruebas locales
+          tags: |
+            ${{ env.REPO_NAME }}:${{ env.VERSION }}
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
 
       - name: Iniciar contenedor
         run: |
