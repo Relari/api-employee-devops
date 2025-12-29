@@ -58,7 +58,7 @@ jobs:
     needs: build-and-unit-test
     runs-on: ubuntu-latest
     env:
-      REPO_NAME: ${{ steps.version.outputs.REPO_NAME }}
+      REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
       VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
       JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
     steps:
@@ -97,7 +97,7 @@ jobs:
     if: always()  # Se ejecuta incluso si build-docker falla (para ver logs en PR)
     runs-on: ubuntu-latest
     env:
-      REPO_NAME: ${{ steps.version.outputs.REPO_NAME }}
+      REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
       VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
       JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
       HOST: http://localhost
@@ -146,13 +146,3 @@ jobs:
         run: |
           docker logs app-test
           docker rm -f app-test
-
-  # ========================================
-  # 4. (Opcional futuro) Despliegue
-  # ========================================
-  # deploy:
-  #   needs: [build-docker-image, integration-test]
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - ...
