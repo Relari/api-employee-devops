@@ -39,11 +39,9 @@ jobs:
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
           echo "JAR_NAME=$JAR_NAME" >> $GITHUB_OUTPUT
           
-          echo "Versión: $VERSION"
-          echo "Repositorio: $REPO_NAME"
-          echo "JAR: $JAR_NAME"
+          echo "Versión: $VERSION | Repo: $REPO_NAME | JAR: $JAR_NAME"
 
-      - name: Compilar (sin pruebas por velocidad, o cámbialo si quieres ejecutarlas)
+      - name: Compilar (sin pruebas)
         run: mvn -B clean package -DskipTests
 
       - name: Subir JAR como artefacto
@@ -53,8 +51,9 @@ jobs:
           path: target/${{ steps.version.outputs.JAR_NAME }}
           retention-days: 1
 
-  build-docker-image:
+  integration-test:
     needs: build-and-unit-test
+    if: always()
     runs-on: ubuntu-latest
     env:
       REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
@@ -63,7 +62,7 @@ jobs:
       APP_PORT: 8081
 
     steps:
-      - name: Checkout código
+      - name: Checkout código (¡OBLIGATORIO para Dockerfile y Postman!)
         uses: actions/checkout@v4
 
       - name: Descargar JAR
@@ -84,63 +83,23 @@ jobs:
           load: true
           tags: |
             ${{ env.REPO_NAME }}:${{ env.VERSION }}
-            ${{ env.REPO_NAME }}:latest
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
 
-  integration-test:
-    needs: [build-and-unit-test, build-docker-image]
-    if: always()
-    runs-on: ubuntu-latest
-    env:
-      REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
-      VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
-      APP_PORT: 8081
-
-    steps:
-#      - name: Checkout código
-#        uses: actions/checkout@v4
-
-      - name: Descargar JAR
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.JAR_NAME }}
-
-      - name: Mover JAR a target/
+      - name: Mostrar imágenes disponibles
         run: |
-          mkdir -p target
-          mv ${{ env.JAR_NAME }} target/
-
-      - name: Construir y pushear imagen
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          load: true   # Necesario para pruebas locales
-          tags: |
-            ${{ env.REPO_NAME }}:${{ env.VERSION }}
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
+          echo "=== Imágenes Docker locales ==="
+          docker images
 
       - name: Iniciar contenedor
         run: |
-          echo "Iniciando: ${{ env.REPO_NAME }}:${{ env.VERSION }} en puerto ${{ env.APP_PORT }}"
-          docker run -d \
-            --name app-test \
-            -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
-            ${{ env.REPO_NAME }}:${{ env.VERSION }}
-
-      - name: Mostrar imágenes Docker disponibles
-        run: |
-          echo "=== Imágenes locales ==="
-          docker images
+          echo "Iniciando contenedor: ${{ env.REPO_NAME }}:${{ env.VERSION }} en puerto ${{ env.APP_PORT }}"
+          docker run -d --name app-test -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} ${{ env.REPO_NAME }}:${{ env.VERSION }}
 
       - name: Esperar health check
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 2
-          max_attempts: 8
-          retry_wait_seconds: 5
+          max_attempts: 10
+          retry_wait_seconds: 6
           command: curl -f http://localhost:${{ env.APP_PORT }}/api/v1/employees/actuator/health
 
       - name: Instalar Newman
@@ -160,9 +119,10 @@ jobs:
           name: newman-report
           path: newman-report.xml
 
-      - name: Logs y limpieza
+      - name: Logs y limpieza final
         if: always()
         run: |
           echo "=== Logs del contenedor ==="
           docker logs app-test || true
+          echo "=== Deteniendo y eliminando contenedor ==="
           docker rm -f app-test || true
