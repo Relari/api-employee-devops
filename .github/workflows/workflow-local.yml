@@ -1,4 +1,4 @@
-name: Reusable Java CI/CD
+name: Workflow Local Java CI
 
 # Esto hace que sea reutilizable
 on:
