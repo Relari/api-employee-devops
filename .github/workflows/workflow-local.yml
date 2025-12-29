@@ -7,18 +7,16 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 jobs:
-  # ========================================
-  # 1. Construcción y pruebas unitarias
-  # ========================================
   build-and-unit-test:
     runs-on: ubuntu-latest
     outputs:
       REPO_NAME: ${{ steps.version.outputs.REPO_NAME }}
       VERSION: ${{ steps.version.outputs.VERSION }}
       JAR_NAME: ${{ steps.version.outputs.JAR_NAME }}
+    env:
+      APP_PORT: 8081
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -28,7 +26,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          cache: 'maven'
+          cache: maven
 
       - name: Extraer versión y metadatos
         id: version
@@ -42,22 +40,19 @@ jobs:
           echo "JAR_NAME=$JAR_NAME" >> $GITHUB_OUTPUT
           
           echo "Versión: $VERSION"
-          echo "Nombre del repositorio: $REPO_NAME"
-          echo "Nombre del JAR: $JAR_NAME"
+          echo "Repositorio: $REPO_NAME"
+          echo "JAR: $JAR_NAME"
 
-      - name: Compilar y pruebas unitarias (con cobertura)
+      - name: Compilar (sin pruebas por velocidad, o cámbialo si quieres ejecutarlas)
         run: mvn -B clean package -DskipTests
 
       - name: Subir JAR como artefacto
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.JAR_NAME }}
-          path: target/${{ env.JAR_NAME }}
+          name: ${{ steps.version.outputs.JAR_NAME }}
+          path: target/${{ steps.version.outputs.JAR_NAME }}
           retention-days: 1
 
-  # ========================================
-  # 2. Construcción de imagen Docker (paralelo)
-  # ========================================
   build-docker-image:
     needs: build-and-unit-test
     runs-on: ubuntu-latest
@@ -65,6 +60,8 @@ jobs:
       REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
       VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
       JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
+      APP_PORT: 8081
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
@@ -79,43 +76,40 @@ jobs:
           mkdir -p target
           mv ${{ env.JAR_NAME }} target/
 
-#      - name: Configurar Buildx
-#        uses: docker/setup-buildx-action@v3
-
-      - name: Construir y pushear imagen
+      - name: Construir imagen Docker (local)
         uses: docker/build-push-action@v5
         with:
           context: .
           push: false
-          load: true   # Necesario para pruebas locales
+          load: true
           tags: |
             ${{ env.REPO_NAME }}:${{ env.VERSION }}
+            ${{ env.REPO_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # ========================================
-  # 3. Pruebas de integración con contenedor (paralelo)
-  # ========================================
   integration-test:
-    needs: [build-and-unit-test, build-docker-image]  # Necesita el JAR y la imagen
-    if: always()  # Se ejecuta incluso si build-docker falla (para ver logs en PR)
+    needs: [build-and-unit-test, build-docker-image]
+    if: always()
     runs-on: ubuntu-latest
     env:
       REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
       VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
-      JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
-#      HOST: localhost
-#      APP_PORT: 8081
-#      BASE_URL: http://${{ HOST }}:${{ APP_PORT }}
+      APP_PORT: 8081
+      BASE_URL: http://localhost:${{ env.APP_PORT }}
+
     steps:
-      - name: Checkout código (para colección Postman)
+      - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Visualizar imágenes Docker locales
-        run: docker images
+      - name: Mostrar imágenes Docker disponibles
+        run: |
+          echo "=== Imágenes locales ==="
+          docker images
 
       - name: Iniciar contenedor
         run: |
+          echo "Iniciando: ${{ env.REPO_NAME }}:${{ env.VERSION }} en puerto ${{ env.APP_PORT }}"
           docker run -d \
             --name app-test \
             -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
@@ -125,8 +119,9 @@ jobs:
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 2
-          max_attempts: 6
-          command: curl -f http://localhost:8081/api/v1/employees/actuator/health
+          max_attempts: 8
+          retry_wait_seconds: 5
+          command: curl -f ${{ env.BASE_URL }}/api/v1/employees/actuator/health
 
       - name: Instalar Newman
         run: npm install -g newman
@@ -134,7 +129,7 @@ jobs:
       - name: Ejecutar pruebas Postman
         run: |
           newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json \
-            --env-var "baseUrl=http://localhost:8081" \
+            --env-var "baseUrl=${{ env.BASE_URL }}" \
             --reporters cli,junit \
             --reporter-junit-export newman-report.xml
 
@@ -145,8 +140,9 @@ jobs:
           name: newman-report
           path: newman-report.xml
 
-      - name: Limpieza
+      - name: Logs y limpieza
         if: always()
         run: |
-          docker logs app-test
-          docker rm -f app-test
+          echo "=== Logs del contenedor ==="
+          docker logs app-test || true
+          docker rm -f app-test || true
