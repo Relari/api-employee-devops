@@ -38,7 +38,7 @@ jobs:
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           REPO_NAME=${{ github.event.repository.name }}
           JAR_NAME="$REPO_NAME-$VERSION.jar"
-          IMAGE_NAME="ghcr.io/$REPO_NAME"
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/$REPO_NAME"
 
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "JAR_NAME=$JAR_NAME" >> $GITHUB_OUTPUT
