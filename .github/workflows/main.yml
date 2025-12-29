@@ -133,16 +133,19 @@ jobs:
       - name: Checkout código (para colección Postman)
         uses: actions/checkout@v4
 
-#      - name: Pull imagen local (en PR) o usar la ya construida
-#        if: github.event_name == 'pull_request'
-#        run: docker pull ${{ env.IMAGE_NAME }}:${{ env.VERSION }} || true
+      - name: Pull imagen local (en PR) o usar la ya construida
+        if: github.event_name == 'pull_request'
+        run: docker pull ${{ env.IMAGE_NAME_WITH_USER }}:${{ env.VERSION }} || true
+
+      - name: Visualizar imágenes Docker locales
+        run: docker images
 
       - name: Iniciar contenedor
         run: |
           docker run -d \
             --name app-test \
             -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
-            ${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+            ${{ env.IMAGE_NAME_WITH_USER }}:${{ env.VERSION }}
 
       - name: Esperar health check
         uses: nick-fields/retry@v3
