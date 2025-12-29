@@ -137,7 +137,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-        run: npm install -g newman
+      - run: npm install -g newman
 
       - name: Esperar a que el Webservice esté listo
         run: |
