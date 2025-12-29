@@ -97,7 +97,7 @@ jobs:
         with:
           registry: ghcr.io   # docker.io o ghcr.io/org
           username: ${{ github.actor }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          password: ${{ secrets.DEV_TOKEN }}
 
       - name: Construir y pushear imagen
         uses: docker/build-push-action@v5
