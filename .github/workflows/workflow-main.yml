@@ -1,0 +1,186 @@
+name: Workflow Main
+
+on:
+  push:
+    branches: [ disabled ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  # ========================================
+  # 1. Construcción y pruebas unitarias
+  # ========================================
+  build-and-unit-test:
+    runs-on: ubuntu-latest
+    outputs:
+      VERSION: ${{ steps.version.outputs.VERSION }}
+      JAR_NAME: ${{ steps.version.outputs.JAR_NAME }}
+      IMAGE_NAME: ${{ steps.version.outputs.IMAGE_NAME }}
+      IMAGE_NAME_WITH_USER: ${{ steps.version.outputs.IMAGE_NAME_WITH_USER }}
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Extraer versión y metadatos
+        id: version
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          REPO_NAME=${{ github.event.repository.name }}
+          JAR_NAME="$REPO_NAME-$VERSION.jar"
+          IMAGE_NAME="ghcr.io/$REPO_NAME"
+          IMAGE_NAME_WITH_USER="ghcr.io/${{ github.repository_owner }}/$REPO_NAME"
+
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "JAR_NAME=$JAR_NAME" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
+          echo "IMAGE_NAME_WITH_USER=$IMAGE_NAME_WITH_USER" >> $GITHUB_OUTPUT
+          echo "::notice::Versión: $VERSION | JAR: $JAR_NAME | Imagen: $IMAGE_NAME"
+
+      - name: Compilar y pruebas unitarias (con cobertura)
+        run: mvn -B clean verify -Pcoverage
+
+      - name: Mostrar cobertura JaCoCo
+        run: |
+          echo "=== Resumen Cobertura JaCoCo ==="
+          if [ -f target/site/jacoco/jacoco.csv ]; then
+            awk -F, 'NR>1 {c+=$4; m+=$5} END {if(c+m>0) printf "Cobertura: %.2f%%\n", (c/(c+m))*100}' target/site/jacoco/jacoco.csv
+          else
+            echo "No hay reporte JaCoCo"
+          fi
+
+      - name: Subir JAR como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.version.outputs.JAR_NAME }}
+          path: target/${{ steps.version.outputs.JAR_NAME }}
+          retention-days: 1
+
+  # ========================================
+  # 2. Construcción de imagen Docker (paralelo)
+  # ========================================
+  build-docker-image:
+    needs: build-and-unit-test
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ needs.build-and-unit-test.outputs.IMAGE_NAME }}
+      IMAGE_NAME_WITH_USER: ${{ needs.build-and-unit-test.outputs.IMAGE_NAME_WITH_USER }}
+      VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
+      JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Descargar JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.JAR_NAME }}
+
+      - name: Mover JAR a target/
+        run: |
+          mkdir -p target
+          mv ${{ env.JAR_NAME }} target/
+
+      - name: Configurar Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login en GHCR
+#        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io   # docker.io o ghcr.io/org
+          username: ${{ github.actor }}
+          password: ${{ secrets.DEV_TOKEN }}
+
+      - name: Construir y pushear imagen
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+#          load: ${{ github.event_name == 'pull_request' }}  # Solo load en PR para pruebas locales
+          load: true   # Necesario para pruebas locales
+          tags: |
+            ${{ env.IMAGE_NAME_WITH_USER }}:${{ env.VERSION }}
+            ${{ env.IMAGE_NAME_WITH_USER }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ========================================
+  # 3. Pruebas de integración con contenedor (paralelo)
+  # ========================================
+  integration-test:
+    needs: [build-and-unit-test, build-docker-image]  # Necesita el JAR y la imagen
+    if: always()  # Se ejecuta incluso si build-docker falla (para ver logs en PR)
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: ${{ needs.build-and-unit-test.outputs.IMAGE_NAME }}
+      IMAGE_NAME_WITH_USER: ${{ needs.build-and-unit-test.outputs.IMAGE_NAME_WITH_USER }}
+      VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
+      APP_PORT: 8081
+
+    steps:
+      - name: Checkout código (para colección Postman)
+        uses: actions/checkout@v4
+
+      - name: Pull imagen local (en PR) o usar la ya construida
+        if: github.event_name == 'pull_request'
+        run: docker pull ${{ env.IMAGE_NAME_WITH_USER }}:${{ env.VERSION }} || true
+
+      - name: Visualizar imágenes Docker locales
+        run: docker images
+
+      - name: Iniciar contenedor
+        run: |
+          docker run -d \
+            --name app-test \
+            -p ${{ env.APP_PORT }}:${{ env.APP_PORT }} \
+            ${{ env.IMAGE_NAME_WITH_USER }}:${{ env.VERSION }}
+
+      - name: Esperar health check
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 2
+          max_attempts: 6
+          command: curl -f http://localhost:${{ env.APP_PORT }}/api/v1/employees/actuator/health
+
+      - name: Instalar Newman
+        run: npm install -g newman
+
+      - name: Ejecutar pruebas Postman
+        run: |
+          newman run ./_postman/API_EMPLOYEE_DEVOPS.postman_collection.json \
+            --env-var "baseUrl=http://localhost:${{ env.APP_PORT }}" \
+            --reporters cli,junit \
+            --reporter-junit-export newman-report.xml
+
+      - name: Subir reporte Newman
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-report
+          path: newman-report.xml
+
+      - name: Limpieza
+        if: always()
+        run: |
+          docker logs app-test
+          docker rm -f app-test
+
+  # ========================================
+  # 4. (Opcional futuro) Despliegue
+  # ========================================
+  # deploy:
+  #   needs: [build-docker-image, integration-test]
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - ...
