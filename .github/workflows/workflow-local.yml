@@ -40,6 +40,10 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_OUTPUT
           echo "JAR_NAME=$JAR_NAME" >> $GITHUB_OUTPUT
+          
+          echo "Versión: $VERSION"
+          echo "Nombre del repositorio: $REPO_NAME"
+          echo "Nombre del JAR: $JAR_NAME"
 
       - name: Compilar y pruebas unitarias (con cobertura)
         run: mvn -B clean package -DskipTests
