@@ -100,9 +100,9 @@ jobs:
       REPO_NAME: ${{ needs.build-and-unit-test.outputs.REPO_NAME }}
       VERSION: ${{ needs.build-and-unit-test.outputs.VERSION }}
       JAR_NAME: ${{ needs.build-and-unit-test.outputs.JAR_NAME }}
-      HOST: http://localhost
+      HOST: localhost
       APP_PORT: 8081
-      BASE_URL: ${{ env.HOST }}:${{ env.APP_PORT }}
+      BASE_URL: http://${{ env.HOST }}:${{ env.APP_PORT }}
     steps:
       - name: Checkout código (para colección Postman)
         uses: actions/checkout@v4
