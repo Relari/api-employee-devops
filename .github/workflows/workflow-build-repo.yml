@@ -20,4 +20,4 @@ jobs:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       SONAR_USERNAME: ${{ secrets.SONAR_USERNAME }}
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      DEV_TOKEN: ${{ secrets.DEV_TOKEN }}
