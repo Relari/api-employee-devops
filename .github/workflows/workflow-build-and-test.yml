@@ -15,3 +15,5 @@ jobs:
       project-type: 'maven'
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      SONAR_USERNAME: ${{ secrets.SONAR_USERNAME }}
