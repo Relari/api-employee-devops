@@ -7,12 +7,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum JobTitle {
 
-    DEVELOPER("developer"),
-    MANAGER("manager"),
-    ARCHITECT("architect"),
-    SCRUM_MASTER("scrum-master"),
-    TEAM_LEAD("team-lead");
+    DEVELOPER("Developer"),
+    MANAGER("Manager"),
+    ARCHITECT("Architect"),
+    SCRUM_MASTER("Scrum Master"),
+    TEAM_LEAD("Team Lead");
 
-    private final String value;
+    private final String description;
+
 
 }
