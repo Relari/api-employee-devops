@@ -89,8 +89,8 @@ class EmployeeControllerTest {
 
         var address = controller.getAddressById("1");
 
-        assertEquals(employee.getAddress().getEmail(), address.getEmail());
-        assertEquals(employee.getAddress().getPhoneNumber(), address.getPhoneNumber());
+        assertEquals(employee.getAddress().getEmail(), address.email());
+        assertEquals(employee.getAddress().getPhoneNumber(), address.phoneNumber());
 
     }
 

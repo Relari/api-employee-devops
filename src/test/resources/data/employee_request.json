@@ -1,14 +1,19 @@
 {
+  "document": {
+    "type": "DNI",
+    "number": "12345678"
+  },
   "firstName": "Renzo Daniel",
   "fatherLastName": "Lavado",
   "motherLastName": "Rivas",
   "gender": "M",
+  "dateOfBirth": "03/05/1995",
   "address": {
-      "phone": "999000999",
-      "email": "relari@corporation.com.pe"
+    "phoneNumber": "987654321",
+    "email": "renzolavador@gmail.com"
   },
   "company": {
     "jobTitle": "DEVELOPER",
-    "salary": "1000.00"
+    "salary": 1000.00
   }
 }
