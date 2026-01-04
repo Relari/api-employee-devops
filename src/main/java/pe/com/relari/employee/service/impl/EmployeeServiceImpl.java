@@ -2,9 +2,12 @@ package pe.com.relari.employee.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import pe.com.relari.employee.dao.EmployeeDao;
+import pe.com.relari.employee.exception.ApiException;
+import pe.com.relari.employee.exception.ErrorCategory;
 import pe.com.relari.employee.model.domain.Employee;
 import pe.com.relari.employee.service.EmployeeService;
 import org.springframework.stereotype.Service;
+import pe.com.relari.employee.util.Constants;
 
 import java.util.List;
 
@@ -36,11 +39,40 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteById(Integer id) {
-        employeeDao.deleteById(id);
+
+        var employee = employeeDao.findById(id);
+        if (employee != null) {
+            employeeDao.deleteById(id);
+        }
+
     }
 
     @Override
     public Employee findById(Integer id) {
         return employeeDao.findById(id);
     }
+
+    @Override
+    public void inactivateById(Integer id) {
+        var employee = employeeDao.findById(id);
+
+        if (Constants.ACTIVE.equals(employee.getStatus())) {
+            employee.setStatus(Constants.INACTIVE);
+            employeeDao.save(employee);
+        } else {
+            throw ApiException.of(ErrorCategory.EMPLOYEE_INACTIVATED);
+        }
+    }
+
+    @Override
+    public void activateById(Integer id) {
+        var employee = employeeDao.findById(id);
+        if (Constants.INACTIVE.equals(employee.getStatus())) {
+            employee.setStatus(Constants.ACTIVE);
+            employeeDao.save(employee);
+        } else {
+            throw ApiException.of(ErrorCategory.EMPLOYEE_ACTIVATED);
+        }
+    }
+
 }

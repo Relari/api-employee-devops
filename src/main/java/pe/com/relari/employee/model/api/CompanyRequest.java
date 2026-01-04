@@ -3,10 +3,12 @@ package pe.com.relari.employee.model.api;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pe.com.relari.employee.util.Constants;
 
 @Getter
 @Setter
@@ -21,6 +23,7 @@ public class CompanyRequest {
             example = "Developer",
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
+    @Pattern(regexp = Constants.REGEXP_JOBS_TITLES)
     private String jobTitle;
 
     @Schema(

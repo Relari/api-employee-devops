@@ -9,6 +9,7 @@ import lombok.Setter;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import pe.com.relari.employee.util.Constants;
 
 /**
  * Class: AddressRequest.
@@ -38,7 +39,7 @@ public class AddressRequest {
           example = "999999999",
           requiredMode = Schema.RequiredMode.REQUIRED)
   @NotBlank
-  @Pattern(regexp = "\\d{9}")
+  @Pattern(regexp = Constants.REGEXP_PHONE_NUMBER)
   private String phoneNumber;
 
 }

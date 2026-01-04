@@ -2,6 +2,7 @@ package pe.com.relari.employee.dao.repository.entity;
 
 import jakarta.persistence.*;
 
+import pe.com.relari.employee.model.domain.DocumentType;
 import pe.com.relari.employee.model.domain.Employee;
 import pe.com.relari.employee.model.domain.Gender;
 import pe.com.relari.employee.model.domain.JobTitle;
@@ -9,6 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -29,6 +33,13 @@ public class EmployeeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "documentType", nullable = false)
+    private DocumentType documentType;
+
+    @Column(name = "documentNumber", length = 10, nullable = false)
+    private String documentNumber;
+
     @Column(name = "fatherLastName", length = 50, nullable = false)
     private String fatherLastName;
 
@@ -41,6 +52,9 @@ public class EmployeeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 1, nullable = false)
     private Gender gender;
+
+    @Column(name = "dateOfBirth", length = 10, nullable = false, columnDefinition = "DATE")
+    private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "jobTitle", length = 50, nullable = false)
@@ -55,20 +69,10 @@ public class EmployeeEntity {
     @Column(name = "phoneNumber", length = 15, nullable = false)
     private String phoneNumber;
 
-    @Column(name = "isActive", nullable = false)
-    private Boolean isActive;
+    @Column(name = "createdAt", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime createdAt;
 
-    public static EmployeeEntity to(Employee employee) {
-        return builder()
-                .firstName(employee.getFirstName())
-                .fatherLastName(employee.getFatherLastName())
-                .motherLastName(employee.getMotherLastName())
-                .gender(employee.getGender())
-                .jobTitle(employee.getCompany().getJobTitle())
-                .salary(employee.getCompany().getSalary())
-                .email(employee.getAddress().getEmail())
-                .phoneNumber(employee.getAddress().getPhoneNumber())
-                .isActive(Boolean.TRUE)
-                .build();
-    }
+    @Column(name = "status", nullable = false)
+    private Boolean status;
+
 }

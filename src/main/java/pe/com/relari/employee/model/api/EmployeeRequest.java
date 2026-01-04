@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+import pe.com.relari.employee.util.Constants;
 
 /**
  * Class: EmployeeRequest.
@@ -56,10 +57,26 @@ public class EmployeeRequest {
             name = "gender",
             implementation = String.class,
             example = "M o F",
+            pattern = Constants.REGEXP_GENDER,
             requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank
-    @Pattern(regexp = "[M|F]")
+    @Pattern(regexp = Constants.REGEXP_GENDER)
     private String gender;
+
+    @Schema(
+            description = "Fecha de Nacimiento del Empleado",
+            name = "dateOfBirth",
+            implementation = String.class,
+            example = "01/01/1990",
+            pattern = Constants.REGEXP_DATE,
+            requiredMode = Schema.RequiredMode.REQUIRED)
+    @NotBlank
+    @Pattern(regexp = Constants.REGEXP_DATE)
+    private String dateOfBirth;
+
+    @Valid
+    @NotNull
+    private DocumentRequest document;
 
     @Valid
     @NotNull

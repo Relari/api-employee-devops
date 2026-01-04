@@ -1,7 +1,7 @@
 package pe.com.relari.controller;
 
 import lombok.RequiredArgsConstructor;
-import pe.com.relari.controller.mapper.EmployeeMapper;
+import pe.com.relari.controller.mapper.DomainToDtoMapper;
 import pe.com.relari.employee.exception.model.ErrorResponse;
 import pe.com.relari.employee.model.api.AddressResponse;
 import pe.com.relari.employee.model.api.EmployeeDetailResponse;
@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
+import pe.com.relari.employee.util.Constants;
+
 import java.util.List;
 
 /**
@@ -49,8 +52,6 @@ import java.util.List;
 @RequestMapping(path = "${application.api.path}")
 @RequiredArgsConstructor
 public class EmployeeController {
-
-    private static final String REGEXP_NUMBER = "\\d+"; // equivalent to [0-9]*
 
     private final EmployeeService employeeService;
 
@@ -72,7 +73,7 @@ public class EmployeeController {
     public List<EmployeeResponse> findAll() {
         return employeeService.findAll()
                 .stream()
-                .map(EmployeeMapper::mapEmployeeResponse)
+                .map(DomainToDtoMapper.INSTANCE::mapEmployeeResponse)
                 .toList();
     }
 
@@ -123,9 +124,9 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
-            @Pattern(regexp = REGEXP_NUMBER)
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
-        return EmployeeMapper.mapEmployeeResponse(
+        return DomainToDtoMapper.INSTANCE.mapEmployeeResponse(
                 employeeService.findById(Integer.valueOf(id))
         );
     }
@@ -159,11 +160,10 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
-            @Pattern(regexp = REGEXP_NUMBER)
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
-        return EmployeeMapper.mapAddressResponse(
-                employeeService.findById(Integer.valueOf(id)).getAddress()
-        );
+        var address = employeeService.findById(Integer.valueOf(id)).getAddress();
+        return new AddressResponse(address.getEmail(), address.getPhoneNumber());
     }
 
     @Operation(
@@ -178,7 +178,7 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void save(@RequestBody @Valid EmployeeRequest employeeRequest) {
-        var employeeEntity = EmployeeMapper.mapEmployee(employeeRequest);
+        var employeeEntity = DomainToDtoMapper.INSTANCE.mapEmployee(employeeRequest);
         employeeService.save(employeeEntity);
     }
 
@@ -215,8 +215,55 @@ public class EmployeeController {
                     in = ParameterIn.PATH,
                     example = "1",
                     required = true)
-            @Pattern(regexp = REGEXP_NUMBER)
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
         employeeService.deleteById(Integer.valueOf(id));
     }
+
+    @Operation(
+            summary = "Inactiva al empleado",
+            method = "PATCH",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Deleted Successful"
+                    )
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping(path = "/{id}/inactive")
+    public void inactiveById(
+            @Parameter(
+                    description = "Id del Empleado",
+                    name = "Id",
+                    in = ParameterIn.PATH,
+                    example = "1",
+                    required = true)
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id) {
+        employeeService.inactivateById(Integer.valueOf(id));
+    }
+
+    @Operation(
+            summary = "Activa al empleado",
+            method = "PATCH",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "Deleted Successful"
+                    )
+            })
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PatchMapping(path = "/{id}/active")
+    public void activeById(
+            @Parameter(
+                    description = "Id del Empleado",
+                    name = "Id",
+                    in = ParameterIn.PATH,
+                    example = "1",
+                    required = true)
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id) {
+        employeeService.activateById(Integer.valueOf(id));
+    }
+
 }

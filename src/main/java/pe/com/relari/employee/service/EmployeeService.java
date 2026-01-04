@@ -19,4 +19,8 @@ public interface EmployeeService {
     void deleteById(Integer id);
 
     Employee findById(Integer id);
+
+    void inactivateById(Integer id);
+
+    void activateById(Integer id);
 }

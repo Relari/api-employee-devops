@@ -31,6 +31,10 @@ application:
       description: 'Empleado no encontrado.'
     EMPLOYEE_UPDATE_FAILED:
       description: 'Error al actualizar al empleado.'
+    EMPLOYEE_INACTIVATED:
+      description: 'Empleado inactivado.'
+    EMPLOYEE_ACTIVATED:
+      description: 'Empleado activado.'
 
 management:
   endpoints:

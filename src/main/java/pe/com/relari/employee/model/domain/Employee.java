@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Class: Employee.
@@ -14,31 +18,25 @@ import lombok.ToString;
 
 @Builder
 @Getter
+@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Employee {
 
     private Integer idEmployee;
+    private Document document;
     private String fatherLastName;
     private String motherLastName;
     private String firstName;
     private Gender gender;
+    private LocalDate dateOfBirth;
     private Address address;
     private Company company;
-    private Boolean isActive;
+    private LocalDateTime createdAt;
+    private Boolean status;
 
-    public static Employee to(EmployeeEntity employeeEntity) {
-        return builder()
-                .idEmployee(employeeEntity.getId())
-                .firstName(employeeEntity.getFirstName())
-                .fatherLastName(employeeEntity.getFatherLastName())
-                .motherLastName(employeeEntity.getMotherLastName())
-                .gender(employeeEntity.getGender())
-                .address(Address.of(employeeEntity.getEmail(), employeeEntity.getPhoneNumber()))
-                .company(Company.of(employeeEntity.getJobTitle(), employeeEntity.getSalary()))
-                .isActive(employeeEntity.getIsActive())
-                .build();
+    public String getFullName() {
+        return String.format("%s %s, %s", fatherLastName, motherLastName, firstName);
     }
-
 }

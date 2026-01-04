@@ -53,6 +53,13 @@ public class EmployeeResponse {
             example = "M o F")
     private String gender;
 
+    @Schema(
+            description = "Fecha de Nacimiento del Empleado",
+            name = "dateOfBirth",
+            implementation = String.class,
+            example = "01/01/2020")
+    private String dateOfBirth;
+
     private AddressResponse address;
     private CompanyResponse company;
 
