@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import pe.com.relari.controller.mapper.DomainToDtoMapper;
 import pe.com.relari.employee.exception.model.ErrorResponse;
 import pe.com.relari.employee.model.api.AddressResponse;
-import pe.com.relari.employee.model.api.EmployeeDetailResponse;
+import pe.com.relari.employee.model.api.DefaultResponse;
 import pe.com.relari.employee.service.EmployeeService;
 import pe.com.relari.employee.model.api.EmployeeRequest;
 import pe.com.relari.employee.model.api.EmployeeResponse;
@@ -85,14 +85,14 @@ public class EmployeeController {
                             responseCode = "200",
                             description = "Show Employee",
                             content = @Content(
-                                    schema = @Schema(implementation = EmployeeDetailResponse.class),
+                                    schema = @Schema(implementation = DefaultResponse.class),
                                     mediaType = MediaType.APPLICATION_JSON_VALUE
                             )
                     )
             })
     @GetMapping(path = "/all")
-    public EmployeeDetailResponse findAll2() {
-        return EmployeeDetailResponse.of(findAll());
+    public DefaultResponse<List<EmployeeResponse>> findAll2() {
+        return DomainToDtoMapper.INSTANCE.mapResponse(findAll());
     }
 
     @Operation(

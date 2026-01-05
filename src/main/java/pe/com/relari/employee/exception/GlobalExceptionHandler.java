@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
 
@@ -49,12 +48,12 @@ public class GlobalExceptionHandler {
 
                 var errorDetail = applicationProperties.getErrors().getValue(apiException.getCatalog());
 
-                log.error("[ApiException]: {}", errorDetail.getDescription(), apiException);
+                log.error("[ApiException]: {}", errorDetail.description(), apiException);
 
                 var error = new ErrorResponse();
                 error.setCode(apiException.getCatalog().name());
                 error.setStatus(apiException.getCatalog().getStatus().value());
-                error.setDescription(errorDetail.getDescription());
+                error.setDescription(errorDetail.description());
                 error.setComponent(applicationName);
                 error.setInstance(request.getRequestURI());
                 error.setTimestamp(LocalDateTime.now().toString());
@@ -113,7 +112,7 @@ public class GlobalExceptionHandler {
                                 .map(fieldError -> new ErrorDetail(
                                                 fieldError.getField(),
                                                 fieldError.getDefaultMessage()))
-                                .collect(Collectors.toList());
+                                .toList();
 
                 var error = new ErrorResponse();
                 error.setStatus(status.value());
@@ -122,7 +121,7 @@ public class GlobalExceptionHandler {
                 error.setComponent(applicationName);
                 error.setInstance(request.getRequestURI());
                 error.setTimestamp(LocalDateTime.now().toString());
-                error.setErrors(errorDetails);
+                error.setErrorDetails(errorDetails);
 
                 return ResponseEntity.status(status).body(error);
         }

@@ -58,8 +58,8 @@ public class ErrorResponse {
 
     @Schema(
             description = "Lista de detalles del error.",
-            name = "errors",
+            name = "errorDetails",
             implementation = ErrorDetail.class)
-    private List<ErrorDetail> errors;
+    private List<ErrorDetail> errorDetails;
 
 }

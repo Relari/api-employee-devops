@@ -2,7 +2,9 @@ package pe.com.relari.controller.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+import pe.com.relari.employee.model.api.DefaultResponse;
 import pe.com.relari.employee.model.api.EmployeeRequest;
 import pe.com.relari.employee.model.api.EmployeeResponse;
 import pe.com.relari.employee.model.domain.Employee;
@@ -10,6 +12,7 @@ import pe.com.relari.employee.util.Constants;
 import pe.com.relari.employee.util.DateUtils;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Class: EmployeeMapper.
@@ -32,5 +35,9 @@ public interface DomainToDtoMapper {
     @Mapping(target = "createdAt", expression = "java( LocalDateTime.now() )")
     @Mapping(target = "status", expression = "java( Constants.ACTIVE )")
     Employee mapEmployee(EmployeeRequest employeeRequest);
+
+    default DefaultResponse<List<EmployeeResponse>> mapResponse(List<EmployeeResponse> employeeResponses) {
+        return new DefaultResponse<>("OK", 200, employeeResponses);
+    }
 
 }
