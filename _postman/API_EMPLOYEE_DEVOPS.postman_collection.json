@@ -7,6 +7,90 @@
 	},
 	"item": [
 		{
+			"name": "docs",
+			"item": [
+				{
+					"name": "Swagger UI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response time is less than 2000ms', function() {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/employees/swagger-ui.html",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"swagger-ui.html"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actuator",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test('Response time is less than 2000ms', function() {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/employees/actuator/info",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"employees",
+								"actuator",
+								"info"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Guardar Empleado",
 			"event": [
 				{
@@ -32,7 +116,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"firstName\": \"Renzo Daniel\",\r\n  \"fatherLastName\": \"Lavado\",\r\n  \"motherLastName\": \"Rivas\",\r\n  \"gender\": \"M\",\r\n  \"address\": {\r\n      \"phoneNumber\": \"999000999\",\r\n      \"email\": \"relari@corporation.com.pe\"\r\n  },\r\n  \"company\": {\r\n    \"jobTitle\": \"DEVELOPER\",\r\n    \"salary\": \"1000.00\"\r\n  }\r\n}",
+					"raw": "{\r\n    \"document\": {\r\n        \"type\": \"DNI\",\r\n        \"number\": \"70605398\"\r\n    },\r\n    \"firstName\": \"Renzo Daniel\",\r\n    \"fatherLastName\": \"Lavado\",\r\n    \"motherLastName\": \"Rivas\",\r\n    \"gender\": \"M\",\r\n    \"dateOfBirth\": \"03/05/1995\",\r\n    \"address\": {\r\n        \"phoneNumber\": \"979896723\",\r\n        \"email\": \"renzolavador@gmail.com\"\r\n    },\r\n    \"company\": {\r\n        \"jobTitle\": \"DEVELOPER\",\r\n        \"salary\": 1000.00\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -114,6 +198,143 @@
 			],
 			"request": {
 				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/employees/:id",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"employees",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Inactivar Empleado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response time is less than 2000ms', function() {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/employees/:id/inactive",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"employees",
+						":id",
+						"inactive"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activar Empleado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response time is less than 2000ms', function() {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/v1/employees/:id/active",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"employees",
+						":id",
+						"active"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar Empleado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('Status code is 204', function() {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test('Response time is less than 2000ms', function() {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
 				"header": [],
 				"url": {
 					"raw": "{{baseUrl}}/api/v1/employees/:id",
