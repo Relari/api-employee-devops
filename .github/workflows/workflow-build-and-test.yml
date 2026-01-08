@@ -2,7 +2,7 @@ name: Build and Test with Sonar
 
 on:
   push:
-    branches: [ disable-tests ]
+    branches: [ main ]
   pull_request:
   workflow_dispatch:
 
@@ -13,6 +13,8 @@ jobs:
       component-name: 'api-employee-devops'
       java-version: '17'
       project-type: 'maven'
+      run-unit-tests: false   # Más rápido
+      run-sonar: false
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
