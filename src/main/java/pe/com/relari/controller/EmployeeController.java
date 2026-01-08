@@ -2,24 +2,15 @@ package pe.com.relari.controller;
 
 import lombok.RequiredArgsConstructor;
 import pe.com.relari.controller.mapper.DomainToDtoMapper;
-import pe.com.relari.employee.exception.model.ErrorResponse;
 import pe.com.relari.employee.model.api.AddressResponse;
 import pe.com.relari.employee.model.api.DefaultResponse;
 import pe.com.relari.employee.service.EmployeeService;
 import pe.com.relari.employee.model.api.EmployeeRequest;
 import pe.com.relari.employee.model.api.EmployeeResponse;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -51,25 +42,12 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "${application.api.path}")
 @RequiredArgsConstructor
-public class EmployeeController {
+public class EmployeeController implements EmployeeApi {
 
     private final EmployeeService employeeService;
 
-    @Operation(
-            summary = "Listado de Empleados.",
-            method = "GET",
-            responses  = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Retorna todos los Empleados",
-                            content = @Content(
-                                    array = @ArraySchema(
-                                            schema = @Schema(implementation = EmployeeResponse.class)),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    )
-            })
     @GetMapping
+    @Override
     public List<EmployeeResponse> findAll() {
         return employeeService.findAll()
                 .stream()
@@ -77,53 +55,15 @@ public class EmployeeController {
                 .toList();
     }
 
-    @Operation(
-            summary = "Listado de Empleados.",
-            method = "GET",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Show Employee",
-                            content = @Content(
-                                    schema = @Schema(implementation = DefaultResponse.class),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    )
-            })
     @GetMapping(path = "/all")
+    @Override
     public DefaultResponse<List<EmployeeResponse>> findAll2() {
-        return DomainToDtoMapper.INSTANCE.mapResponse(findAll());
+        return DomainToDtoMapper.INSTANCE.mapResponse(employeeService.findAll());
     }
 
-    @Operation(
-            summary = "Obtiene la informacion de un empleado.",
-            method = "GET",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Show Employee",
-                            content = @Content(
-                                    schema = @Schema(implementation = EmployeeResponse.class),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Error to Save",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorResponse.class),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    )
-            })
     @GetMapping(path = "/{id}")
+    @Override
     public EmployeeResponse findById(
-            @Parameter(
-                    description = "Id del Empleado",
-                    name = "Id",
-                    in = ParameterIn.PATH,
-                    example = "1",
-                    required = true)
             @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
         return DomainToDtoMapper.INSTANCE.mapEmployeeResponse(
@@ -131,136 +71,52 @@ public class EmployeeController {
         );
     }
 
-    @Operation(
-            summary = "Obtiene la informacion de un empleado.",
-            method = "GET",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Show Employee",
-                            content = @Content(
-                                    schema = @Schema(implementation = AddressResponse.class),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Error to Save",
-                            content = @Content(
-                                    schema = @Schema(implementation = ErrorResponse.class),
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE
-                            )
-                    )
-            })
     @GetMapping(path = "/{id}/address")
+    @Override
     public AddressResponse getAddressById(
-            @Parameter(
-                    description = "Id del Empleado",
-                    name = "Id",
-                    in = ParameterIn.PATH,
-                    example = "1",
-                    required = true)
             @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
         var address = employeeService.findById(Integer.valueOf(id)).getAddress();
         return new AddressResponse(address.getEmail(), address.getPhoneNumber());
     }
 
-    @Operation(
-            summary = "Guarda al empleado",
-            method = "POST",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "201",
-                            description = "Create Successful"
-                    )
-            })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
+    @Override
     public void save(@RequestBody @Valid EmployeeRequest employeeRequest) {
         var employeeEntity = DomainToDtoMapper.INSTANCE.mapEmployee(employeeRequest);
         employeeService.save(employeeEntity);
     }
 
-    @Operation(
-            summary = "Elimina todos los empleados",
-            method = "DELETE",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "Deleted Successful"
-                    )
-            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
+    @Override
     public void deleteAll() {
         employeeService.deleteAll();
     }
 
-    @Operation(
-            summary = "Elimina al empleado",
-            method = "DELETE",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "Deleted Successful"
-                    )
-            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(path = "/{id}")
+    @Override
     public void deleteById(
-            @Parameter(
-                    description = "Id del Empleado",
-                    name = "Id",
-                    in = ParameterIn.PATH,
-                    example = "1",
-                    required = true)
             @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
         employeeService.deleteById(Integer.valueOf(id));
     }
 
-    @Operation(
-            summary = "Inactiva al empleado",
-            method = "PATCH",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "Deleted Successful"
-                    )
-            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(path = "/{id}/inactive")
+    @Override
     public void inactiveById(
-            @Parameter(
-                    description = "Id del Empleado",
-                    name = "Id",
-                    in = ParameterIn.PATH,
-                    example = "1",
-                    required = true)
             @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
         employeeService.inactivateById(Integer.valueOf(id));
     }
 
-    @Operation(
-            summary = "Activa al empleado",
-            method = "PATCH",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "204",
-                            description = "Deleted Successful"
-                    )
-            })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PatchMapping(path = "/{id}/active")
+    @Override
     public void activeById(
-            @Parameter(
-                    description = "Id del Empleado",
-                    name = "Id",
-                    in = ParameterIn.PATH,
-                    example = "1",
-                    required = true)
             @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
             @PathVariable(name = "id") String id) {
         employeeService.activateById(Integer.valueOf(id));
