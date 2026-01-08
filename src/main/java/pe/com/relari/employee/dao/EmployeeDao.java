@@ -1,5 +1,6 @@
 package pe.com.relari.employee.dao;
 
+import pe.com.relari.employee.model.domain.Document;
 import pe.com.relari.employee.model.domain.Employee;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface EmployeeDao {
     void deleteById(Integer id);
 
     Employee findById(Integer id);
+
+    Employee findByDocument(Document document);
+
 }

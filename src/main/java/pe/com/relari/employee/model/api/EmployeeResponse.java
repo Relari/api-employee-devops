@@ -20,14 +20,14 @@ public class EmployeeResponse {
 
     @Schema(
             description = "Id del Empleado",
-            name = "firstName",
+            name = "id",
             implementation = Integer.class,
             example = "1")
     private Integer id;
 
     @Schema(
             description = "Nombre del Empleado",
-            name = "name",
+            name = "firstName",
             implementation = String.class,
             example = "Renzo")
     private String firstName;
@@ -43,14 +43,14 @@ public class EmployeeResponse {
             description = "Apellido del Empleado",
             name = "motherLastName",
             implementation = String.class,
-            example = "Lavado")
+            example = "Rivas")
     private String motherLastName;
 
     @Schema(
             description = "Sexo del Empleado",
             name = "gender",
             implementation = String.class,
-            example = "M o F")
+            example = "M")
     private String gender;
 
     @Schema(

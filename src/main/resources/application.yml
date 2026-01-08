@@ -35,6 +35,8 @@ application:
       description: 'Empleado inactivado.'
     EMPLOYEE_ACTIVATED:
       description: 'Empleado activado.'
+    DOCUMENT_NOT_FOUND:
+      description: 'Documento no encontrado.'
 
 management:
   endpoints:

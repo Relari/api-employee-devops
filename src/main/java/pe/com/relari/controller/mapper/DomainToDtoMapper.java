@@ -26,8 +26,9 @@ public interface DomainToDtoMapper {
     DomainToDtoMapper INSTANCE = Mappers.getMapper(DomainToDtoMapper.class);
 
     @Mapping(target = "id", source = "idEmployee")
-    @Mapping(target = "gender", expression = "java( employee.getGender().name() )")
+    @Mapping(target = "gender", expression = "java( employee.getGender().getDescription() )")
     @Mapping(target = "dateOfBirth", expression = "java( DateUtils.format(employee.getDateOfBirth()) )")
+    @Mapping(target = "company.jobTitle", expression = "java( company.getJobTitle().getDescription() )")
     EmployeeResponse mapEmployeeResponse(Employee employee);
 
     @Mapping(target = "idEmployee", ignore = true)
@@ -36,8 +37,8 @@ public interface DomainToDtoMapper {
     @Mapping(target = "status", expression = "java( Constants.ACTIVE )")
     Employee mapEmployee(EmployeeRequest employeeRequest);
 
-    default DefaultResponse<List<EmployeeResponse>> mapResponse(List<EmployeeResponse> employeeResponses) {
-        return new DefaultResponse<>("OK", 200, employeeResponses);
+    default DefaultResponse<List<EmployeeResponse>> mapResponse(List<Employee> employee) {
+        return new DefaultResponse<>("OK", 200, employee.stream().map(this::mapEmployeeResponse).toList());
     }
 
 }

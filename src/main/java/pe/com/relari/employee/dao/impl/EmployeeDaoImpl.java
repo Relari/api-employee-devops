@@ -7,6 +7,8 @@ import pe.com.relari.employee.dao.mapper.DomainToEntityMapper;
 import pe.com.relari.employee.dao.repository.EmployeeRepository;
 import pe.com.relari.employee.exception.ApiException;
 import pe.com.relari.employee.exception.ErrorCategory;
+import pe.com.relari.employee.model.domain.Document;
+import pe.com.relari.employee.model.domain.DocumentType;
 import pe.com.relari.employee.model.domain.Employee;
 import org.springframework.stereotype.Component;
 
@@ -59,4 +61,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 .map(DomainToEntityMapper.INSTANCE::mapEmployee)
                 .orElseThrow(() -> ApiException.of(ErrorCategory.EMPLOYEE_NOT_FOUND));
     }
+
+    @Override
+    public Employee findByDocument(Document document) {
+        return employeeRepository.findByDocumentTypeAndDocumentNumber(document.getType(), document.getNumber())
+                .map(DomainToEntityMapper.INSTANCE::mapEmployee)
+                .orElseThrow(() -> ApiException.of(ErrorCategory.DOCUMENT_NOT_FOUND));
+    }
+
 }

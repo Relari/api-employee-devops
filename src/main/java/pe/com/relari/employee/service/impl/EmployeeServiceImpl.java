@@ -29,7 +29,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void save(Employee employee) {
-        employeeDao.save(employee);
+        var response = employeeDao.findByDocument(employee.getDocument());
+        if (response != null) {
+            employeeDao.save(employee);
+        }
     }
 
     @Override

@@ -12,7 +12,8 @@ public enum ErrorCategory {
     EMPLOYEE_NOT_FOUND(HttpStatus.NOT_FOUND),
     EMPLOYEE_UPDATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR),
     EMPLOYEE_INACTIVATED(HttpStatus.CONFLICT),
-    EMPLOYEE_ACTIVATED(HttpStatus.CONFLICT);
+    EMPLOYEE_ACTIVATED(HttpStatus.CONFLICT),
+    DOCUMENT_NOT_FOUND(HttpStatus.CONFLICT);
 
     private final HttpStatus status;
 
