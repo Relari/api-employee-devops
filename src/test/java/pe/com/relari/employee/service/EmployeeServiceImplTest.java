@@ -3,8 +3,12 @@ package pe.com.relari.employee.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.Assertions;
 import pe.com.relari.employee.dao.EmployeeDao;
+import pe.com.relari.employee.exception.ApiException;
+import pe.com.relari.employee.exception.ErrorCategory;
 import pe.com.relari.employee.service.impl.EmployeeServiceImpl;
+import pe.com.relari.employee.util.Constants;
 import pe.com.relari.employee.util.DataMocks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,11 +63,28 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void deleteById_success() {
 
-        Integer id = 1;
+        var employee = DataMocks.buildEmployee();
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(employee);
 
         employeeDao.deleteById(Mockito.anyInt());
+
+        employeeService.deleteById(employee.getIdEmployee());
+
+        assertNotNull(employee);
+    }
+
+    @Test
+    void deleteById_failed() {
+
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(null);
+
+        Integer id = 1;
 
         employeeService.deleteById(id);
 
@@ -88,14 +109,94 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void save() {
-        employeeDao.save(Mockito.any());
+    void save_success() {
 
         var employee = DataMocks.buildEmployee();
+
+        Mockito.when(employeeDao.findByDocument(Mockito.any()))
+                .thenReturn(employee);
+
+        employeeDao.save(Mockito.any());
+
         employeeService.save(employee);
 
         assertNotNull(employee);
     }
 
+    @Test
+    void save_failed() {
+
+        Mockito.when(employeeDao.findByDocument(Mockito.any()))
+                .thenReturn(null);
+
+        var employee = DataMocks.buildEmployee();
+
+        employeeService.save(employee);
+
+        assertNotNull(employee);
+    }
+
+    @Test
+    void inactive_success() {
+
+        var employee = DataMocks.buildEmployee();
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(employee);
+
+        employeeDao.save(Mockito.any());
+
+        employeeService.inactivateById(employee.getIdEmployee());
+
+        assertNotNull(employee);
+    }
+
+    @Test
+    void inactive_error() {
+
+        var employee = DataMocks.buildEmployee();
+        employee.setStatus(Constants.INACTIVE);
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(employee);
+
+        Integer id = employee.getIdEmployee();
+
+        ApiException apiException = Assertions.assertThrows(ApiException.class, () -> employeeService.inactivateById(id));
+
+        assertNotNull(apiException.getMessage());
+    }
+
+    @Test
+    void active_success() {
+
+        var employee = DataMocks.buildEmployee();
+        employee.setStatus(Constants.INACTIVE);
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(employee);
+
+        employeeDao.save(Mockito.any());
+
+        employeeService.activateById(employee.getIdEmployee());
+
+        assertNotNull(employee);
+    }
+
+    @Test
+    void active_error() {
+
+        var employee = DataMocks.buildEmployee();
+        employee.setStatus(Constants.ACTIVE);
+
+        Mockito.when(employeeDao.findById(Mockito.anyInt()))
+                .thenReturn(employee);
+
+        Integer id = employee.getIdEmployee();
+
+        ApiException apiException = Assertions.assertThrows(ApiException.class, () -> employeeService.activateById(id));
+
+        assertNotNull(apiException.getMessage());
+    }
 
 }

@@ -2,7 +2,7 @@ package pe.com.relari.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -37,13 +37,13 @@ class EmployeeControllerTest {
         when(service.findAll())
                 .thenReturn(Collections.singletonList(employee));
 
-        var employeeResponses = controller.findAll();
+        var responses = controller.findAll();
 
-        assertEquals(employee.getIdEmployee(), employeeResponses.get(0).getId());
-        assertEquals(employee.getFirstName(), employeeResponses.get(0).getFirstName());
-        assertEquals(employee.getFatherLastName(), employeeResponses.get(0).getFatherLastName());
-        assertEquals(employee.getMotherLastName(), employeeResponses.get(0).getMotherLastName());
-        assertEquals(employee.getGender().name(), employeeResponses.get(0).getGender());
+        assertEquals(employee.getIdEmployee(), responses.get(0).getId());
+        assertEquals(employee.getFirstName(), responses.get(0).getFirstName());
+        assertEquals(employee.getFatherLastName(), responses.get(0).getFatherLastName());
+        assertEquals(employee.getMotherLastName(), responses.get(0).getMotherLastName());
+        assertEquals(employee.getGender().getDescription(), responses.get(0).getGender());
     }
 
     @Test
@@ -54,9 +54,11 @@ class EmployeeControllerTest {
         when(service.findAll())
                 .thenReturn(Collections.singletonList(employee));
 
-        var employeeDetailResponse = controller.findAll2();
+        var response = controller.findAll2();
 
-        assertNotNull(employeeDetailResponse);
+        assertNotNull(response);
+        assertEquals("OK", response.code());
+        assertEquals(200, response.status());
     }
 
 
@@ -69,13 +71,13 @@ class EmployeeControllerTest {
         when(service.findById(anyInt()))
                 .thenReturn(employee);
 
-        var employeeResponse = controller.findById("1");
+        var response = controller.findById("1");
 
-        assertEquals(employee.getIdEmployee(), employeeResponse.getId());
-        assertEquals(employee.getFirstName(), employeeResponse.getFirstName());
-        assertEquals(employee.getFatherLastName(), employeeResponse.getFatherLastName());
-        assertEquals(employee.getMotherLastName(), employeeResponse.getMotherLastName());
-        assertEquals(employee.getGender().name(), employeeResponse.getGender());
+        assertEquals(employee.getIdEmployee(), response.getId());
+        assertEquals(employee.getFirstName(), response.getFirstName());
+        assertEquals(employee.getFatherLastName(), response.getFatherLastName());
+        assertEquals(employee.getMotherLastName(), response.getMotherLastName());
+        assertEquals(employee.getGender().getDescription(), response.getGender());
 
     }
 
@@ -87,10 +89,10 @@ class EmployeeControllerTest {
         when(service.findById(anyInt()))
                 .thenReturn(employee);
 
-        var address = controller.getAddressById("1");
+        var response = controller.getAddressById("1");
 
-        assertEquals(employee.getAddress().getEmail(), address.email());
-        assertEquals(employee.getAddress().getPhoneNumber(), address.phoneNumber());
+        assertEquals(employee.getAddress().getEmail(), response.email());
+        assertEquals(employee.getAddress().getPhoneNumber(), response.phoneNumber());
 
     }
 
@@ -114,7 +116,7 @@ class EmployeeControllerTest {
 
         controller.deleteAll();
 
-        Integer id = 1;
+        String id = "1";
 
         assertNotNull(id);
     }
@@ -127,6 +129,32 @@ class EmployeeControllerTest {
         String id = "1";
 
         controller.deleteById(id);
+
+        assertNotNull(id);
+
+    }
+
+    @Test
+    void inactiveEmployeeById() {
+
+        service.inactivateById(anyInt());
+
+        String id = "1";
+
+        controller.inactiveById(id);
+
+        assertNotNull(id);
+
+    }
+
+        @Test
+    void activeEmployeeById() {
+
+        service.activateById(anyInt());
+
+        String id = "1";
+
+        controller.activeById(id);
 
         assertNotNull(id);
 
