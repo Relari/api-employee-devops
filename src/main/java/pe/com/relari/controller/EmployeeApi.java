@@ -5,12 +5,16 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import pe.com.relari.employee.exception.model.ErrorResponse;
 import pe.com.relari.employee.model.api.AddressResponse;
 import pe.com.relari.employee.model.api.DefaultResponse;
 import pe.com.relari.employee.model.api.EmployeeRequest;
 import pe.com.relari.employee.model.api.EmployeeResponse;
+import pe.com.relari.employee.util.Constants;
 
 import java.util.List;
 
@@ -64,7 +68,11 @@ public interface EmployeeApi {
                             )
                     )
             })
-    EmployeeResponse findById(@IdPathParameter String id);
+    @GetMapping(path = "/{id}")
+    EmployeeResponse findById(
+            @IdPathParameter
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id);
 
     @Operation(
             summary = "Obtiene la informacion del contacto del empleado por ID.",
@@ -85,7 +93,11 @@ public interface EmployeeApi {
                             )
                     )
             })
-    AddressResponse getAddressById(@IdPathParameter String id);
+    @GetMapping(path = "/{id}/address")
+    AddressResponse getAddressById(
+            @IdPathParameter
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id);
 
     @Operation(
             summary = "Registra un nuevo empleado.",
@@ -102,7 +114,7 @@ public interface EmployeeApi {
                             )
                     )
             })
-    void save(EmployeeRequest employeeRequest);
+    void save(@RequestBody @Valid EmployeeRequest employeeRequest);
 
     @Operation(
             summary = "Elimina a todos los empleados.",
@@ -129,7 +141,11 @@ public interface EmployeeApi {
                             )
                     )
             })
-    void deleteById(@IdPathParameter String id);
+    @DeleteMapping(path = "/{id}")
+    void deleteById(
+            @IdPathParameter
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id);
 
     @Operation(
             summary = "Inactiva al empleado por el ID",
@@ -153,7 +169,11 @@ public interface EmployeeApi {
                             )
                     )
             })
-    void inactiveById(@IdPathParameter String id);
+    @PatchMapping(path = "/{id}/inactive")
+    void inactiveById(
+            @IdPathParameter
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id);
 
     @Operation(
             summary = "Activa al empleado por el ID",
@@ -177,6 +197,10 @@ public interface EmployeeApi {
                             )
                     )
             })
-    void activeById(@IdPathParameter String id);
+    @PatchMapping(path = "/{id}/active")
+    void activeById(
+            @IdPathParameter
+            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
+            @PathVariable(name = "id") String id);
 
 }

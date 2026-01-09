@@ -127,7 +127,7 @@ class EmployeeServiceImplTest {
     void save_failed() {
 
         Mockito.when(employeeDao.findByDocument(Mockito.any()))
-                .thenReturn(null);
+                .thenThrow(ApiException.of(ErrorCategory.DOCUMENT_NOT_FOUND));
 
         var employee = DataMocks.buildEmployee();
 

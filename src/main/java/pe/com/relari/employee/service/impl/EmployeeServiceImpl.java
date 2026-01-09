@@ -29,10 +29,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void save(Employee employee) {
-        var response = employeeDao.findByDocument(employee.getDocument());
-        if (response != null) {
-            employeeDao.save(employee);
+
+        try {
+            employeeDao.findByDocument(employee.getDocument());
+        } catch (ApiException e) {
+            if (ErrorCategory.DOCUMENT_NOT_FOUND.equals(e.getCatalog())) {
+                employeeDao.save(employee);
+            }
         }
+
     }
 
     @Override

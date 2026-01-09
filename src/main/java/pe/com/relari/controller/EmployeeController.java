@@ -13,17 +13,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
-import pe.com.relari.employee.util.Constants;
 
 import java.util.List;
 
@@ -61,21 +54,15 @@ public class EmployeeController implements EmployeeApi {
         return DomainToDtoMapper.INSTANCE.mapResponse(employeeService.findAll());
     }
 
-    @GetMapping(path = "/{id}")
     @Override
-    public EmployeeResponse findById(
-            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
-            @PathVariable(name = "id") String id) {
+    public EmployeeResponse findById(String id) {
         return DomainToDtoMapper.INSTANCE.mapEmployeeResponse(
                 employeeService.findById(Integer.valueOf(id))
         );
     }
 
-    @GetMapping(path = "/{id}/address")
     @Override
-    public AddressResponse getAddressById(
-            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
-            @PathVariable(name = "id") String id) {
+    public AddressResponse getAddressById(String id) {
         var address = employeeService.findById(Integer.valueOf(id)).getAddress();
         return new AddressResponse(address.getEmail(), address.getPhoneNumber());
     }
@@ -83,7 +70,7 @@ public class EmployeeController implements EmployeeApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @Override
-    public void save(@RequestBody @Valid EmployeeRequest employeeRequest) {
+    public void save(EmployeeRequest employeeRequest) {
         var employeeEntity = DomainToDtoMapper.INSTANCE.mapEmployee(employeeRequest);
         employeeService.save(employeeEntity);
     }
@@ -96,29 +83,20 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(path = "/{id}")
     @Override
-    public void deleteById(
-            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
-            @PathVariable(name = "id") String id) {
+    public void deleteById(String id) {
         employeeService.deleteById(Integer.valueOf(id));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping(path = "/{id}/inactive")
     @Override
-    public void inactiveById(
-            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
-            @PathVariable(name = "id") String id) {
+    public void inactiveById(String id) {
         employeeService.inactivateById(Integer.valueOf(id));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping(path = "/{id}/active")
     @Override
-    public void activeById(
-            @Pattern(regexp = Constants.REGEXP_ONLY_NUMBER)
-            @PathVariable(name = "id") String id) {
+    public void activeById(String id) {
         employeeService.activateById(Integer.valueOf(id));
     }
 
