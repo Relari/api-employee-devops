@@ -29,6 +29,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public List<Employee> findAll() {
+        log.debug("Fetching all employees from the database.");
         return employeeRepository.findAll()
                 .stream()
                 .map(DomainToEntityMapper.INSTANCE::mapEmployee)
@@ -37,7 +38,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void save(Employee employee) {
-
+        log.debug("Saving employee: {}", employee);
         Optional.of(employee)
                 .map(DomainToEntityMapper.INSTANCE::mapEmployeeEntity)
                 .map(employeeRepository::save)
@@ -47,16 +48,19 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public void deleteAll() {
+        log.debug("Deleting all employees from the database.");
         employeeRepository.deleteAll();
     }
 
     @Override
     public void deleteById(Integer id) {
+        log.debug("Deleting employee with ID: {}", id);
         employeeRepository.deleteById(id);
     }
 
     @Override
     public Employee findById(Integer id) {
+        log.debug("Finding employee with ID: {}", id);
         return employeeRepository.findById(id)
                 .map(DomainToEntityMapper.INSTANCE::mapEmployee)
                 .orElseThrow(() -> ApiException.of(ErrorCategory.EMPLOYEE_NOT_FOUND));
@@ -64,6 +68,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public Optional<Employee> findByDocument(Document document) {
+        log.debug("Finding employee with document: {} {}", document.getType(), document.getNumber());
         return employeeRepository.findByDocumentTypeAndDocumentNumber(document.getType(), document.getNumber())
                 .map(DomainToEntityMapper.INSTANCE::mapEmployee);
     }
