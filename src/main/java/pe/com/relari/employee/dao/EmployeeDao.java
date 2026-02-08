@@ -4,9 +4,11 @@ import pe.com.relari.employee.model.domain.Document;
 import pe.com.relari.employee.model.domain.Employee;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface: EmployeeDao.
+ * 
  * @author Relari
  */
 public interface EmployeeDao {
@@ -21,6 +23,6 @@ public interface EmployeeDao {
 
     Employee findById(Integer id);
 
-    Employee findByDocument(Document document);
+    Optional<Employee> findByDocument(Document document);
 
 }

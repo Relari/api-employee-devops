@@ -29,4 +29,7 @@ public class Constants {
     public static final Boolean ACTIVE = Boolean.TRUE;
     public static final Boolean INACTIVE = Boolean.FALSE;
 
+    public static final Integer SUCCESS_STATUS = 200;
+    public static final String SUCCESS_CODE = "OK";
+
 }

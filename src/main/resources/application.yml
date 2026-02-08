@@ -4,8 +4,8 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: '${DB_USER:sa}'
-    password: '${DB_PASS:123456}'
+    username: ${DB_USER:sa}
+    password: ${DB_PASS:123456}
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     show-sql: true
@@ -37,6 +37,8 @@ application:
       description: 'Empleado activado.'
     DOCUMENT_NOT_FOUND:
       description: 'Documento no encontrado.'
+    DOCUMENT_REGISTERED:
+      description: 'Documento registrado.'
 
 management:
   endpoints:
@@ -64,8 +66,8 @@ springdoc:
 server:
   error:
     include-message: always
-  port: 8081
+  port: ${APP_PORT:8081}
 
 logging:
   level:
-    'pe.com.relari': TRACE
+    'pe.com.relari': ${LOG_LEVEL:TRACE}

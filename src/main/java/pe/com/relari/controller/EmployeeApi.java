@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import pe.com.relari.employee.annotations.IdPathParameter;
 import pe.com.relari.employee.exception.model.ErrorResponse;
 import pe.com.relari.employee.model.api.AddressResponse;
 import pe.com.relari.employee.model.api.DefaultResponse;

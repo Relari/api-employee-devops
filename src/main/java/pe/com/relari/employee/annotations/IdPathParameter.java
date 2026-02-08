@@ -1,4 +1,4 @@
-package pe.com.relari.controller;
+package pe.com.relari.employee.annotations;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

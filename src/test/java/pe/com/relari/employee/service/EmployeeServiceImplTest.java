@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Collections;
+import java.util.Optional;
 
 class EmployeeServiceImplTest {
 
@@ -114,7 +115,7 @@ class EmployeeServiceImplTest {
         var employee = DataMocks.buildEmployee();
 
         Mockito.when(employeeDao.findByDocument(Mockito.any()))
-                .thenReturn(employee);
+                .thenReturn(Optional.of(employee));
 
         employeeDao.save(Mockito.any());
 

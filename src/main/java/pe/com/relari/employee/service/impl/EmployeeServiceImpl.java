@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Class: EmployeeServiceImpl.
+ * 
  * @author Relari
  */
 
@@ -29,15 +30,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void save(Employee employee) {
-
-        try {
-            employeeDao.findByDocument(employee.getDocument());
-        } catch (ApiException e) {
-            if (ErrorCategory.DOCUMENT_NOT_FOUND.equals(e.getCatalog())) {
-                employeeDao.save(employee);
-            }
+        var response = employeeDao.findByDocument(employee.getDocument());
+        if (response.isPresent()) {
+            throw ApiException.of(ErrorCategory.DOCUMENT_REGISTERED);
         }
-
+        employeeDao.save(employee);
     }
 
     @Override

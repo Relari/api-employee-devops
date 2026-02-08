@@ -2,7 +2,6 @@ package pe.com.relari.controller.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 import pe.com.relari.employee.model.api.DefaultResponse;
 import pe.com.relari.employee.model.api.EmployeeRequest;
@@ -38,7 +37,10 @@ public interface DomainToDtoMapper {
     Employee mapEmployee(EmployeeRequest employeeRequest);
 
     default DefaultResponse<List<EmployeeResponse>> mapResponse(List<Employee> employee) {
-        return new DefaultResponse<>("OK", 200, employee.stream().map(this::mapEmployeeResponse).toList());
+        return new DefaultResponse<>(
+                Constants.SUCCESS_CODE, Constants.SUCCESS_STATUS,
+                employee.stream().map(this::mapEmployeeResponse).toList()
+        );
     }
 
 }
